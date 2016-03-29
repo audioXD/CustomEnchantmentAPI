@@ -232,11 +232,11 @@ public class ItemUtil {
 	}
 
 	public static ItemStack getMainHandItem(LivingEntity player) {
-		return CustomEnchantmentAPI.getInstace().getNSU().getItemInMainHand(player);
+		return CustomEnchantmentAPI.getInstace().getNSM().getItemInMainHand(player);
 	}
 
 	public static ItemStack getOffHandItem(LivingEntity player) {
-		return CustomEnchantmentAPI.getInstace().getNSU().getItemInOffHand(player);
+		return CustomEnchantmentAPI.getInstace().getNSM().getItemInOffHand(player);
 	}
 
 	public static HandType getEquippingHandType(Player player) {

@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
@@ -30,7 +29,7 @@ public class onInteract extends CEPLListener {
 
 		Player player = event.getPlayer();
 		ItemStack item = event.getItem();
-		HandType hT = CustomEnchantmentAPI.getInstace().getNSU().isHandMainHAnd(event) ? HandType.MAIN : HandType.OFF;
+		HandType hT = CustomEnchantmentAPI.getInstace().getNSM().isHandMainHAnd(event) ? HandType.MAIN : HandType.OFF;
 
 		for (Enchanted ench : this.getEnchantments(item)) {
 			EInteractEvent e = new EInteractEvent(ench.getLvl(), item, player, event.getAction(), event.getBlockFace(),

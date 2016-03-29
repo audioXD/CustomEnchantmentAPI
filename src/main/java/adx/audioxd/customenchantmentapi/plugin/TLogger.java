@@ -1,0 +1,79 @@
+package adx.audioxd.customenchantmentapi.plugin;
+
+import java.util.logging.Level;
+
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+
+import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
+
+public class TLogger {
+	private boolean DEBUG = false;
+
+	public boolean isDebug() {
+		return DEBUG;
+	}
+
+	public void setDebug(boolean debug) {
+		DEBUG = debug;
+	}
+
+	private final Plugin plugin;
+
+	public TLogger(Plugin plugin) {
+		this.plugin = plugin;
+	}
+
+	public void log(Level ll, String message) {
+		CustomEnchantmentAPI.getCeapiLogger().log(ll, "<" + plugin.getName() + ">: " + message);
+	}
+
+	public void info(String message) {
+		log(Level.INFO, message);
+	}
+
+	public void severe(String message) {
+		log(Level.SEVERE, message);
+	}
+
+	public void debug(String message) {
+		if (DEBUG)
+			log(Level.INFO, "[DEBUG] " + message);
+	}
+
+	public void warning(String message) {
+		log(Level.WARNING, message);
+	}
+
+	public void fine(String message) {
+		log(Level.FINE, message);
+	}
+
+	public void finer(String message) {
+		log(Level.FINER, message);
+	}
+
+	public void finest(String message) {
+		log(Level.FINEST, message);
+	}
+
+	public void preEnabled(boolean enabled) {
+		if (enabled) {
+			PluginDescriptionFile p = plugin.getDescription();
+			info(p.getName() + " Version: " + p.getVersion() + " Is being Enabled!");
+		} else {
+			PluginDescriptionFile p = plugin.getDescription();
+			info(p.getName() + " Version: " + p.getVersion() + " Is being Disabled!");
+		}
+	}
+
+	public void enabled(boolean enabled) {
+		if (enabled) {
+			PluginDescriptionFile p = plugin.getDescription();
+			info(p.getName() + " Version: " + p.getVersion() + " Has ben Enabled!");
+		} else {
+			PluginDescriptionFile p = plugin.getDescription();
+			info(p.getName() + " Version: " + p.getVersion() + " Has ben Disabled!");
+		}
+	}
+}

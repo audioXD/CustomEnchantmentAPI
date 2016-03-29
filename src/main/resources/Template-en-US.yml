@@ -1,0 +1,28 @@
+# This fille accepts color codes with '??'
+messages:
+  reloadConfig: "\xa72Reloaded config files."
+error:
+# '%1$s' is the permission, '%2$s' is the command (without the '/')
+  errorYouDoNotHavePermission: "\xa7cYou don't have  permission: %1$s, to use Command: /%2$s"
+# No extra args
+  errorNotEnoughArguments: "\xa7cNot enought arguments."
+# '%1$s' is the command (without the '/')
+  unknownCommand: "\xa7cUnknown command: %1$s"
+# No extra args
+  notPlayer: "\xa7cThis command must be executed by a player!"
+enchant:
+# No extra args
+  errorLessThanOne: "\xa75The level must be more or equal to 1."
+# '%1$s' is the permission, '%2$s' is the Enchantment
+  noAccesToEnchantment: "\xa7cYou don't have the Permission: %1$s, to enchant Enchantment: %2$s"
+#  '%1$s' is the Enchantment
+  succes: "\xa72Enchanted item in hand with %s"
+#  '%1$s' is the Enchantment
+  error: "\xa7cDidn't enchant item with %s"
+unenchant:
+# '%1$s' is the permission, '%2$s' is the Enchantment
+  noAccesToEnchantment: "\xa7cYou don't have the Permission: %1$s, to unenchant Enchantment: %2$s"
+#  '%1$s' is the Enchantment
+  succes: "\xa72Un-enchanted item in hand with %s"
+#  '%1$s' is the Enchantment
+  error: "\xa7cDidn't un-enchant item with %s"

@@ -1,0 +1,62 @@
+#####################################################
+# For more info http://wiki.bukkit.org/Plugin_YAML  #
+#####################################################
+name: ${plugin_name}
+version: ${plugin_version}
+description: This is a description
+
+author: audioXD
+
+main: ${plugin_main}
+database: false
+depend: []
+
+commands:
+  ceapi:
+    description: The main command for ${plugin_name}
+  ${plugin_name}:
+    description: The main command for ${plugin_name}
+
+permissions:
+  adx.custom.enchantmentapi.plugin.*:
+    description: Gives acces to all ${plugin_name} commands
+    children:
+      adx.ceapi.*: true
+  adx.ceapi.*:
+    description: Gives acces to all ${plugin_name} commands
+    children:
+      adx.ceapi.use: true
+      adx.ceapi.list: true
+      adx.ceapi.enchant.*: true
+      adx.ceapi.unenchant.*: true
+#-----------------------------------------------------
+  adx.ceapi.use:
+    description: Allows the use of /ceapi
+    default: false
+  adx.ceapi.enchant.use:
+    description: Allows the use of /ceapi enchant <ench_id> [lvl]
+    default: false
+    children:
+      adx.ceapi.use: true
+  adx.ceapi.unenchant.use:
+    description: Allows the use of /ceapi unenchant <ench_id>
+    default: false
+    children:
+      adx.ceapi.use: true
+    
+  adx.ceapi.list:
+    description: Allows the use of /ceapi list
+    default: false
+    children:
+      adx.ceapi.use: true
+  
+  adx.ceapi.enchant.*:
+    description: Allows the use of /ceapi enchant <ench_id> [lvl] and all of its enchantment
+    default: false
+    children:
+      adx.ceapi.enchant.use: true
+  adx.ceapi.unenchant.*:
+    description: Allows the use of /ceapi unenchant <ench_id>
+    default: false
+    children:
+      adx.ceapi.unenchant.use: true

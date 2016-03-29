@@ -1,0 +1,5 @@
+include ':modules:API'
+include ':modules:v1_8'
+include ':modules:v1_9'
+
+rootProject.name = 'CustomEnchantmentAPI'

@@ -1,5 +1,6 @@
 package adx.audioxd.customenchantmentapi.plugin;
 
+
 import java.util.logging.Level;
 
 import org.bukkit.plugin.Plugin;
@@ -9,13 +10,19 @@ import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 
 public class TLogger {
 	private boolean DEBUG = false;
-
 	public boolean isDebug() {
 		return DEBUG;
 	}
-
 	public void setDebug(boolean debug) {
 		DEBUG = debug;
+	}
+
+	private boolean PUBLIC = true;
+	public boolean isPublic() {
+		return PUBLIC;
+	}
+	public void setPublic(boolean isPublic) {
+		PUBLIC = isPublic;
 	}
 
 	private final Plugin plugin;
@@ -26,6 +33,7 @@ public class TLogger {
 
 	public void log(Level ll, String message) {
 		CustomEnchantmentAPI.getCeapiLogger().log(ll, "<" + plugin.getName() + ">: " + message);
+		if (PUBLIC) plugin.getLogger().log(ll, message);
 	}
 
 	public void info(String message) {
@@ -37,8 +45,7 @@ public class TLogger {
 	}
 
 	public void debug(String message) {
-		if (DEBUG)
-			log(Level.INFO, "[DEBUG] " + message);
+		if (DEBUG) log(Level.INFO, "[DEBUG] " + message);
 	}
 
 	public void warning(String message) {

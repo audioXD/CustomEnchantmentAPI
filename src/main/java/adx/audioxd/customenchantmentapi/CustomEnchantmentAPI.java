@@ -81,8 +81,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 				}
 			} catch (final Exception e) {
 				e.printStackTrace();
-				this.getLogger().severe("Could not find support for Spigot " + version + ".");
-				this.getLogger().info("Check for updates at URL HERE");
+				logger.severe("Could not find support for Spigot " + version + ".");
 				this.setEnabled(false);
 				return;
 			}

@@ -7,7 +7,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
-public interface NSU {
+/**
+ * Created by test on 29/03/2016.
+ */
+public interface NSM {
 	public ItemStack getItemInMainHand(LivingEntity player);
 
 	public ItemStack getItemInOffHand(LivingEntity player);

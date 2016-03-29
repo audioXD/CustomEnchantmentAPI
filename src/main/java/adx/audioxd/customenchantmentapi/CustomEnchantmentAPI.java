@@ -1,7 +1,7 @@
 package adx.audioxd.customenchantmentapi;
 
 
-import adx.audioxd.customenchantmentapi.abst.api.NSU;
+import adx.audioxd.customenchantmentapi.abst.api.NSM;
 import adx.audioxd.customenchantmentapi.commands.PluginTabComplete;
 import adx.audioxd.customenchantmentapi.config.DefaultConfig;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
@@ -42,9 +42,9 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		return lc;
 	}
 
-	private NSU nsu;
-	public NSU getNSU() {
-		return nsu;
+	private NSM nsm;
+	public NSM getNSM() {
+		return nsm;
 	}
 
 	private final String version;
@@ -72,9 +72,10 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		{
 			logger.info("Bukkit version: " + version);
 			try {
-				final Class<?> clazz = Class.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSUHandler");
-				if (NSU.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
-					this.nsu = (NSU) clazz.getConstructor().newInstance(); // Set our handler
+				final Class<?> clazz = Class
+						.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSMHandler");
+				if (NSM.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
+					this.nsm = (NSM) clazz.getConstructor().newInstance(); // Set our handler
 				}
 			} catch (final Exception e) {
 				logger.info(e.getMessage());
@@ -99,7 +100,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 				Method notOff = CEPLListener.class.getMethod("itemNotInOffHand", LivingEntity.class, ItemStack.class);
 				Method main = CEPLListener.class.getMethod("itemInMainHand", LivingEntity.class, ItemStack.class);
 				Method off = CEPLListener.class.getMethod("itemInOffHand", LivingEntity.class, ItemStack.class);
-				Bukkit.getPluginManager().registerEvents(nsu.getVersionListener(notMain, notOff, main, off), this);
+				Bukkit.getPluginManager().registerEvents(nsm.getVersionListener(notMain, notOff, main, off), this);
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
 			}

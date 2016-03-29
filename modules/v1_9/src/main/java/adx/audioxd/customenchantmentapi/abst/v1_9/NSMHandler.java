@@ -1,8 +1,8 @@
 package adx.audioxd.customenchantmentapi.abst.v1_9;
 
 
+import adx.audioxd.customenchantmentapi.abst.api.NSM;
 import adx.audioxd.customenchantmentapi.abst.api.VersionListenr;
-import adx.audioxd.customenchantmentapi.abst.api.NSU;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
-public class NSUHandler implements NSU {
+public class NSMHandler implements NSM {
 	public ItemStack getItemInMainHand(LivingEntity player) {
 		return player.getEquipment().getItemInMainHand();
 	}
@@ -34,8 +34,7 @@ public class NSUHandler implements NSU {
 			super(notMain, notOff, main, off);
 		}
 
-		@EventHandler
-		public void hotbarSwap(PlayerSwapHandItemsEvent event){
+		@EventHandler public void hotbarSwap(PlayerSwapHandItemsEvent event) {
 			this.itemNotInMainHand(event.getPlayer(), event.getOffHandItem());
 			this.itemNotInOffHand(event.getPlayer(), event.getMainHandItem());
 

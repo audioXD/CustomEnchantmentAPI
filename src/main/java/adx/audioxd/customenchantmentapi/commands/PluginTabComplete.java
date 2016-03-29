@@ -1,28 +1,29 @@
 package adx.audioxd.customenchantmentapi.commands;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
+import adx.audioxd.customenchantmentapi.EnchantmentRegistery;
+import adx.audioxd.customenchantmentapi.config.LanguageConfig;
+import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
+import adx.audioxd.customenchantmentapi.listeners.CEPLListener;
+import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
-import adx.audioxd.customenchantmentapi.EnchantmentRegistery;
-import adx.audioxd.customenchantmentapi.config.LanguageConfig;
-import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
-import adx.audioxd.customenchantmentapi.utils.ItemUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class PluginTabComplete implements TabExecutor {
 
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+	@Override public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		List<String> out = new ArrayList<String>();
 		if (args.length == 1) {
 			if ("list".startsWith(args[0].toLowerCase())) out.add("list");
@@ -112,14 +113,15 @@ public class PluginTabComplete implements TabExecutor {
 				if (args.length >= 2) {
 					Enchantment ench = EnchantmentRegistery.getFromID(args[1]);
 					if (ench != null) {
-						if (!(player.hasPermission("adx.ceapi.unenchant." + args[1].toLowerCase())
-								|| player.hasPermission("adx.ceapi.unenchant.*"))) {
+						if (!(player.hasPermission("adx.ceapi.unenchant." + args[1].toLowerCase()) || player
+								.hasPermission("adx.ceapi.unenchant.*"))) {
 							sender.sendMessage(lc.UNENCHANT_NO_ACCES_TO_ENCHANTMENT
 									.format("adx.ceapi.unenchant." + args[1].toLowerCase(), ench.getDisplay("")));
 							return false;
 						}
-
+						ItemStack prew = new ItemStack(ItemUtil.getMainHandItem(player));
 						if (EnchantmentRegistery.unenchant(ItemUtil.getMainHandItem(player), ench)) {
+							CEPLListener.itemNotInHand(player, prew, HandType.MAIN);
 							sender.sendMessage(lc.UNENCHANT_SUCCES.format(ench.getDisplay("")));
 						} else {
 							sender.sendMessage(lc.UNENCHANT_ERROR.format(ench.getDisplay("")));
@@ -147,24 +149,26 @@ public class PluginTabComplete implements TabExecutor {
 				if (args.length >= 2) {
 					Enchantment ench = EnchantmentRegistery.getFromID(args[1]);
 					if (ench != null) {
-						if (!(player.hasPermission("adx.ceapi.enchant." + args[1].toLowerCase())
-								|| player.hasPermission("adx.ceapi.enchant.*"))) {
+						if (!(player.hasPermission("adx.ceapi.enchant." + args[1].toLowerCase()) || player
+								.hasPermission("adx.ceapi.enchant.*"))) {
 							sender.sendMessage(lc.ENCHANT_NO_ACCES_TO_ENCHANTMENT
 									.format("adx.ceapi.enchant." + args[1].toLowerCase(), ench.getDisplay("")));
 							return false;
 						}
 
-						int lvl = (args.length == 2) ? 1
-								: ((StringUtils.isNumeric(args[2])) ? Integer.valueOf(args[2]) : 1);
+						int lvl = (args.length == 2) ?
+								1 :
+								((StringUtils.isNumeric(args[2])) ? Integer.valueOf(args[2]) : 1);
 						if (lvl < 1) {
 							sender.sendMessage(lc.LEVEL_LESS_THAN_ONE.format());
 							return false;
 						}
 
 						if (EnchantmentRegistery.enchant(ItemUtil.getMainHandItem(player), ench, lvl, true, false)) {
+							CEPLListener.itemInHand(player, ItemUtil.getMainHandItem(player), HandType.MAIN);
 							sender.sendMessage(lc.ENCHANT_SUCCES.format(ench.getDisplay(lvl)));
 						} else {
-							sender.sendMessage(lc.UNENCHANT_ERROR.format(ench.getDisplay(lvl)));
+							sender.sendMessage(lc.ENCHANT_ERROR.format(ench.getDisplay(lvl)));
 						}
 						return false;
 					}

@@ -72,8 +72,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		{
 			logger.info("Bukkit version: " + version);
 			try {
-				final Class<?> clazz = Class
-						.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSMHandler");
+				final Class<?> clazz = Class.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSMHandler");
 				if (NSM.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
 					this.nsm = (NSM) clazz.getConstructor().newInstance(); // Set our handler
 				}

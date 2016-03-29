@@ -1,12 +1,9 @@
 package adx.audioxd.customenchantmentapi.utils;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
+import adx.audioxd.customenchantmentapi.enums.ItemType;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -17,8 +14,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import adx.audioxd.customenchantmentapi.enums.ItemType;
-import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ItemUtil {
 	/**************************************************************************************************/
@@ -250,4 +249,5 @@ public class ItemUtil {
 			}
 		}
 	}
+
 }

@@ -1,6 +1,8 @@
 package adx.audioxd.customenchantmentapi.utils;
 
 
+import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -139,6 +141,12 @@ public class GameLogger {
 
 	public void debug(String message) {
 		if (DEBUG) info("[DEBUG] " + message);
+	}
+
+	public void printException(Exception e) {
+		warning(e.getLocalizedMessage());
+		warning(e.getMessage());
+		e.printStackTrace();
 	}
 
 	public void createDefaultLogFiles(File folder) {

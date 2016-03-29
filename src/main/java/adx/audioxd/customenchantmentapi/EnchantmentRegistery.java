@@ -1,24 +1,19 @@
 package adx.audioxd.customenchantmentapi;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
+import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
+import adx.audioxd.customenchantmentapi.events.enchant.EEnchantEvent;
+import adx.audioxd.customenchantmentapi.events.enchant.EUnenchantEvent;
+import adx.audioxd.customenchantmentapi.utils.ItemUtil;
+import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
-import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
-import adx.audioxd.customenchantmentapi.utils.ItemUtil;
-import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
+import java.util.*;
 
 public class EnchantmentRegistery {
 	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<Plugin, Map<String, Enchantment>>();
@@ -208,19 +203,20 @@ public class EnchantmentRegistery {
 		ItemMeta data = item.getItemMeta();
 		if (!data.hasLore()) return false;
 		List<String> lore = data.getLore();
+		if (lore.isEmpty()) return false;
 
-		for (int i = 0; i < lore.size(); i++) {
-			String line = lore.get(i);
-			if (enchantment.hasCustomEnchantment(line)) {
-				lore.remove(i);
-				data.setLore(lore);
-				item.setItemMeta(data);
-				CustomEnchantmentAPI.getInstace().getTLogger().info("Unenchanted item with: " + line);
-				return true;
-			}
+		List<String> newLore = new ArrayList<String>();
+
+		for (String line : lore) {
+			if (!enchantment.hasCustomEnchantment(line)) newLore.add(line);
 		}
+		if (lore.equals(newLore)) return false;
 
-		return false;
+		data.setLore(newLore);
+		item.setItemMeta(data);
+		CustomEnchantmentAPI.getCeapiLogger().info("Unenchanted item with: " + enchantment.getDisplay(""));
+		enchantment.fireEvent(new EUnenchantEvent(item));
+		return true;
 	}
 
 	/**
@@ -258,7 +254,7 @@ public class EnchantmentRegistery {
 					}
 					if ((level > maxLvl && override_if_larger_level) || override) {
 						lore.add(0, enchantment.getDisplay(level));
-						CustomEnchantmentAPI.getInstace().getTLogger()
+						CustomEnchantmentAPI.getCeapiLogger()
 								.info("Enchanted item with: " + enchantment.getDisplay(level));
 						flag = true;
 					}
@@ -267,6 +263,7 @@ public class EnchantmentRegistery {
 			data.setLore(lore);
 		}
 		item.setItemMeta(data);
+		if (flag) enchantment.fireEvent(new EEnchantEvent(level, item));
 		return flag;
 	}
 

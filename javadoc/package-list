@@ -9,6 +9,7 @@ adx.audioxd.customenchantmentapi.enchantment.event.forhelp
 adx.audioxd.customenchantmentapi.enums
 adx.audioxd.customenchantmentapi.events.bow
 adx.audioxd.customenchantmentapi.events.damage
+adx.audioxd.customenchantmentapi.events.enchant
 adx.audioxd.customenchantmentapi.events.inventory
 adx.audioxd.customenchantmentapi.events.inventory.hand
 adx.audioxd.customenchantmentapi.events.inventory.hand.enums

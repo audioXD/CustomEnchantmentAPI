@@ -8,10 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class HotbarSwapListener implements Listener {
+public class VersionListenr implements Listener {
 	private final Method notMain, notOff, main, off;
 
-	public HotbarSwapListener(Method notMain, Method notOff, Method main, Method off) {
+	public VersionListenr(Method notMain, Method notOff, Method main, Method off) {
 		this.notMain = notMain;
 		this.notOff = notOff;
 		this.main = main;

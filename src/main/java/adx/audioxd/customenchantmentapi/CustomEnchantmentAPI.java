@@ -18,42 +18,42 @@ import java.lang.reflect.Method;
 
 public class CustomEnchantmentAPI extends JavaPlugin {
 	private static CustomEnchantmentAPI instance;
-
 	public static CustomEnchantmentAPI getInstace() {
 		return instance;
 	}
 
 	private static final GameLogger ceapiLogger = new GameLogger();
-
 	public static GameLogger getCeapiLogger() {
 		return ceapiLogger;
 	}
 
 	private final TLogger logger;
-
 	public TLogger getTLogger() {
 		return logger;
 	}
 
 	private final DefaultConfig dc;
-
 	public DefaultConfig getDefaultConfig() {
 		return dc;
 	}
 
 	private LanguageConfig lc;
-
 	public LanguageConfig getLanguageConfig() {
 		return lc;
 	}
 
 	private NSU nsu;
-
 	public NSU getNSU() {
 		return nsu;
 	}
 
+	private final String version;
+
 	public CustomEnchantmentAPI() {
+		String packageName = this.getServer().getClass().getPackage().getName();
+		String v1 = packageName.substring(packageName.lastIndexOf('.') + 1);
+		version = v1.split("_")[0] + "_" + v1.split("_")[1];
+
 		instance = this;
 		logger = new TLogger(this);
 		ceapiLogger.getLogger().setParent(this.getLogger());
@@ -70,22 +70,19 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		ceapiLogger.createDefaultLogFiles(this.getDataFolder());
 		logger.preEnabled(true);
 		{
-			String packageName = this.getServer().getClass().getPackage().getName();
-			String version = packageName.substring(packageName.lastIndexOf('.') + 1);
-			version = version.split("_")[0] + "_" + version.split("_")[1];
+			logger.info("Bukkit version: " + version);
 			try {
-				final Class<?> clazz = Class
-						.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSUHandler");
+				final Class<?> clazz = Class.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSUHandler");
 				if (NSU.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
 					this.nsu = (NSU) clazz.getConstructor().newInstance(); // Set our handler
 				}
 			} catch (final Exception e) {
-				e.printStackTrace();
+				logger.info(e.getMessage());
 				logger.severe("Could not find support for Spigot " + version + ".");
 				this.setEnabled(false);
+				onDisable();
 				return;
 			}
-			logger.info("Bukkit version: " + version);
 
 			reloadConfigs();
 
@@ -102,7 +99,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 				Method notOff = CEPLListener.class.getMethod("itemNotInOffHand", LivingEntity.class, ItemStack.class);
 				Method main = CEPLListener.class.getMethod("itemInMainHand", LivingEntity.class, ItemStack.class);
 				Method off = CEPLListener.class.getMethod("itemInOffHand", LivingEntity.class, ItemStack.class);
-				Bukkit.getPluginManager().registerEvents(nsu.getHotbarSwapListener(notMain, notOff, main, off), this);
+				Bukkit.getPluginManager().registerEvents(nsu.getVersionListener(notMain, notOff, main, off), this);
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
 			}

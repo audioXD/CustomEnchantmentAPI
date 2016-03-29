@@ -1,7 +1,7 @@
 package adx.audioxd.customenchantmentapi.abst.v1_9;
 
 
-import adx.audioxd.customenchantmentapi.abst.api.HotbarSwapListener;
+import adx.audioxd.customenchantmentapi.abst.api.VersionListenr;
 import adx.audioxd.customenchantmentapi.abst.api.NSU;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -25,11 +25,11 @@ public class NSUHandler implements NSU {
 		return EquipmentSlot.HAND.equals(event.getHand());
 	}
 
-	public HotbarSwapListener getHotbarSwapListener(Method notMain, Method notOff, Method main, Method off) {
+	public VersionListenr getVersionListener(Method notMain, Method notOff, Method main, Method off) {
 		return new HSL(notMain, notOff, main, off);
 	}
 
-	public static class HSL extends HotbarSwapListener{
+	public static class HSL extends VersionListenr {
 		HSL(Method notMain, Method notOff, Method main, Method off) {
 			super(notMain, notOff, main, off);
 		}

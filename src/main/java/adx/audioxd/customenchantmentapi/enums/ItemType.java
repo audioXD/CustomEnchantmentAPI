@@ -1,19 +1,18 @@
 package adx.audioxd.customenchantmentapi.enums;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import adx.audioxd.customenchantmentapi.utils.ItemUtil;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 
 public class ItemType {
+	// Global Fields
 	public final static ItemType SPADE = new ItemType(new Material[] {
 			Material.WOOD_SPADE, Material.STONE_SPADE, Material.IRON_SPADE, Material.GOLD_SPADE, Material.DIAMOND_SPADE
 	});
@@ -82,27 +81,10 @@ public class ItemType {
 	});
 
 	private final Material[] types;
-
-	public Material[] getTypes() {
-		return types;
-	}
-
 	private final List<Material> typesList;
-
-	public List<Material> getTypesList() {
-		return typesList;
-	}
 
 	public ItemType(ItemType[] subIT) {
 		this(subIT, null);
-	}
-
-	public ItemType(List<Material> subMList) {
-		this(null, null, subMList);
-	}
-
-	public ItemType(Material[] subM) {
-		this(null, subM);
 	}
 
 	public ItemType(ItemType[] subIT, Material[] subM) {
@@ -111,13 +93,13 @@ public class ItemType {
 
 	public ItemType(ItemType[] subIT, Material[] subM, List<Material> subMList) {
 		List<Material> materials = new ArrayList<Material>();
-		if (subIT != null) {
-			for (ItemType type : subIT) {
+		if(subIT != null) {
+			for(ItemType type : subIT) {
 				materials.addAll(type.typesList);
 			}
 		}
-		if (subM != null) materials.addAll(asList(subM));
-		if (subMList != null) materials.addAll(subMList);
+		if(subM != null) materials.addAll(asList(subM));
+		if(subMList != null) materials.addAll(subMList);
 
 		materials = removeNullIndex(materials);
 		Collections.sort(materials);
@@ -128,20 +110,36 @@ public class ItemType {
 
 	private List<Material> removeNullIndex(List<Material> in) {
 		List<Material> out = new ArrayList<Material>();
-		for (Material mat : in) {
-			if (mat == null) continue;
+		for(Material mat : in) {
+			if(mat == null) continue;
 			out.add(mat);
 		}
 		return out;
 	}
 
+	public ItemType(List<Material> subMList) {
+		this(null, null, subMList);
+	}
+
+	public ItemType(Material[] subM) {
+		this(null, subM);
+	}
+
 	public boolean matchType(ItemStack item) {
-		if (ItemUtil.isEmpty(item)) return false;
+		if(ItemUtil.isEmpty(item)) return false;
 		return typesList.contains(item.getType());
 	}
 
 	public boolean matchType(Material material) {
-		if (material == null) return false;
+		if(material == null) return false;
 		return typesList.contains(material);
+	}
+
+	public Material[] getTypes() {
+		return types;
+	}
+
+	public List<Material> getTypesList() {
+		return typesList;
 	}
 }

@@ -1,51 +1,32 @@
 package adx.audioxd.customenchantmentapi.plugin;
 
 
-import java.util.logging.Level;
-
+import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
+import java.util.logging.Level;
 
 public class TLogger {
-	private boolean DEBUG = false;
-	public boolean isDebug() {
-		return DEBUG;
-	}
-	public void setDebug(boolean debug) {
-		DEBUG = debug;
-	}
-
-	private boolean PUBLIC = true;
-	public boolean isPublic() {
-		return PUBLIC;
-	}
-	public void setPublic(boolean isPublic) {
-		PUBLIC = isPublic;
-	}
-
 	private final Plugin plugin;
+	private boolean DEBUG = false;
+	private boolean PUBLIC = true;
 
 	public TLogger(Plugin plugin) {
 		this.plugin = plugin;
-	}
-
-	public void log(Level ll, String message) {
-		CustomEnchantmentAPI.getCeapiLogger().log(ll, "<" + plugin.getName() + ">: " + message);
-		if (PUBLIC) plugin.getLogger().log(ll, message);
-	}
-
-	public void info(String message) {
-		log(Level.INFO, message);
 	}
 
 	public void severe(String message) {
 		log(Level.SEVERE, message);
 	}
 
+	public void log(Level ll, String message) {
+		CustomEnchantmentAPI.getCeapiLogger().log(ll, "<" + plugin.getName() + ">: " + message);
+		if(PUBLIC) plugin.getLogger().log(ll, message);
+	}
+
 	public void debug(String message) {
-		if (DEBUG) log(Level.INFO, "[DEBUG] " + message);
+		if(DEBUG) log(Level.INFO, "[DEBUG] " + message);
 	}
 
 	public void warning(String message) {
@@ -65,7 +46,7 @@ public class TLogger {
 	}
 
 	public void preEnabled(boolean enabled) {
-		if (enabled) {
+		if(enabled) {
 			PluginDescriptionFile p = plugin.getDescription();
 			info(p.getName() + " Version: " + p.getVersion() + " Is being Enabled!");
 		} else {
@@ -74,13 +55,33 @@ public class TLogger {
 		}
 	}
 
+	public void info(String message) {
+		log(Level.INFO, message);
+	}
+
 	public void enabled(boolean enabled) {
-		if (enabled) {
+		if(enabled) {
 			PluginDescriptionFile p = plugin.getDescription();
 			info(p.getName() + " Version: " + p.getVersion() + " Has ben Enabled!");
 		} else {
 			PluginDescriptionFile p = plugin.getDescription();
 			info(p.getName() + " Version: " + p.getVersion() + " Has ben Disabled!");
 		}
+	}
+
+	public boolean isDebug() {
+		return DEBUG;
+	}
+
+	public void setDebug(boolean debug) {
+		DEBUG = debug;
+	}
+
+	public boolean isPublic() {
+		return PUBLIC;
+	}
+
+	public void setPublic(boolean isPublic) {
+		PUBLIC = isPublic;
 	}
 }

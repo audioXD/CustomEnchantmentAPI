@@ -7,18 +7,6 @@ public class Option {
 	private final String path;
 	private Object value;
 
-	public String getPath() {
-		return path;
-	}
-
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
-	public Object getValue() {
-		return value;
-	}
-
 	public Option(String path, Object value) {
 		this.path = path;
 		this.value = value;
@@ -29,7 +17,7 @@ public class Option {
 	}
 
 	public static final void loadIfExist(Config config, Option option) {
-		if (config.getConfig().isSet(option.getPath())) {
+		if(config.getConfig().isSet(option.getPath())) {
 			option.setValue(config.getConfig().get(option.getPath()));
 		} else {
 			save(config, option);
@@ -37,11 +25,23 @@ public class Option {
 		}
 	}
 
-	public final void save(Config config) {
-		save(config, this);
+	public String getPath() {
+		return path;
 	}
 
 	public static final void save(Config config, Option option) {
 		config.getConfig().set(option.getPath(), option.getValue());
+	}
+
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	public final void save(Config config) {
+		save(config, this);
 	}
 }

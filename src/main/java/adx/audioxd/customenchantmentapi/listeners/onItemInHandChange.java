@@ -31,74 +31,73 @@ public class onItemInHandChange extends CEPLListener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onHotbarChange(PlayerItemHeldEvent event) {
 		Player player = event.getPlayer();
-		if (player == null) return;
+		if(player == null) return;
 
 		ItemStack newItem = player.getInventory().getItem(event.getNewSlot());
 		ItemStack prewItem = player.getInventory().getItem(event.getPreviousSlot());
 
-		if (!ItemUtil.isEmpty(prewItem)) this.itemNotInHand(player, prewItem, HandType.MAIN);
-		if (!ItemUtil.isEmpty(newItem)) this.itemInHand(player, newItem, HandType.MAIN);
+		if(!ItemUtil.isEmpty(prewItem)) itemNotInHand(player, prewItem, HandType.MAIN);
+		if(!ItemUtil.isEmpty(newItem)) itemInHand(player, newItem, HandType.MAIN);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDeath(EntityDeathEvent event) {
 		LivingEntity entity = event.getEntity();
-		if (entity == null) return;
+		if(entity == null) return;
 
-		if (!ItemUtil.isEmpty(ItemUtil.getMainHandItem(entity)))
-			this.itemNotInHand(entity, ItemUtil.getMainHandItem(entity), HandType.MAIN);
-		if (!ItemUtil.isEmpty(ItemUtil.getOffHandItem(entity)))
-			this.itemNotInHand(entity, ItemUtil.getOffHandItem(entity), HandType.OFF);
+		if(!ItemUtil.isEmpty(ItemUtil.getMainHandItem(entity)))
+			itemNotInHand(entity, ItemUtil.getMainHandItem(entity), HandType.MAIN);
+		if(!ItemUtil.isEmpty(ItemUtil.getOffHandItem(entity)))
+			itemNotInHand(entity, ItemUtil.getOffHandItem(entity), HandType.OFF);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPickUp(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
-		if (player == null) return;
+		if(player == null) return;
 
 		ItemStack item = event.getItem().getItemStack();
-		if (item == null) return;
-		if (ItemUtil.getSlotsList(player, item, SlotType.OUTSIDE).contains(player.getInventory().getHeldItemSlot()))
-			this.itemInHand(player, item, HandType.MAIN);
+		if(item == null) return;
+		if(ItemUtil.getSlotsList(player, item, SlotType.OUTSIDE).contains(player.getInventory().getHeldItemSlot()))
+			itemInHand(player, item, HandType.MAIN);
 
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDropUp(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
-		if (player == null) return;
+		if(player == null) return;
 
 		ItemStack item = event.getItemDrop().getItemStack();
-		if (item == null) return;
+		if(item == null) return;
 
-		this.itemNotInHand(player, item, HandType.MAIN);
+		itemNotInHand(player, item, HandType.MAIN);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void slotChange(InventoryClickEvent event) {
-		if (event.getWhoClicked() == null) return;
-		if (!(event.getWhoClicked() instanceof Player)) return;
-		if (event.getCurrentItem() == null && event.getCursor() == null) return;
+		if(event.getWhoClicked() == null) return;
+		if(!(event.getWhoClicked() instanceof Player)) return;
+		if(event.getCurrentItem() == null && event.getCursor() == null) return;
 
 		Player player = (Player) event.getWhoClicked();
-		if (player == null) return;
+		if(player == null) return;
 
-		boolean shift = (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) ? true
-				: false;
+		boolean shift = (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT);
 
-		if (shift) {
+		if(shift) {
 			ItemStack item = event.getCurrentItem();
-			if (ItemUtil.canEnquipt(item, player)
+			if(ItemUtil.canEnquipt(item, player)
 					&& event.getInventory().getName().equalsIgnoreCase("container.crafting"))
 				return;
-			if (event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
+			if(event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
 				Map<Integer, ItemStack> items = ItemUtil.getSlots(player, item, event.getSlotType());
 
-				if (event.getSlot() == player.getInventory().getHeldItemSlot() && !items.isEmpty())
-					this.itemNotInHand(player, item, HandType.MAIN);
+				if(event.getSlot() == player.getInventory().getHeldItemSlot() && !items.isEmpty())
+					itemNotInHand(player, item, HandType.MAIN);
 
-				if (items.containsKey(player.getInventory().getHeldItemSlot()))
-					this.itemInHand(player, items.get(player.getInventory().getHeldItemSlot()), HandType.MAIN);
+				if(items.containsKey(player.getInventory().getHeldItemSlot()))
+					itemInHand(player, items.get(player.getInventory().getHeldItemSlot()), HandType.MAIN);
 
 			}
 		} else {
@@ -109,21 +108,23 @@ public class onItemInHandChange extends CEPLListener {
 			boolean hotbarSwap = (event.getAction().equals(InventoryAction.HOTBAR_SWAP)
 					&& (event.getHotbarButton() == player.getInventory().getHeldItemSlot()));
 
-			if (item != null && (event.getSlot() == player.getInventory().getHeldItemSlot() || offHand || hotbarSwap)) {
-				if (hotbarSwap && offHand) {
-					this.itemNotInMainHand(player, ItemUtil.getMainHandItem(player));
-					this.itemNotInOffHand(player, ItemUtil.getOffHandItem(player));
+			if(item != null && (event.getSlot() == player.getInventory().getHeldItemSlot() || offHand || hotbarSwap)) {
+				if(hotbarSwap && offHand) {
+					itemNotInMainHand(player, ItemUtil.getMainHandItem(player));
+					itemNotInOffHand(player, ItemUtil.getOffHandItem(player));
 
-					this.itemInMainHand(player, ItemUtil.getOffHandItem(player));
-					this.itemInOffHand(player, ItemUtil.getMainHandItem(player));
-				} else if (offHand && event.getAction().equals(InventoryAction.HOTBAR_SWAP)) {
-					this.itemNotInHand(player, event.getCurrentItem(), HandType.OFF);
-					this.itemInHand(player, player.getInventory().getItem(event.getHotbarButton()), HandType.OFF);
+					itemInMainHand(player, ItemUtil.getOffHandItem(player));
+					itemInOffHand(player, ItemUtil.getMainHandItem(player));
+				} else if(offHand && event.getAction().equals(InventoryAction.HOTBAR_SWAP)) {
+					itemNotInHand(player, event.getCurrentItem(), HandType.OFF);
+					itemInHand(player, player.getInventory().getItem(event.getHotbarButton()), HandType.OFF);
 				} else {
-					this.itemNotInHand(player, (hotbarSwap ? ItemUtil.getMainHandItem(player) : event.getCurrentItem()),
-							offHand ? HandType.OFF : HandType.MAIN);
-					this.itemInHand(player, (hotbarSwap ? event.getCurrentItem() : event.getCursor()),
-							offHand ? HandType.OFF : HandType.MAIN);
+					itemNotInHand(player, (hotbarSwap ? ItemUtil.getMainHandItem(player) : event.getCurrentItem()),
+					              offHand ? HandType.OFF : HandType.MAIN
+					);
+					itemInHand(player, (hotbarSwap ? event.getCurrentItem() : event.getCursor()),
+					           offHand ? HandType.OFF : HandType.MAIN
+					);
 				}
 			}
 		}

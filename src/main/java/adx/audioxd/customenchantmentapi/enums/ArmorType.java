@@ -19,21 +19,20 @@ public enum ArmorType {
 	/**
 	 * Attempts to match the ArmorType for the specified ItemStack.
 	 *
-	 * @param itemStack
-	 *            The ItemStack to parse the type of.
+	 * @param itemStack The ItemStack to parse the type of.
 	 * @return The parsed ArmorType. (null if none were found.)
 	 */
 	public final static ArmorType matchType(final ItemStack itemStack) {
-		if (itemStack == null) { return null; }
-		if (ItemType.HELMET.matchType(itemStack)) {
+		if(itemStack == null) { return null; }
+		if(ItemType.HELMET.matchType(itemStack)) {
 			return ArmorType.HELMET;
-		} else if (ItemType.CHESTPLATE.matchType(itemStack)) {
+		} else if(ItemType.CHESTPLATE.matchType(itemStack)) {
 			return ArmorType.CHESTPLATE;
-		} else if (ItemType.ELYTRA.matchType(itemStack)) {
+		} else if(ItemType.ELYTRA.matchType(itemStack)) {
 			return ArmorType.ELYTRA;
-		} else if (ItemType.LEGGNIG.matchType(itemStack)) {
+		} else if(ItemType.LEGGNIG.matchType(itemStack)) {
 			return ArmorType.LEGGINGS;
-		} else if (ItemType.BOOT.matchType(itemStack)) {
+		} else if(ItemType.BOOT.matchType(itemStack)) {
 			return ArmorType.BOOTS;
 		} else {
 			return null;

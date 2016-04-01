@@ -46,32 +46,32 @@ public class RomanNumeral {
 		private final int num;
 
 		public RN(int arabic) {
-			if (arabic < 1) throw new NumberFormatException("Value of RomanNumeral must be positive.");
-			if (arabic > 3999) throw new NumberFormatException("Value of RomanNumeral must be 3999 or less.");
+			if(arabic < 1) throw new NumberFormatException("Value of RomanNumeral must be positive.");
+			if(arabic > 3999) throw new NumberFormatException("Value of RomanNumeral must be 3999 or less.");
 			num = arabic;
 		}
 
 		public RN(String roman) {
 
-			if (roman.length() == 0)
+			if(roman.length() == 0)
 				throw new NumberFormatException("An empty string does not define a Roman numeral.");
 
 			roman = roman.toUpperCase();
 
 			int i = 0;
 			int arabic = 0;
-			while (i < roman.length()) {
+			while(i < roman.length()) {
 
 				char letter = roman.charAt(i);
 				int number = letterToNumber(letter);
 
 				i++;
 
-				if (i == roman.length()) {
+				if(i == roman.length()) {
 					arabic += number;
 				} else {
 					int nextNumber = letterToNumber(roman.charAt(i));
-					if (nextNumber > number) {
+					if(nextNumber > number) {
 						arabic += (nextNumber - number);
 						i++;
 					} else {
@@ -81,14 +81,14 @@ public class RomanNumeral {
 
 			}
 
-			if (arabic > 3999) throw new NumberFormatException("Roman numeral must have value 3999 or less.");
+			if(arabic > 3999) throw new NumberFormatException("Roman numeral must have value 3999 or less.");
 
 			num = arabic;
 
 		}
 
 		private int letterToNumber(char letter) {
-			switch (letter) {
+			switch(letter) {
 				case 'I':
 					return 1;
 				case 'V':
@@ -112,8 +112,8 @@ public class RomanNumeral {
 			String roman = ""; // The roman numeral.
 			int N = num; // N represents the part of num that still has
 			// to be converted to Roman numeral representation.
-			for (int i = 0; i < numbers.length; i++) {
-				while (N >= numbers[i]) {
+			for(int i = 0; i < numbers.length; i++) {
+				while(N >= numbers[i]) {
 					roman += letters[i];
 					N -= numbers[i];
 				}

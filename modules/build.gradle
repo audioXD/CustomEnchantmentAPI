@@ -1,6 +1,6 @@
-configure( subprojects - project (':modules:API') ) {
+configure(subprojects - project(':modules:API')) {
     dependencies {
-        compile(project (':modules:API')) {
+        compile(project(':modules:API')) {
             transitive = false
         }
         compile fileTree(dir: 'libs', include: '*.jar')

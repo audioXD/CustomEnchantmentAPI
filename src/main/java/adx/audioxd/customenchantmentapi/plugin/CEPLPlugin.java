@@ -1,17 +1,12 @@
 package adx.audioxd.customenchantmentapi.plugin;
 
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import adx.audioxd.customenchantmentapi.EnchantmentRegistery;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class CEPLPlugin extends JavaPlugin {
 
 	private final TLogger logger;
-
-	public final TLogger getPluginLogger() {
-		return logger;
-	}
 
 	public CEPLPlugin() {
 		logger = new TLogger(this);
@@ -24,6 +19,8 @@ public abstract class CEPLPlugin extends JavaPlugin {
 		logger.enabled(true);
 	}
 
+	public abstract void Enable();
+
 	@Override
 	public final void onDisable() {
 		logger.preEnabled(false);
@@ -32,8 +29,10 @@ public abstract class CEPLPlugin extends JavaPlugin {
 		logger.enabled(false);
 	}
 
-	public abstract void Enable();
-
 	public abstract void Disable();
+
+	public final TLogger getPluginLogger() {
+		return logger;
+	}
 
 }

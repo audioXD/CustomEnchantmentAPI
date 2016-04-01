@@ -1,49 +1,50 @@
 def modules = []
-configure( allprojects - project (':modules') ) {
+configure(allprojects - project(':modules')) {
     apply plugin: 'eclipse'
     apply plugin: 'java'
-    
+
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
-    
+
     dependencies {
         compile fileTree(dir: 'libs', include: '*.jar')
     }
-    if(path.startsWith(":modules:")){
+    if (path.startsWith(":modules:")) {
         println "Found module $name"
         modules << path
     }
 }
+
+// For the main project
 
 archivesBaseName = 'CustomEnchantmentAPI'
 group = 'adx.audioxd.customenchantmentapi'
 version = '2.2-RELEASE'
 
 dependencies {
-    compile(project(':modules:API')){
+    compile(project(':modules:API')) {
         transitive = false
     }
 }
 
-jar {
-    from files( modules.collect{ 
-        project(it).sourceSets.main.output 
-    })
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include 'plugin.yml'
+
+        expand 'plugin_name': project.archivesBaseName,
+                'plugin_version': project.version,
+                'plugin_main': project.group + '.' + project.archivesBaseName
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'plugin.yml'
+        exclude '**/*.dev'
+    }
 }
 
-processResources {
-	from(sourceSets.main.resources.srcDirs) {
-		include 'plugin.yml'
-
-		// replace version and mcversion
-		expand  'plugin_name': project.archivesBaseName, 
-				'plugin_version': project.version,
-				'plugin_main': project.group + '.' + project.archivesBaseName
-	}
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'plugin.yml'
-		exclude '**/*.dev'
-	}
+jar {
+    from files(modules.collect {
+        project(it).sourceSets.main.output
+    })
 }
 
 uploadArchives {

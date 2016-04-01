@@ -1,14 +1,6 @@
 package adx.audioxd.customenchantmentapi.listeners;
 
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
-
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.enums.ItemType;
@@ -16,6 +8,13 @@ import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedByEntityEvent
 import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedEvent.Type;
 import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagesEntityEvent;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class onEntityDamagedByEntity extends CEPLListener {
 
@@ -25,8 +24,8 @@ public class onEntityDamagedByEntity extends CEPLListener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onOwnerDamagedByEntity(EntityDamageByEntityEvent event) {
-		if (event.getEntity() == null) return;
-		if (!(event.getEntity() instanceof LivingEntity)) return;
+		if(event.getEntity() == null) return;
+		if(!(event.getEntity() instanceof LivingEntity)) return;
 
 		LivingEntity owner = (LivingEntity) event.getEntity();
 		Entity damager = event.getDamager();
@@ -34,10 +33,11 @@ public class onEntityDamagedByEntity extends CEPLListener {
 		// Main hand and off hand
 		ItemStack mainHand = ItemUtil.getMainHandItem(owner), offHand = ItemUtil.getOffHandItem(owner);
 		// Main hand
-		if (ItemType.SHIELD.matchType(mainHand)) {
-			for (Enchanted ench : this.getEnchantments(mainHand)) {
+		if(ItemType.SHIELD.matchType(mainHand)) {
+			for(Enchanted ench : getEnchantments(mainHand)) {
 				EOwnerDamagedByEntityEvent e = new EOwnerDamagedByEntityEvent(ench.getLvl(), mainHand, owner,
-						event.getDamage(), event.getCause(), Type.SHIELD, damager);
+				                                                              event.getDamage(), event.getCause(), Type.SHIELD, damager
+				);
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -46,9 +46,10 @@ public class onEntityDamagedByEntity extends CEPLListener {
 				event.setDamage(e.getDamage());
 			}
 		} else {
-			for (Enchanted ench : this.getEnchantments(mainHand)) {
+			for(Enchanted ench : getEnchantments(mainHand)) {
 				EOwnerDamagedByEntityEvent e = new EOwnerDamagedByEntityEvent(ench.getLvl(), mainHand, owner,
-						event.getDamage(), event.getCause(), Type.IN_HAND, damager);
+				                                                              event.getDamage(), event.getCause(), Type.IN_HAND, damager
+				);
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -58,10 +59,11 @@ public class onEntityDamagedByEntity extends CEPLListener {
 			}
 		}
 		// OFf hand
-		if (ItemType.SHIELD.matchType(offHand)) {
-			for (Enchanted ench : this.getEnchantments(offHand)) {
+		if(ItemType.SHIELD.matchType(offHand)) {
+			for(Enchanted ench : getEnchantments(offHand)) {
 				EOwnerDamagedByEntityEvent e = new EOwnerDamagedByEntityEvent(ench.getLvl(), offHand, owner,
-						event.getDamage(), event.getCause(), Type.SHIELD, damager);
+				                                                              event.getDamage(), event.getCause(), Type.SHIELD, damager
+				);
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -70,9 +72,10 @@ public class onEntityDamagedByEntity extends CEPLListener {
 				event.setDamage(e.getDamage());
 			}
 		} else {
-			for (Enchanted ench : this.getEnchantments(offHand)) {
+			for(Enchanted ench : getEnchantments(offHand)) {
 				EOwnerDamagedByEntityEvent e = new EOwnerDamagedByEntityEvent(ench.getLvl(), offHand, owner,
-						event.getDamage(), event.getCause(), Type.IN_HAND, damager);
+				                                                              event.getDamage(), event.getCause(), Type.IN_HAND, damager
+				);
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -82,10 +85,11 @@ public class onEntityDamagedByEntity extends CEPLListener {
 			}
 		}
 		// Armor
-		for (ItemStack item : owner.getEquipment().getArmorContents()) {
-			for (Enchanted ench : this.getEnchantments(item)) {
+		for(ItemStack item : owner.getEquipment().getArmorContents()) {
+			for(Enchanted ench : getEnchantments(item)) {
 				EOwnerDamagedByEntityEvent e = new EOwnerDamagedByEntityEvent(ench.getLvl(), item, owner,
-						event.getDamage(), event.getCause(), Type.ARMOR, damager);
+				                                                              event.getDamage(), event.getCause(), Type.ARMOR, damager
+				);
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -97,13 +101,14 @@ public class onEntityDamagedByEntity extends CEPLListener {
 		}
 
 		/// for horses
-		if (owner instanceof Horse) {
+		if(owner instanceof Horse) {
 			Horse horse = (Horse) owner;
 
-			for (Enchanted ench : this.getEnchantments(horse.getInventory().getArmor())) {
+			for(Enchanted ench : getEnchantments(horse.getInventory().getArmor())) {
 				EOwnerDamagedByEntityEvent e = new EOwnerDamagedByEntityEvent(ench.getLvl(),
-						horse.getInventory().getArmor(), horse, event.getDamage(), event.getCause(), Type.HORSE_ARMOR,
-						damager);
+				                                                              horse.getInventory().getArmor(), horse, event.getDamage(), event.getCause(), Type.HORSE_ARMOR,
+				                                                              damager
+				);
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -111,10 +116,11 @@ public class onEntityDamagedByEntity extends CEPLListener {
 				event.setCancelled(e.isCancelled());
 				event.setDamage(e.getDamage());
 			}
-			for (Enchanted ench : this.getEnchantments(horse.getInventory().getSaddle())) {
+			for(Enchanted ench : getEnchantments(horse.getInventory().getSaddle())) {
 				EOwnerDamagedByEntityEvent e = new EOwnerDamagedByEntityEvent(ench.getLvl(),
-						horse.getInventory().getSaddle(), horse, event.getDamage(), event.getCause(), Type.SADDLE,
-						damager);
+				                                                              horse.getInventory().getSaddle(), horse, event.getDamage(), event.getCause(), Type.SADDLE,
+				                                                              damager
+				);
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -127,15 +133,16 @@ public class onEntityDamagedByEntity extends CEPLListener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onOwnerDamagesEntity(EntityDamageByEntityEvent event) {
-		if (!(event.getDamager() instanceof LivingEntity)) return;
+		if(!(event.getDamager() instanceof LivingEntity)) return;
 		LivingEntity owner = (LivingEntity) event.getDamager();
 		Entity entity = event.getEntity();
 
 		ItemStack item = ItemUtil.getMainHandItem(owner);
 
-		for (Enchanted ench : this.getEnchantments(item)) {
+		for(Enchanted ench : getEnchantments(item)) {
 			EOwnerDamagesEntityEvent e = new EOwnerDamagesEntityEvent(ench.getLvl(), item, owner, entity,
-					event.getDamage(), event.getCause());
+			                                                          event.getDamage(), event.getCause()
+			);
 			e.setCancelled(event.isCancelled());
 			{
 				ench.fireEvent(e);

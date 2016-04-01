@@ -34,7 +34,8 @@ public class NSMHandler implements NSM {
 			super(notMain, notOff, main, off);
 		}
 
-		@EventHandler public void hotbarSwap(PlayerSwapHandItemsEvent event) {
+		@EventHandler
+		public void hotbarSwap(PlayerSwapHandItemsEvent event) {
 			this.itemNotInMainHand(event.getPlayer(), event.getOffHandItem());
 			this.itemNotInOffHand(event.getPlayer(), event.getMainHandItem());
 

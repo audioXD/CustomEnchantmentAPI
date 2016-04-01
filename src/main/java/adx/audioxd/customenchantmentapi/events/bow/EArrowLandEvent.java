@@ -1,18 +1,18 @@
 package adx.audioxd.customenchantmentapi.events.bow;
 
 
+import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEvent;
 import org.bukkit.entity.Arrow;
 
-import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEvent;
+public class EArrowLandEvent extends EnchantmentEvent {
+	private final Arrow arrow;
 
-public class EArrowLandEvent extends EnchantmentEvent{
-	private Arrow arrow;
-	public Arrow getArrow() {
-		return arrow;
-	}
-
-	public EArrowLandEvent(Arrow arrow, int lvl) {
+	public EArrowLandEvent(int lvl, Arrow arrow) {
 		super(lvl);
 		this.arrow = arrow;
+	}
+
+	public Arrow getArrow() {
+		return arrow;
 	}
 }

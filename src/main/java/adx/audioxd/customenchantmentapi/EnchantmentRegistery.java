@@ -33,8 +33,8 @@ public class EnchantmentRegistery {
 	 * has a Enchantment with the same display name)
 	 */
 	public static synchronized boolean register(Plugin plugin, Enchantment enchantment) {
-		if (plugin == null || enchantment == null) return false;
-		if (enchantments.add(enchantment)) {
+		if(plugin == null || enchantment == null) return false;
+		if(enchantments.add(enchantment)) {
 			Map<String, Enchantment> enchs = enchantmentsMap.containsKey(plugin) ?
 					enchantmentsMap.get(plugin) :
 					new HashMap<String, Enchantment>();
@@ -49,6 +49,10 @@ public class EnchantmentRegistery {
 		return false;
 	}
 
+	private static String getID(Enchantment ench) {
+		return ChatColor.stripColor(ench.getName().toUpperCase()).replace(" ", "_");
+	}
+
 	/**
 	 * Unregisters a Enchantment.
 	 *
@@ -57,13 +61,13 @@ public class EnchantmentRegistery {
 	 * @return If the Enchantment has ben unregistered.
 	 */
 	public static synchronized boolean unregister(Plugin plugin, Enchantment enchantment) {
-		if (plugin == null || enchantment == null) return false;
+		if(plugin == null || enchantment == null) return false;
 
-		if (enchantments.remove(enchantment)) {
-			if (enchantmentsMap.containsKey(plugin)) {
+		if(enchantments.remove(enchantment)) {
+			if(enchantmentsMap.containsKey(plugin)) {
 				Map<String, Enchantment> enchs = enchantmentsMap.get(plugin);
-				if (enchs.containsKey(getID(enchantment))) enchs.remove(getID(enchantment));
-				if (enchs.isEmpty()) enchantmentsMap.remove(plugin);
+				if(enchs.containsKey(getID(enchantment))) enchs.remove(getID(enchantment));
+				if(enchs.isEmpty()) enchantmentsMap.remove(plugin);
 			}
 			backedEnchantments = null;
 			return true;
@@ -78,29 +82,16 @@ public class EnchantmentRegistery {
 	 * @param plugin If it unregistered.
 	 */
 	public static synchronized void unregisterAll(Plugin plugin) {
-		if (plugin == null) return;
+		if(plugin == null) return;
 
-		if (enchantmentsMap.containsKey(plugin)) {
-			for (Enchantment en : enchantmentsMap.get(plugin).values()) {
-				if (enchantments.remove(en)) {
+		if(enchantmentsMap.containsKey(plugin)) {
+			for(Enchantment en : enchantmentsMap.get(plugin).values()) {
+				if(enchantments.remove(en)) {
 					backedEnchantments = null;
 				}
 			}
 			enchantmentsMap.remove(plugin);
 		}
-	}
-
-	private static String getID(Enchantment ench) {
-		return ChatColor.stripColor(ench.getName().toUpperCase()).replace(" ", "_");
-	}
-
-	/**
-	 * Gets all Enchantments registered in a HashMap.
-	 *
-	 * @return Returns a Map.
-	 */
-	public static synchronized Map<Plugin, Map<String, Enchantment>> getEnchantments() {
-		return enchantmentsMap;
 	}
 
 	/**
@@ -109,16 +100,16 @@ public class EnchantmentRegistery {
 	 * @return Returns a Enchantment[].
 	 */
 	public static synchronized Enchantment[] geEnchantmentsArray() {
-		if (backedEnchantments != null) return backedEnchantments;
+		if(backedEnchantments != null) return backedEnchantments;
 		return bake();
 	}
 
 	private static Enchantment[] bake() {
 		Enchantment[] baked = backedEnchantments;
-		if (baked == null) {
+		if(baked == null) {
 			// Set -> array
-			synchronized (EnchantmentRegistery.class) {
-				if ((baked = backedEnchantments) == null) {
+			synchronized(EnchantmentRegistery.class) {
+				if((baked = backedEnchantments) == null) {
 					baked = enchantments.toArray(new Enchantment[enchantments.size()]);
 					Arrays.sort(baked);
 					backedEnchantments = baked;
@@ -139,10 +130,6 @@ public class EnchantmentRegistery {
 		backedEnchantments = null;
 	}
 
-	/********************************************************************/
-	/* Some function for easy use. */
-	/********************************************************************/
-
 	/**
 	 * Gets the Enchantment from the ID.
 	 *
@@ -150,25 +137,29 @@ public class EnchantmentRegistery {
 	 * @return Returns the Enchantment or null.
 	 */
 	public static synchronized Enchantment getFromID(String id) {
-		if (id == null) return null;
-		if (id.trim().length() == 0) return null;
+		if(id == null) return null;
+		if(id.trim().length() == 0) return null;
 
 		String[] data = id.split("\\:");
-		if (data.length < 2) return null;
+		if(data.length < 2) return null;
 		String plugin = data[0];
 		String ench = data[1];
 		Plugin plu = Bukkit.getPluginManager().getPlugin(plugin);
 
-		if (!enchantmentsMap.containsKey(plu)) return null;
+		if(!enchantmentsMap.containsKey(plu)) return null;
 
 		Map<String, Enchantment> data2 = enchantmentsMap.get(plu);
-		if (data2 == null) return null;
-		if (data2.isEmpty()) return null;
-		if (data2.containsKey(ench.toUpperCase())) {
+		if(data2 == null) return null;
+		if(data2.isEmpty()) return null;
+		if(data2.containsKey(ench.toUpperCase())) {
 			return data2.get(ench.toUpperCase());
 		}
 		return null;
 	}
+
+	/********************************************************************/
+	/* Some function for easy use. */
+	/********************************************************************/
 
 	/**
 	 * Returns a ID. That can be used from getFromID().
@@ -178,14 +169,10 @@ public class EnchantmentRegistery {
 	 * @return The ID
 	 */
 	public static String getID(Plugin plugin, Enchantment enchantment) {
-		if (plugin == null) return null;
-		if (enchantment == null) return null;
+		if(plugin == null) return null;
+		if(enchantment == null) return null;
 		return plugin.getName() + ":" + getID(enchantment);
 	}
-
-	// ******************************************************\\
-	// METHODS FOR ENCHANTING \\
-	// ******************************************************\\
 
 	/**
 	 * Unenchants a Enchantment from a Item
@@ -196,21 +183,21 @@ public class EnchantmentRegistery {
 	 * item).
 	 */
 	public static boolean unenchant(ItemStack item, Enchantment enchantment) {
-		if (ItemUtil.isEmpty(item)) return false;
-		if (enchantment == null) return false;
+		if(ItemUtil.isEmpty(item)) return false;
+		if(enchantment == null) return false;
 
-		if (!item.hasItemMeta()) return false;
+		if(!item.hasItemMeta()) return false;
 		ItemMeta data = item.getItemMeta();
-		if (!data.hasLore()) return false;
+		if(!data.hasLore()) return false;
 		List<String> lore = data.getLore();
-		if (lore.isEmpty()) return false;
+		if(lore.isEmpty()) return false;
 
 		List<String> newLore = new ArrayList<String>();
 
-		for (String line : lore) {
-			if (!enchantment.hasCustomEnchantment(line)) newLore.add(line);
+		for(String line : lore) {
+			if(!enchantment.hasCustomEnchantment(line)) newLore.add(line);
 		}
-		if (lore.equals(newLore)) return false;
+		if(lore.equals(newLore)) return false;
 
 		data.setLore(newLore);
 		item.setItemMeta(data);
@@ -218,6 +205,10 @@ public class EnchantmentRegistery {
 		enchantment.fireEvent(new EUnenchantEvent(item));
 		return true;
 	}
+
+	// ******************************************************\\
+	// METHODS FOR ENCHANTING \\
+	// ******************************************************\\
 
 	/**
 	 * Enchantnts a plugin with a Enchantment.
@@ -230,11 +221,11 @@ public class EnchantmentRegistery {
 	 * @return If the enchant method was successful.
 	 */
 	public static boolean enchant(ItemStack item, Enchantment enchantment, int level, boolean override,
-			boolean override_if_larger_level) {
-		if (ItemUtil.isEmpty(item)) return false;
-		if (enchantment == null) return false;
-		if (!enchantment.getType().matchType(item)) return false;
-		if (enchantment.getMaxLvl() < level) level = enchantment.getMaxLvl();
+	                              boolean override_if_larger_level) {
+		if(ItemUtil.isEmpty(item)) return false;
+		if(enchantment == null) return false;
+		if(!enchantment.getType().matchType(item)) return false;
+		if(enchantment.getMaxLvl() < level) level = enchantment.getMaxLvl();
 
 		boolean flag = false;
 
@@ -242,17 +233,17 @@ public class EnchantmentRegistery {
 		{
 			List<String> lore = data.hasLore() ? data.getLore() : new ArrayList<String>();
 			{
-				if (!lore.contains(enchantment.getDisplay(level))) {
+				if(!lore.contains(enchantment.getDisplay(level))) {
 					int maxLvl = 0;
-					for (int i = lore.size() - 1; i >= 0; i--) {
+					for(int i = lore.size() - 1; i >= 0; i--) {
 						String line = lore.get(i);
-						if (enchantment.hasCustomEnchantment(line)) {
+						if(enchantment.hasCustomEnchantment(line)) {
 							int lvl = RomanNumeral.getIntFromRoman(line.substring(line.lastIndexOf(" ") + 1));
-							if (lvl < level || override) lore.remove(i);
-							if (lvl > maxLvl) maxLvl = lvl;
+							if(lvl < level || override) lore.remove(i);
+							if(lvl > maxLvl) maxLvl = lvl;
 						}
 					}
-					if ((level > maxLvl && override_if_larger_level) || override) {
+					if((level > maxLvl && override_if_larger_level) || override) {
 						lore.add(0, enchantment.getDisplay(level));
 						CustomEnchantmentAPI.getCeapiLogger()
 								.info("Enchanted item with: " + enchantment.getDisplay(level));
@@ -263,7 +254,7 @@ public class EnchantmentRegistery {
 			data.setLore(lore);
 		}
 		item.setItemMeta(data);
-		if (flag) enchantment.fireEvent(new EEnchantEvent(level, item));
+		if(flag) enchantment.fireEvent(new EEnchantEvent(level, item));
 		return flag;
 	}
 
@@ -275,17 +266,17 @@ public class EnchantmentRegistery {
 	 */
 	public static synchronized Enchanted[] getEnchantments(ItemStack item) {
 		List<Enchanted> res = new ArrayList<Enchanted>();
-		if (ItemUtil.isEmpty(item)) return res.toArray(new Enchanted[res.size()]);
-		if (!item.hasItemMeta()) return res.toArray(new Enchanted[res.size()]);
+		if(ItemUtil.isEmpty(item)) return res.toArray(new Enchanted[res.size()]);
+		if(!item.hasItemMeta()) return res.toArray(new Enchanted[res.size()]);
 		ItemMeta data = item.getItemMeta();
-		if (!data.hasLore()) return res.toArray(new Enchanted[res.size()]);
+		if(!data.hasLore()) return res.toArray(new Enchanted[res.size()]);
 
-		for (String line : data.getLore()) {
-			if (line == null) continue;
-			if (line.equalsIgnoreCase("")) continue;
+		for(String line : data.getLore()) {
+			if(line == null) continue;
+			if(line.equalsIgnoreCase("")) continue;
 
-			for (Enchantment ench : bake()) {
-				if (ench.hasCustomEnchantment(line)) {
+			for(Enchantment ench : bake()) {
+				if(ench.hasCustomEnchantment(line)) {
 					int lvl = RomanNumeral.getIntFromRoman(line.substring(line.lastIndexOf(" ") + 1));
 					res.add(new Enchanted(lvl, ench));
 				}
@@ -293,5 +284,14 @@ public class EnchantmentRegistery {
 		}
 
 		return res.toArray(new Enchanted[res.size()]);
+	}
+
+	/**
+	 * Gets all Enchantments registered in a HashMap.
+	 *
+	 * @return Returns a Map.
+	 */
+	public static synchronized Map<Plugin, Map<String, Enchantment>> getEnchantments() {
+		return enchantmentsMap;
 	}
 }

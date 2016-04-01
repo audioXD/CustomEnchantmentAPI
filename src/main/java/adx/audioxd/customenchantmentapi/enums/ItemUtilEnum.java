@@ -1,13 +1,13 @@
 package adx.audioxd.customenchantmentapi.enums;
 
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public enum ItemUtilEnum {
 	// OTHER
@@ -94,7 +94,7 @@ public enum ItemUtilEnum {
 
 	ItemUtilEnum(ItemUtilEnum[] sub) {
 		List<Material> materials = new ArrayList<Material>();
-		for (ItemUtilEnum type : sub) {
+		for(ItemUtilEnum type : sub) {
 			materials.addAll(type.getTypesList());
 		}
 
@@ -104,14 +104,8 @@ public enum ItemUtilEnum {
 		this.types = materials.toArray(new Material[materials.size()]);
 	}
 
-	public boolean matchType(ItemStack item) {
-		if (adx.audioxd.customenchantmentapi.utils.ItemUtil.isEmpty(item)) return false;
-		return typesList.contains(item.getType());
-	}
-
-	public boolean matchType(Material material) {
-		if (material == null) return false;
-		return typesList.contains(material);
+	public List<Material> getTypesList() {
+		return typesList;
 	}
 
 	ItemUtilEnum(Material[] types) {
@@ -124,11 +118,17 @@ public enum ItemUtilEnum {
 		this.types = typesList.toArray(new Material[typesList.size()]);
 	}
 
-	public Material[] getTypes() {
-		return types;
+	public boolean matchType(ItemStack item) {
+		if(adx.audioxd.customenchantmentapi.utils.ItemUtil.isEmpty(item)) return false;
+		return typesList.contains(item.getType());
 	}
 
-	public List<Material> getTypesList() {
-		return typesList;
+	public boolean matchType(Material material) {
+		if(material == null) return false;
+		return typesList.contains(material);
+	}
+
+	public Material[] getTypes() {
+		return types;
 	}
 }

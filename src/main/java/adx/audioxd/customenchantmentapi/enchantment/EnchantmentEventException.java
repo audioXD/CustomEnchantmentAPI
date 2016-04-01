@@ -1,5 +1,6 @@
 package adx.audioxd.customenchantmentapi.enchantment;
 
+
 public class EnchantmentEventException extends RuntimeException {
 
 	private static final long serialVersionUID = 6141478629585371864L;

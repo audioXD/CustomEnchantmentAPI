@@ -22,6 +22,14 @@ public class VersionListenr implements Listener {
 		invoke(notMain, owner, item);
 	}
 
+	private void invoke(Method method, LivingEntity owner, ItemStack item) {
+		try {
+			method.invoke(null, owner, item);
+		} catch(IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void itemInMainHand(LivingEntity owner, ItemStack item) {
 		invoke(main, owner, item);
 	}
@@ -32,14 +40,6 @@ public class VersionListenr implements Listener {
 
 	public void itemInOffHand(LivingEntity owner, ItemStack item) {
 		invoke(off, owner, item);
-	}
-
-	private void invoke(Method method, LivingEntity owner, ItemStack item) {
-		try {
-			method.invoke(null, owner, item);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

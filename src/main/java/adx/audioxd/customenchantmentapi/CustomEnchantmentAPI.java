@@ -17,37 +17,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Method;
 
 public class CustomEnchantmentAPI extends JavaPlugin {
-	private static CustomEnchantmentAPI instance;
-	public static CustomEnchantmentAPI getInstace() {
-		return instance;
-	}
-
 	private static final GameLogger ceapiLogger = new GameLogger();
-	public static GameLogger getCeapiLogger() {
-		return ceapiLogger;
-	}
-
+	private static CustomEnchantmentAPI instance;
 	private final TLogger logger;
-	public TLogger getTLogger() {
-		return logger;
-	}
-
 	private final DefaultConfig dc;
-	public DefaultConfig getDefaultConfig() {
-		return dc;
-	}
-
-	private LanguageConfig lc;
-	public LanguageConfig getLanguageConfig() {
-		return lc;
-	}
-
-	private NSM nsm;
-	public NSM getNSM() {
-		return nsm;
-	}
-
 	private final String version;
+	private LanguageConfig lc;
+	private NSM nsm;
 
 	public CustomEnchantmentAPI() {
 		String packageName = this.getServer().getClass().getPackage().getName();
@@ -65,7 +41,17 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		}
 	}
 
-	@Override public void onEnable() {
+	public void reloadConfigs() {
+		(new DefaultConfig(this)).createFileIfDoesNotExist();
+		(new LanguageConfig(this, "/locale/en-US")).createFileIfDoesNotExist();
+		(new LanguageConfig(this, "/locale/Template-en-US")).createFileIfDoesNotExist();
+
+		dc.load();
+		lc = new LanguageConfig(this, "locale/" + dc.MESSAGE_LOCALIZATION_FILE.getValue());
+	}
+
+	@Override
+	public void onEnable() {
 		instance = this;
 		ceapiLogger.createDefaultLogFiles(this.getDataFolder());
 		logger.preEnabled(true);
@@ -73,10 +59,10 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 			logger.info("Bukkit version: " + version);
 			try {
 				final Class<?> clazz = Class.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSMHandler");
-				if (NSM.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
+				if(NSM.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
 					this.nsm = (NSM) clazz.getConstructor().newInstance(); // Set our handler
 				}
-			} catch (final Exception e) {
+			} catch(final Exception e) {
 				logger.info(e.getMessage());
 				logger.severe("Could not find support for Spigot " + version + ".");
 				this.setEnabled(false);
@@ -100,7 +86,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 				Method main = CEPLListener.class.getMethod("itemInMainHand", LivingEntity.class, ItemStack.class);
 				Method off = CEPLListener.class.getMethod("itemInOffHand", LivingEntity.class, ItemStack.class);
 				Bukkit.getPluginManager().registerEvents(nsm.getVersionListener(notMain, notOff, main, off), this);
-			} catch (NoSuchMethodException e) {
+			} catch(NoSuchMethodException e) {
 				e.printStackTrace();
 			}
 
@@ -114,7 +100,8 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		logger.enabled(true);
 	}
 
-	@Override public void onDisable() {
+	@Override
+	public void onDisable() {
 		logger.preEnabled(false);
 		{
 			EnchantmentRegistery.reset();
@@ -124,12 +111,27 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		instance = null;
 	}
 
-	public void reloadConfigs() {
-		(new DefaultConfig(this)).createFileIfDoesNotExist();
-		(new LanguageConfig(this, "/locale/en-US")).createFileIfDoesNotExist();
-		(new LanguageConfig(this, "/locale/Template-en-US")).createFileIfDoesNotExist();
+	public static CustomEnchantmentAPI getInstace() {
+		return instance;
+	}
 
-		dc.load();
-		lc = new LanguageConfig(this, "locale/" + dc.MESSAGE_LOCALIZATION_FILE.getValue());
+	public static GameLogger getCeapiLogger() {
+		return ceapiLogger;
+	}
+
+	public TLogger getTLogger() {
+		return logger;
+	}
+
+	public DefaultConfig getDefaultConfig() {
+		return dc;
+	}
+
+	public LanguageConfig getLanguageConfig() {
+		return lc;
+	}
+
+	public NSM getNSM() {
+		return nsm;
 	}
 }

@@ -2,8 +2,6 @@ package adx.audioxd.customenchantmentapi.events.enchant;
 
 
 import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEventWithItem;
-import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEventWithOwnerAndItem;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
 /**

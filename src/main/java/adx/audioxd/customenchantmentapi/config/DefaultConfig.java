@@ -1,13 +1,13 @@
 package adx.audioxd.customenchantmentapi.config;
 
 
+import adx.audioxd.customenchantmentapi.config.option.StringOption;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import adx.audioxd.customenchantmentapi.config.option.StringOption;
-
 public class DefaultConfig extends Config {
 
+	// Class base fields
 	public final StringOption MESSAGE_LOCALIZATION_FILE;
 
 	public DefaultConfig(Plugin plugin) {

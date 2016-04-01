@@ -1,12 +1,12 @@
 package adx.audioxd.customenchantmentapi.enchantment;
 
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventHandler;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventPriority;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class RegisteredListener implements Comparable<RegisteredListener> {
 	private final Enchantment enchantment;
@@ -17,32 +17,18 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 		this.method = method;
 		method.setAccessible(true);
 
-		if (method.getParameterCount() != 1) { throw new IllegalArgumentException(
-				"Method must have a Event as the only parameter: " + this); }
+		if(method.getParameterCount() != 1) {
+			throw new IllegalArgumentException(
+					"Method must have a Event as the only parameter: " + this);
+		}
 	}
 
 	public void fireEvent(EnchantmentEvent event) {
 		try {
 			method.invoke(enchantment, event);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new EnchantmentEventException("Exception in: " + this + "(" + e.getMessage() + ")", e.getCause());
 		}
-	}
-
-	public Class<?> getEventClass() {
-		return method.getParameterTypes()[0];
-	}
-
-	public EnchantmentEventPriority getPriority() {
-		return method.getAnnotation(EnchantmentEventHandler.class).priority();
-	}
-
-	public Enchantment getEnchantment() {
-		return enchantment;
-	}
-
-	public Method getMethod() {
-		return method;
 	}
 
 	@Override
@@ -55,6 +41,10 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 		return other.getPriority().compareTo(getPriority());
 	}
 
+	public EnchantmentEventPriority getPriority() {
+		return method.getAnnotation(EnchantmentEventHandler.class).priority();
+	}
+
 	@Override
 	public int hashCode() {
 		int result = enchantment.hashCode();
@@ -64,9 +54,21 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o == this) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if(o == this) return true;
+		if(o == null || getClass() != o.getClass()) return false;
 		RegisteredListener other = (RegisteredListener) o;
 		return enchantment.equals(other.enchantment) && method.equals(other.method);
+	}
+
+	public Class<?> getEventClass() {
+		return method.getParameterTypes()[0];
+	}
+
+	public Enchantment getEnchantment() {
+		return enchantment;
+	}
+
+	public Method getMethod() {
+		return method;
 	}
 }

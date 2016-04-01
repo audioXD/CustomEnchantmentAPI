@@ -50,10 +50,20 @@ jar {
 uploadArchives {
     repositories {
         flatDir {
+            dirs '/output'
+        }
+        flatDir {
             dirs '../_extra/_out'
         }
         flatDir {
             dirs '../_extra/run/plugins'
         }
     }
+}
+
+task javadocZip(type: Zip, dependsOn: javadoc) {
+    from "build/docs/javadoc"
+    baseName = "CEAPI-javadoc"
+    into('/')
+    destinationDir file('/output')
 }

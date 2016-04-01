@@ -2,7 +2,7 @@ package adx.audioxd.customenchantmentapi.enchantment.event.forhelp;
 
 
 public interface Damage {
-	public double getDamage();
+	double getDamage();
 
-	public void setDamage(double damage);
+	void setDamage(double damage);
 }

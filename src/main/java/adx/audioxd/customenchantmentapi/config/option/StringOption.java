@@ -15,7 +15,7 @@ public class StringOption {
 
 	public final String format(String... o) {
 		String out = String.format(value, (Object[]) o);
-		return ChatColor.translateAlternateColorCodes('�', out);
+		return ChatColor.translateAlternateColorCodes('&', out);
 	}
 
 	public final void loadIfExist(Config config) {

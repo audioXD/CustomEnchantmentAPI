@@ -194,7 +194,6 @@ public class ItemUtil {
 
 	/**************************************************************************************************/
 	/* Checkers */
-
 	public static ItemStack setDurability(ItemStack item, short damage, boolean breakItem) {
 		if(isEmpty(item)) return NULL;
 		item.setDurability((short) (item.getType().getMaxDurability() - damage));

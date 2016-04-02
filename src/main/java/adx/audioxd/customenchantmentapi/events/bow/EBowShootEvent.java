@@ -11,11 +11,13 @@ public class EBowShootEvent extends EnchantmentEventWithOwnerAndItem implements 
 	private final Entity projectile;
 	private boolean cancelled = false;
 
+	// Constructor
 	public EBowShootEvent(int lvl, ItemStack item, LivingEntity owner, Entity projectile) {
 		super(lvl, owner, item);
 		this.projectile = projectile;
 	}
 
+	// Getters
 	public boolean isCancelled() {
 		return cancelled;
 	}

@@ -11,11 +11,13 @@ public class EItemHandEvent extends EnchantmentEventWithOwnerAndItem implements 
 	private final HandType handType;
 	private boolean cancelled = false;
 
+	// Constructor
 	public EItemHandEvent(int lvl, ItemStack item, LivingEntity owner, HandType handType) {
 		super(lvl, owner, item);
 		this.handType = handType;
 	}
 
+	// Getters
 	public boolean isCancelled() {
 		return cancelled;
 	}

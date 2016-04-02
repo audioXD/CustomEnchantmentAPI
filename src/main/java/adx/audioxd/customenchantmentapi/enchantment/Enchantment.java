@@ -15,6 +15,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	private final EventBus eb;
 
 // Constructor
+
 	/**
 	 * @param name   The name of the enchantment
 	 * @param type   The ItemType that the Enchantment can be enchanted on.
@@ -108,6 +109,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	}
 
 // Getters
+
 	/**
 	 * Gets the Enchantment name
 	 *

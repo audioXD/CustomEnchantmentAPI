@@ -16,11 +16,14 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 public class EnchantmentRegistery {
+	// Global fields
 	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<Plugin, Map<String, Enchantment>>();
 
 	private static final Set<Enchantment> enchantments = new HashSet<Enchantment>();
 	private static volatile Enchantment[] backedEnchantments = null;
+// End of Global Fields
 
+	// Constructor
 	private EnchantmentRegistery() {
 	}
 
@@ -286,6 +289,7 @@ public class EnchantmentRegistery {
 		return res.toArray(new Enchanted[res.size()]);
 	}
 
+// Getters
 	/**
 	 * Gets all Enchantments registered in a HashMap.
 	 *

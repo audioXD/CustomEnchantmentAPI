@@ -19,8 +19,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class onBowShotEvent extends CEPLListener {
 
+	// Global fields
 	private static String salt = "adx_536_";
+// End of Global Fields
 
+	// Constructor
 	public onBowShotEvent(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}

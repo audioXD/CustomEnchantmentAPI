@@ -30,6 +30,7 @@ public class NSMHandler implements NSM {
 	}
 
 	public static class HSL extends VersionListenr {
+		// Constructor
 		HSL(Method notMain, Method notOff, Method main, Method off) {
 			super(notMain, notOff, main, off);
 		}

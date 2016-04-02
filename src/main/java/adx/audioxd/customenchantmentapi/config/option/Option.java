@@ -7,6 +7,7 @@ public class Option {
 	private final String path;
 	private Object value;
 
+	// Constructor
 	public Option(String path, Object value) {
 		this.path = path;
 		this.value = value;

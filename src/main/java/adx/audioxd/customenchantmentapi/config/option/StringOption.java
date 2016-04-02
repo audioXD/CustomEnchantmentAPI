@@ -8,6 +8,7 @@ public class StringOption {
 	private final String path;
 	private String value;
 
+	// Constructor
 	public StringOption(String path, String value) {
 		this.path = path;
 		this.value = value;

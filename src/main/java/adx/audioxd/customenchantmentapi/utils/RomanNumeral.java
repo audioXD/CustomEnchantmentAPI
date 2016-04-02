@@ -2,6 +2,7 @@ package adx.audioxd.customenchantmentapi.utils;
 
 
 public class RomanNumeral {
+	// Global fields
 	private static int[] numbers = {
 			1000,
 			900,
@@ -32,6 +33,7 @@ public class RomanNumeral {
 			"IV",
 			"I"
 	};
+// End of Global Fields
 
 	// Methods
 	public static String getRomanFromInt(int number) {

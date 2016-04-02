@@ -10,12 +10,14 @@ public abstract class EnchantmentEventWithOwnerAndItem extends EnchantmentEvent 
 	protected final LivingEntity owner;
 	private final ItemStack item;
 
+	// Constructor
 	public EnchantmentEventWithOwnerAndItem(int lvl, LivingEntity owner, ItemStack item) {
 		super(lvl);
 		this.owner = owner;
 		this.item = item;
 	}
 
+	// Getters
 	final public LivingEntity getOwner() {
 		return owner;
 	}

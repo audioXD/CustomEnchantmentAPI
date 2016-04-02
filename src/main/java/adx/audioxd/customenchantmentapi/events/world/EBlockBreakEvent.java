@@ -12,12 +12,14 @@ public class EBlockBreakEvent extends EnchantmentEventWithOwnerAndItem implement
 	private int ExpToDrop = 0;
 	private boolean cancelled = false;
 
+	// Constructor
 	public EBlockBreakEvent(int lvl, ItemStack item, LivingEntity owner, Block block, int exp) {
 		super(lvl, owner, item);
 		this.block = block;
 		this.ExpToDrop = exp;
 	}
 
+	// Getters
 	public Block getBlock() {
 		return block;
 	}

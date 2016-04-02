@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class CEPLListener implements Listener {
 	protected CustomEnchantmentAPI plugin;
 
+	// Constructor
 	CEPLListener(CustomEnchantmentAPI plugin) {
 		this.plugin = plugin;
 	}

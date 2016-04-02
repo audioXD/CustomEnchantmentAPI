@@ -7,11 +7,13 @@ import org.bukkit.entity.Arrow;
 public class EArrowLandEvent extends EnchantmentEvent {
 	private final Arrow arrow;
 
+	// Constructor
 	public EArrowLandEvent(int lvl, Arrow arrow) {
 		super(lvl);
 		this.arrow = arrow;
 	}
 
+	// Getters
 	public Arrow getArrow() {
 		return arrow;
 	}

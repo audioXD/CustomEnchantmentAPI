@@ -12,6 +12,7 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 	private final Enchantment enchantment;
 	private final Method method;
 
+	// Constructor
 	RegisteredListener(Enchantment listener, Method method) {
 		this.enchantment = listener;
 		this.method = method;
@@ -60,6 +61,7 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 		return enchantment.equals(other.enchantment) && method.equals(other.method);
 	}
 
+	// Getters
 	public Class<?> getEventClass() {
 		return method.getParameterTypes()[0];
 	}

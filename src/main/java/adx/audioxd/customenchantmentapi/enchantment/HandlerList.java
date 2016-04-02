@@ -11,6 +11,7 @@ public class HandlerList {
 	private final Set<RegisteredListener> listeners;
 	private volatile RegisteredListener[] backedListeners;
 
+	// Constructor
 	HandlerList() {
 		listeners = new HashSet<>();
 	}

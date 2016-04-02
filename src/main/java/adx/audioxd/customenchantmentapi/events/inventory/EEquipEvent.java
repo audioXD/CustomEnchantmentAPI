@@ -11,11 +11,13 @@ public class EEquipEvent extends EnchantmentEventWithOwnerAndItem implements Can
 	private final ArmorType armorType;
 	private boolean cancelled = false;
 
+	// Constructor
 	public EEquipEvent(int lvl, ItemStack item, LivingEntity owner) {
 		super(lvl, owner, item);
 		armorType = ArmorType.matchType(item);
 	}
 
+	// Getters
 	public boolean isCancelled() {
 		return cancelled;
 	}

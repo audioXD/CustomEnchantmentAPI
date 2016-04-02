@@ -12,6 +12,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public class ItemType {
+	// Global fields
 	public final static ItemType SPADE = new ItemType(new Material[] {
 			Material.WOOD_SPADE, Material.STONE_SPADE, Material.IRON_SPADE, Material.GOLD_SPADE, Material.DIAMOND_SPADE
 	});
@@ -78,6 +79,7 @@ public class ItemType {
 	public final static ItemType ALL_OFF_THE_ABOVE = new ItemType(new ItemType[] {
 			TOOLS, WEAPONS, SHIELD, ARMOR, ELYTRA, HORSE
 	});
+// End of Global Fields
 
 	private final Material[] types;
 	private final List<Material> typesList;

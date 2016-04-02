@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.logging.*;
 
 public class GameLogger {
+	// Global fields
 	// Private global fields
 	private static final Formatter DFormatter = new Formatter() {
 		public String format(LogRecord rec) {
@@ -24,6 +25,7 @@ public class GameLogger {
 			return buf.toString();
 		}
 	};
+	// End of Global Fields
 	// Class base fields
 	private final Logger LOGGER;
 	private boolean DEBUG = false;

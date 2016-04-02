@@ -12,6 +12,7 @@ public enum ArmorType {
 
 	private final int slot;
 
+	// Constructor
 	ArmorType(int slot) {
 		this.slot = slot;
 	}
@@ -39,6 +40,7 @@ public enum ArmorType {
 		}
 	}
 
+	// Getters
 	public int getSlot() {
 		return slot;
 	}

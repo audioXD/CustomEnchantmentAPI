@@ -13,6 +13,7 @@ public class EArrowHitEvent extends EnchantmentEvent implements Cancellable, Dam
 	private double damage;
 	private boolean cancelled = false;
 
+	// Constructor
 	public EArrowHitEvent(int lvl, LivingEntity target, Arrow arrow, double damage) {
 		super(lvl);
 		this.target = target;
@@ -20,6 +21,7 @@ public class EArrowHitEvent extends EnchantmentEvent implements Cancellable, Dam
 		this.damage = damage;
 	}
 
+	// Getters
 	public LivingEntity getTarget() {
 		return target;
 	}

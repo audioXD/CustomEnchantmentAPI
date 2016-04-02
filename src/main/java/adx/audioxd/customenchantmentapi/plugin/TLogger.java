@@ -12,6 +12,7 @@ public class TLogger {
 	private boolean DEBUG = false;
 	private boolean PUBLIC = true;
 
+	// Constructor
 	public TLogger(Plugin plugin) {
 		this.plugin = plugin;
 	}
@@ -69,6 +70,7 @@ public class TLogger {
 		}
 	}
 
+	// Getters
 	public boolean isDebug() {
 		return DEBUG;
 	}

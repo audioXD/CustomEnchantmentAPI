@@ -17,14 +17,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Method;
 
 public class CustomEnchantmentAPI extends JavaPlugin {
+	// Global fields
 	private static final GameLogger ceapiLogger = new GameLogger();
 	private static CustomEnchantmentAPI instance;
+	// End of Global Fields
 	private final TLogger logger;
 	private final DefaultConfig dc;
 	private final String version;
 	private LanguageConfig lc;
 	private NSM nsm;
 
+	// Constructor
 	public CustomEnchantmentAPI() {
 		String packageName = this.getServer().getClass().getPackage().getName();
 		String v1 = packageName.substring(packageName.lastIndexOf('.') + 1);
@@ -111,6 +114,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		instance = null;
 	}
 
+	// Getters
 	public static CustomEnchantmentAPI getInstace() {
 		return instance;
 	}

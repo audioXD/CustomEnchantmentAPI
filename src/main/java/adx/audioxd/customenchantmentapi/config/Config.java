@@ -12,6 +12,7 @@ public abstract class Config {
 	protected final Plugin plugin;
 	protected YamlConfiguration config;
 
+	// Constructor
 	public Config(Plugin plugin, String file) {
 		this.localFile = new File(file + ".yml");
 		this.configFile = new File(plugin.getDataFolder(), localFile.getPath());
@@ -60,6 +61,7 @@ public abstract class Config {
 
 	public abstract void onSave(YamlConfiguration config);
 
+	// Getters
 	public final File getFile() {
 		return configFile;
 	}

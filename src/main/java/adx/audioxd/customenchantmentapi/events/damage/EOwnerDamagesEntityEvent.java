@@ -15,6 +15,7 @@ public class EOwnerDamagesEntityEvent extends EnchantmentEventWithOwnerAndItem i
 	private double damage;
 	private Entity victum;
 
+	// Constructor
 	public EOwnerDamagesEntityEvent(int lvl, ItemStack item, LivingEntity owner, Entity victum, double damage,
 	                                DamageCause cause) {
 		super(lvl, owner, item);
@@ -23,6 +24,7 @@ public class EOwnerDamagesEntityEvent extends EnchantmentEventWithOwnerAndItem i
 		this.cause = cause;
 	}
 
+	// Getters
 	public boolean isCancelled() {
 		return cancelled;
 	}

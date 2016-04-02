@@ -8,6 +8,7 @@ public class Enchanted implements Lvl {
 	private final int lvl;
 	private final Enchantment enchantment;
 
+	// Constructor
 	public Enchanted(int lvl, Enchantment enchantment) {
 		this.lvl = lvl;
 		this.enchantment = enchantment;
@@ -17,6 +18,7 @@ public class Enchanted implements Lvl {
 		if(enchantment != null) enchantment.fireEvent(event);
 	}
 
+	// Getters
 	public int getLvl() {
 		return lvl;
 	}

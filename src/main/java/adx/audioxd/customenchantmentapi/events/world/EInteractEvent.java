@@ -17,6 +17,7 @@ public class EInteractEvent extends EnchantmentEventWithOwnerAndItem implements 
 	private BlockFace blockFace;
 	private Block clickedBlock;
 
+	// Constructor
 	public EInteractEvent(int lvl, ItemStack item, LivingEntity owner, Action action, BlockFace blockFace,
 	                      Block clickedBlock, HandType handType) {
 		super(lvl, owner, item);
@@ -26,6 +27,7 @@ public class EInteractEvent extends EnchantmentEventWithOwnerAndItem implements 
 		this.handType = handType;
 	}
 
+	// Getters
 	public boolean isCancelled() {
 		return cancelled;
 	}

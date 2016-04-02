@@ -14,6 +14,7 @@ public class EBlockPlaceEvent extends EnchantmentEventWithOwnerAndItem implement
 	private BlockState blockReplacedState;
 	private boolean cancelled = false;
 
+	// Constructor
 	public EBlockPlaceEvent(int lvl, ItemStack item, LivingEntity owner, Block block, Block blockAgainst,
 	                        Block blockPlaced, BlockState blockReplacedState) {
 		super(lvl, owner, item);
@@ -27,6 +28,7 @@ public class EBlockPlaceEvent extends EnchantmentEventWithOwnerAndItem implement
 		return canBuild;
 	}
 
+	// Getters
 	public Block getBlock() {
 		return block;
 	}
@@ -51,6 +53,7 @@ public class EBlockPlaceEvent extends EnchantmentEventWithOwnerAndItem implement
 		this.cancelled = cancelled;
 	}
 
+	// Setters
 	public void setBuild(boolean build) {
 		this.canBuild = build;
 	}

@@ -10,7 +10,9 @@ import org.bukkit.inventory.ItemStack;
 
 public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 
+	// Global fields
 	private static final HandlerList handlers = new HandlerList();
+	// End of Global Fields
 	private final EquipMethod equipType;
 	private final ArmorType type;
 	private final ItemStack oldArmorPiece;

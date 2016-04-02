@@ -11,11 +11,13 @@ public class EUnequipEvent extends EnchantmentEventWithOwnerAndItem implements C
 	private final ArmorType armorType;
 	private boolean cancelled = false;
 
+	// Constructor
 	public EUnequipEvent(int lvl, ItemStack item, LivingEntity owner) {
 		super(lvl, owner, item);
 		armorType = ArmorType.matchType(item);
 	}
 
+	// Getters
 	public boolean isCancelled() {
 		return cancelled;
 	}

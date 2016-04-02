@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EventBus {
 	private final Map<Class<?>, HandlerList> handlers = new ConcurrentHashMap<>();
 
+	// Constructor
 	EventBus(Enchantment listener) {
 		if(listener == null) throw new NullPointerException("Listenr cannot be null!");
 

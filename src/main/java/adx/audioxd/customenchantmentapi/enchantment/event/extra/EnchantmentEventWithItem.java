@@ -8,11 +8,13 @@ public abstract class EnchantmentEventWithItem extends EnchantmentEvent implemen
 
 	private final ItemStack item;
 
+	// Constructor
 	public EnchantmentEventWithItem(int lvl, ItemStack item) {
 		super(lvl);
 		this.item = item;
 	}
 
+	// Getters
 	final public ItemStack getItem() {
 		return item;
 	}

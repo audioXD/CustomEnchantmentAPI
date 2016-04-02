@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 
 public class onItemInHandChange extends CEPLListener {
-
+	// Constructor
 	public onItemInHandChange(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}

@@ -7,9 +7,9 @@ import org.bukkit.plugin.Plugin;
 
 public class DefaultConfig extends Config {
 
-	// Class base fields
 	public final StringOption MESSAGE_LOCALIZATION_FILE;
 
+	// Constructor
 	public DefaultConfig(Plugin plugin) {
 		super(plugin, "config");
 

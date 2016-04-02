@@ -12,7 +12,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public class ItemType {
-	// Global Fields
 	public final static ItemType SPADE = new ItemType(new Material[] {
 			Material.WOOD_SPADE, Material.STONE_SPADE, Material.IRON_SPADE, Material.GOLD_SPADE, Material.DIAMOND_SPADE
 	});
@@ -83,6 +82,7 @@ public class ItemType {
 	private final Material[] types;
 	private final List<Material> typesList;
 
+	// Constructor
 	public ItemType(ItemType[] subIT) {
 		this(subIT, null);
 	}
@@ -135,6 +135,7 @@ public class ItemType {
 		return typesList.contains(material);
 	}
 
+	// Getters
 	public Material[] getTypes() {
 		return types;
 	}

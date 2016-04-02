@@ -9,7 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class onBlockPlaceEvent extends CEPLListener {
-
+	// Constructor
 	public onBlockPlaceEvent(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}

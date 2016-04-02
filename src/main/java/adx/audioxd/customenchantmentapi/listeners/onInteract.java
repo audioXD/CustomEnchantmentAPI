@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class onInteract extends CEPLListener {
-
+	// Constructor
 	public onInteract(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}

@@ -20,13 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemUtil {
-	/**************************************************************************************************/
-	/* Inventory Functionality */
-
-// Global Fields
-	/**************************************************************************************************/
+	// Global Fields
 	public static final ItemStack NULL = new ItemStack(Material.AIR, 0);
 
+	// Methods
 	final public static List<Integer> getSlotsList(Player player, ItemStack item, SlotType slotType) {
 		if(canEnquipt(item, player) && (slotType.equals(SlotType.CONTAINER) || slotType.equals(SlotType.QUICKBAR)))
 			return new ArrayList<Integer>();
@@ -85,14 +82,10 @@ public class ItemUtil {
 		return itemStack.getType() == Material.AIR;
 	}
 
-	/**************************************************************************************************/
-	/* ItemStack Functionality */
 	public static int getMaxStackSize(ItemStack item) {
-		if(item == null) return 0;
+		if(isEmpty(item)) return 0;
 		return item.getMaxStackSize();
 	}
-
-	/**************************************************************************************************/
 
 	public static boolean isSame(ItemStack item1, ItemStack item2) {
 		if(item1 == item2) return true;
@@ -123,8 +116,6 @@ public class ItemUtil {
 		}
 		return getSlotsItem(strat, player.getInventory(), item);
 	}
-
-	/**************************************************************************************************/
 
 	final public static Map<Integer, ItemStack> getSlotsItem(int index, final Inventory inventory,
 	                                                         final ItemStack item) {
@@ -192,8 +183,6 @@ public class ItemUtil {
 		return item;
 	}
 
-	/**************************************************************************************************/
-	/* Checkers */
 	public static ItemStack setDurability(ItemStack item, short damage, boolean breakItem) {
 		if(isEmpty(item)) return NULL;
 		item.setDurability((short) (item.getType().getMaxDurability() - damage));

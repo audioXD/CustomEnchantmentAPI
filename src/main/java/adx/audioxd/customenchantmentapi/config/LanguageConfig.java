@@ -6,7 +6,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 public class LanguageConfig extends Config {
-	// Class base fields
 	public final StringOption RELOAD_CONFIG;
 
 	public final StringOption NO_PERMISSION;
@@ -25,6 +24,7 @@ public class LanguageConfig extends Config {
 	public final StringOption UNENCHANT_ERROR;
 
 
+	// Constructor
 	public LanguageConfig(Plugin plugin, String file) {
 		super(plugin, file);
 		RELOAD_CONFIG = new StringOption("messages.reloadConfig", "&2Reloaded config files.");

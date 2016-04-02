@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 public class ReflectUtils {
 
+	// Methods
 	public static void sendPacket(Player player, Object packet) {
 		try {
 			Object handle = player.getClass().getMethod("getHandle").invoke(player);

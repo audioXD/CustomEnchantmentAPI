@@ -14,6 +14,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	protected final EnchantmentPriority priority;
 	private final EventBus eb;
 
+// Constructor
 	/**
 	 * @param name   The name of the enchantment
 	 * @param type   The ItemType that the Enchantment can be enchanted on.
@@ -96,7 +97,6 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		return getDisplay("").hashCode();
 	}
 
-	// Class methods
 
 	/**
 	 * Fires the event.
@@ -107,6 +107,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		eb.fireEvent(event);
 	}
 
+// Getters
 	/**
 	 * Gets the Enchantment name
 	 *

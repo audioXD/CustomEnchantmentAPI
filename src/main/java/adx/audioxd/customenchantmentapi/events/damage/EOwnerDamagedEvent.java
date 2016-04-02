@@ -14,6 +14,7 @@ public class EOwnerDamagedEvent extends EnchantmentEventWithOwnerAndItem impleme
 	private boolean cancelled = false;
 	private double damage;
 
+	// Constructor
 	public EOwnerDamagedEvent(int lvl, ItemStack item, LivingEntity owner, double damage, DamageCause cause,
 	                          Type type) {
 		super(lvl, owner, item);
@@ -22,14 +23,7 @@ public class EOwnerDamagedEvent extends EnchantmentEventWithOwnerAndItem impleme
 		this.type = type;
 	}
 
-	public enum Type {
-		IN_HAND,
-		ARMOR,
-		SHIELD,
-		SADDLE,
-		HORSE_ARMOR
-	}
-
+	// Getters
 	public boolean isCancelled() {
 		return cancelled;
 	}
@@ -52,5 +46,13 @@ public class EOwnerDamagedEvent extends EnchantmentEventWithOwnerAndItem impleme
 
 	public Type getType() {
 		return type;
+	}
+
+	public enum Type {
+		IN_HAND,
+		ARMOR,
+		SHIELD,
+		SADDLE,
+		HORSE_ARMOR
 	}
 }

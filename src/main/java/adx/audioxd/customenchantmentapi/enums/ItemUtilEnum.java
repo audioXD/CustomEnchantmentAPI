@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 public enum ItemUtilEnum {
-	// OTHER
 	OTHER_UNSTACKABLE_ITEMS(new Material[] {
 			Material.ENCHANTED_BOOK,
 			Material.POTION,
@@ -92,6 +91,7 @@ public enum ItemUtilEnum {
 	private final Material[] types;
 	private final List<Material> typesList;
 
+	// Constructor
 	ItemUtilEnum(ItemUtilEnum[] sub) {
 		List<Material> materials = new ArrayList<Material>();
 		for(ItemUtilEnum type : sub) {
@@ -128,6 +128,7 @@ public enum ItemUtilEnum {
 		return typesList.contains(material);
 	}
 
+	// Getters
 	public Material[] getTypes() {
 		return types;
 	}

@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class onArmorListener extends CEPLListener {
-
+	// Constructor
 	public onArmorListener(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}

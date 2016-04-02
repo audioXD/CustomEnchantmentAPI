@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.logging.*;
 
 public class GameLogger {
+	// Private global fields
 	private static final Formatter DFormatter = new Formatter() {
 		public String format(LogRecord rec) {
 			StringBuffer buf = new StringBuffer(1000);
@@ -23,10 +24,13 @@ public class GameLogger {
 			return buf.toString();
 		}
 	};
+	// Class base fields
 	private final Logger LOGGER;
 	private boolean DEBUG = false;
 	private boolean HAS_DEFAULT_LOG_FILES = false;
+//
 
+	// Constructor
 	public GameLogger() {
 		this(false);
 	}
@@ -153,6 +157,8 @@ public class GameLogger {
 		HAS_DEFAULT_LOG_FILES = false;
 	}
 
+	// Getters
+	// Getters and Setters
 	public boolean isDebuging() {
 		return DEBUG;
 	}

@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class onEntityDamage extends CEPLListener {
-
+	// Constructor
 	public onEntityDamage(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}

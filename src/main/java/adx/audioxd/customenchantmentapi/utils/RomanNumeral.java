@@ -33,6 +33,7 @@ public class RomanNumeral {
 			"I"
 	};
 
+	// Methods
 	public static String getRomanFromInt(int number) {
 		return new RN(number).toString();
 	}
@@ -43,8 +44,11 @@ public class RomanNumeral {
 
 	private static class RN {
 
+		// Class base fields
 		private final int num;
+//
 
+		// Constructor
 		public RN(int arabic) {
 			if(arabic < 1) throw new NumberFormatException("Value of RomanNumeral must be positive.");
 			if(arabic > 3999) throw new NumberFormatException("Value of RomanNumeral must be 3999 or less.");

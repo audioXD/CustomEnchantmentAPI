@@ -17,6 +17,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 	private boolean cancel = false;
 	private ItemStack newArmorPiece;
 
+	// Constructor
 	public ArmorEquipEvent(final Player player, final EquipMethod equipType, final ArmorType type,
 	                       final ItemStack oldArmorPiece, final ItemStack newArmorPiece) {
 		super(player);
@@ -26,10 +27,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 		this.newArmorPiece = newArmorPiece;
 	}
 
-	public enum EquipMethod {
-		SHIFT_CLICK, DRAG, HOTBAR, DISPENSER, BROKE, DEATH
-	}
-
+	// Getters
 	public final static HandlerList getHandlerList() {
 		return handlers;
 	}
@@ -65,5 +63,9 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 
 	public EquipMethod getMethod() {
 		return equipType;
+	}
+
+	public enum EquipMethod {
+		SHIFT_CLICK, DRAG, HOTBAR, DISPENSER, BROKE, DEATH
 	}
 }

@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class onBlockBreakEvent extends CEPLListener {
+	// Constructor
 	public onBlockBreakEvent(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}

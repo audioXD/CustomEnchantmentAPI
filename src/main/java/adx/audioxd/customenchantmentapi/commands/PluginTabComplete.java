@@ -55,6 +55,7 @@ public class PluginTabComplete implements TabExecutor {
 
 	public static class PluginCommand {
 
+		// Methods
 		public static boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 			LanguageConfig lc = CustomEnchantmentAPI.getInstace().getLanguageConfig();
 

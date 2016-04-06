@@ -26,11 +26,18 @@ public class PluginTabComplete implements TabExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		List<String> out = new ArrayList<String>();
+		if(!sender.hasPermission("adx.ceapi.use"))
+			return null;
+
 		if(args.length == 1) {
-			if("list".startsWith(args[0].toLowerCase())) out.add("list");
-			if("enchant".startsWith(args[0].toLowerCase())) out.add("enchant");
-			if("unenchant".startsWith(args[0].toLowerCase())) out.add("unenchant");
-			if("reloadconfig".startsWith(args[0].toLowerCase())) out.add("reloadConfigs");
+			if("list".startsWith(args[0].toLowerCase()) && sender.hasPermission("adx.ceapi.list"))
+				out.add("list");
+			if("enchant".startsWith(args[0].toLowerCase()) && sender.hasPermission("adx.ceapi.enchant.use"))
+				out.add("enchant");
+			if("unenchant".startsWith(args[0].toLowerCase()) && sender.hasPermission("adx.ceapi.unenchant.use"))
+				out.add("unenchant");
+			if("reloadconfig".startsWith(args[0].toLowerCase()) && sender.isOp())
+				out.add("reloadConfigs");
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("enchant") || args[0].equalsIgnoreCase("unenchant")) {
 				for(Plugin plugin : EnchantmentRegistery.getEnchantments().keySet()) {

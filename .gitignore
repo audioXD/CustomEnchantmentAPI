@@ -4,3 +4,9 @@
 **/build/*
 
 **/*.jar
+
+!gradlew
+!gradlew.bat
+!gradle/*
+!**/*.gradle
+!LICENSE

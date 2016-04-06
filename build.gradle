@@ -19,7 +19,7 @@ configure(allprojects - project(':modules')) {
 
 archivesBaseName = 'CustomEnchantmentAPI'
 group = 'adx.audioxd.customenchantmentapi'
-version = '2.2.1-RELEASE'
+version = '2.3-RELEASE'
 
 dependencies {
     compile(project(':modules:API')) {
@@ -59,6 +59,10 @@ uploadArchives {
             dirs '../_extra/run/plugins'
         }
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
 }
 
 task javadocZip(type: Zip, dependsOn: javadoc) {

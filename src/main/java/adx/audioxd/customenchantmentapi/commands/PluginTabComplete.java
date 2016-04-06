@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 public class PluginTabComplete implements TabExecutor {
-
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		List<String> out = new ArrayList<String>();
@@ -42,11 +41,12 @@ public class PluginTabComplete implements TabExecutor {
 			if(args[0].equalsIgnoreCase("enchant") || args[0].equalsIgnoreCase("unenchant")) {
 				for(Plugin plugin : EnchantmentRegistery.getEnchantments().keySet()) {
 					if(EnchantmentRegistery.getEnchantments().get(plugin) == null) continue;
-
 					for(String enchName : EnchantmentRegistery.getEnchantments().get(plugin).keySet()) {
 						Enchantment ench = EnchantmentRegistery.getEnchantments().get(plugin).get(enchName);
 						String o = EnchantmentRegistery.getID(plugin, ench);
 						if(o == null) continue;
+						if(!(sender.hasPermission("adx.ceapi." + args[0].toLowerCase() + "." + EnchantmentRegistery.getID(plugin, ench).toLowerCase()) ||
+								sender.hasPermission("adx.ceapi." + args[0].toLowerCase() + ".*"))) continue;
 						if(o.toLowerCase().startsWith(args[1].toLowerCase())) out.add(o);
 					}
 				}

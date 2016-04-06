@@ -5,6 +5,11 @@
 
 **/*.jar
 
+.gradletasknamecache
+
+gradle-app.setting
+!gradle-wrapper.jar
+
 !gradlew
 !gradlew.bat
 !gradle/*

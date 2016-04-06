@@ -5,13 +5,17 @@
 
 **/*.jar
 
+#
+!gradle/*
+!gradle-wrapper.jar
+!gradle-wrapper.properties
 .gradletasknamecache
+#
 
 gradle-app.setting
-!gradle-wrapper.jar
 
 !gradlew
 !gradlew.bat
-!gradle/*
 !**/*.gradle
+
 !LICENSE

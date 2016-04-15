@@ -2,7 +2,7 @@ package adx.audioxd.customenchantmentapi.listeners;
 
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
-import adx.audioxd.customenchantmentapi.EnchantmentRegistery;
+import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import adx.audioxd.customenchantmentapi.events.bow.EArrowHitEvent;
@@ -34,7 +34,7 @@ public class onBowShotEvent extends CEPLListener {
 		for(Enchanted ench : getEnchantments(event.getBow())) {
 
 			event.getProjectile().setMetadata(
-					salt + ench.getEncnantment().getName(),
+					salt + ench.getEnchantment().getName(),
 					new FixedMetadataValue(this.plugin, ench.getLvl())
 			);
 
@@ -49,18 +49,18 @@ public class onBowShotEvent extends CEPLListener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void hitedByArrow(
+	public void hitByArrow(
 			EntityDamageByEntityEvent event) {
 		if(!(event.getDamager() instanceof Arrow)) return;
 		if(!(event.getEntity() instanceof LivingEntity)) return;
 
-		LivingEntity targer = (LivingEntity) event.getEntity();
+		LivingEntity target = (LivingEntity) event.getEntity();
 		Arrow arrow = (Arrow) event.getDamager();
 
-		for(Enchantment ench : EnchantmentRegistery.geEnchantmentsArray()) {
+		for(Enchantment ench : EnchantmentRegistry.getEnchantmentsArray()) {
 			if(arrow.hasMetadata(salt + ench.getName())) {
 				int lvl = arrow.getMetadata(salt + ench.getName()).get(0).asInt();
-				EArrowHitEvent e = new EArrowHitEvent(lvl, targer, arrow, event.getDamage());
+				EArrowHitEvent e = new EArrowHitEvent(lvl, target, arrow, event.getDamage());
 				e.setCancelled(event.isCancelled());
 				{
 					ench.fireEvent(e);
@@ -76,7 +76,7 @@ public class onBowShotEvent extends CEPLListener {
 		if(!(event.getEntity() instanceof Arrow)) return;
 		Arrow arrow = (Arrow) event.getEntity();
 
-		for(Enchantment ench : EnchantmentRegistery.geEnchantmentsArray()) {
+		for(Enchantment ench : EnchantmentRegistry.getEnchantmentsArray()) {
 			if(arrow.hasMetadata(salt + ench.getName())) {
 				int lvl = arrow.getMetadata(salt + ench.getName()).get(0).asInt();
 

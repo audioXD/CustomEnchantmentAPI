@@ -29,7 +29,7 @@ public class onInteract extends CEPLListener {
 
 		Player player = event.getPlayer();
 		ItemStack item = event.getItem();
-		HandType hT = CustomEnchantmentAPI.getInstace().getNSM().isHandMainHAnd(event) ? HandType.MAIN : HandType.OFF;
+		HandType hT = CustomEnchantmentAPI.getInstance().getNSM().isHandMainHAnd(event) ? HandType.MAIN : HandType.OFF;
 
 		for(Enchanted ench : getEnchantments(item)) {
 			EInteractEvent e = new EInteractEvent(ench.getLvl(), item, player, event.getAction(), event.getBlockFace(),

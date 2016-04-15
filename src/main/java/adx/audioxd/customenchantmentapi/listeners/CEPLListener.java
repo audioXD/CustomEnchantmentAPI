@@ -2,7 +2,7 @@ package adx.audioxd.customenchantmentapi.listeners;
 
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
-import adx.audioxd.customenchantmentapi.EnchantmentRegistery;
+import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.events.inventory.EEquipEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.EUnequipEvent;
@@ -24,9 +24,9 @@ public abstract class CEPLListener implements Listener {
 	public static void unenquipt(LivingEntity owner, ItemStack item) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			EUnequipEvent eevent = new EUnequipEvent(ench.getLvl(), item, owner);
-			ench.fireEvent(eevent);
+		for(Enchanted enchanted : getEnchantments(item)) {
+			EUnequipEvent eEvent = new EUnequipEvent(enchanted.getLvl(), item, owner);
+			enchanted.fireEvent(eEvent);
 		}
 
 		for(ItemStack i : owner.getEquipment().getArmorContents()) {
@@ -38,16 +38,16 @@ public abstract class CEPLListener implements Listener {
 	}
 
 	public static Enchanted[] getEnchantments(ItemStack item) {
-		return EnchantmentRegistery.getEnchantments(item);
+		return EnchantmentRegistry.getEnchantments(item);
 	}
 
 	public static void enquipt(LivingEntity owner, ItemStack item) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			EEquipEvent eevent = new EEquipEvent(ench.getLvl(), item, owner);
+		for(Enchanted enchanted : getEnchantments(item)) {
+			EEquipEvent eEvent = new EEquipEvent(enchanted.getLvl(), item, owner);
 			{
-				ench.fireEvent(eevent);
+				enchanted.fireEvent(eEvent);
 			}
 		}
 	}
@@ -55,10 +55,12 @@ public abstract class CEPLListener implements Listener {
 	public static void itemNotInHand(LivingEntity owner, ItemStack item, HandType handType) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			ench.fireEvent(new EItemNotInHandEvent(ench.getLvl(), item, owner, handType));
-			if(HandType.MAIN.equals(handType)) ench.fireEvent(new EItemNotInMainHandEvent(ench.getLvl(), item, owner));
-			if(HandType.OFF.equals(handType)) ench.fireEvent(new EItemNotInOffHandEvent(ench.getLvl(), item, owner));
+		for(Enchanted enchanted : getEnchantments(item)) {
+			enchanted.fireEvent(new EItemNotInHandEvent(enchanted.getLvl(), item, owner, handType));
+			if(HandType.MAIN.equals(handType))
+				enchanted.fireEvent(new EItemNotInMainHandEvent(enchanted.getLvl(), item, owner));
+			if(HandType.OFF.equals(handType))
+				enchanted.fireEvent(new EItemNotInOffHandEvent(enchanted.getLvl(), item, owner));
 		}
 
 		if(HandType.MAIN.equals(handType)) itemInOffHand(owner, ItemUtil.getOffHandItem(owner));
@@ -68,42 +70,44 @@ public abstract class CEPLListener implements Listener {
 	public static void itemInOffHand(LivingEntity owner, ItemStack item) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			ench.fireEvent(new EItemInOffHandEvent(ench.getLvl(), item, owner));
+		for(Enchanted enchanted : getEnchantments(item)) {
+			enchanted.fireEvent(new EItemInOffHandEvent(enchanted.getLvl(), item, owner));
 		}
 	}
 
 	public static void itemInMainHand(LivingEntity owner, ItemStack item) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			ench.fireEvent(new EItemInMainHandEvent(ench.getLvl(), item, owner));
+		for(Enchanted enchanted : getEnchantments(item)) {
+			enchanted.fireEvent(new EItemInMainHandEvent(enchanted.getLvl(), item, owner));
 		}
 	}
 
 	public static void itemInHand(LivingEntity owner, ItemStack item, HandType handType) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			ench.fireEvent(new EItemInHandEvent(ench.getLvl(), item, owner, handType));
-			if(HandType.MAIN.equals(handType)) ench.fireEvent(new EItemInMainHandEvent(ench.getLvl(), item, owner));
-			if(HandType.OFF.equals(handType)) ench.fireEvent(new EItemInOffHandEvent(ench.getLvl(), item, owner));
+		for(Enchanted enchanted : getEnchantments(item)) {
+			enchanted.fireEvent(new EItemInHandEvent(enchanted.getLvl(), item, owner, handType));
+			if(HandType.MAIN.equals(handType))
+				enchanted.fireEvent(new EItemInMainHandEvent(enchanted.getLvl(), item, owner));
+			if(HandType.OFF.equals(handType))
+				enchanted.fireEvent(new EItemInOffHandEvent(enchanted.getLvl(), item, owner));
 		}
 	}
 
 	public static void itemNotInMainHand(LivingEntity owner, ItemStack item) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			ench.fireEvent(new EItemNotInMainHandEvent(ench.getLvl(), item, owner));
+		for(Enchanted enchanted : getEnchantments(item)) {
+			enchanted.fireEvent(new EItemNotInMainHandEvent(enchanted.getLvl(), item, owner));
 		}
 	}
 
 	public static void itemNotInOffHand(LivingEntity owner, ItemStack item) {
 		if(owner == null || ItemUtil.isEmpty(item)) return;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			ench.fireEvent(new EItemNotInOffHandEvent(ench.getLvl(), item, owner));
+		for(Enchanted enchanted : getEnchantments(item)) {
+			enchanted.fireEvent(new EItemNotInOffHandEvent(enchanted.getLvl(), item, owner));
 		}
 	}
 }

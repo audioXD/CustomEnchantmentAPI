@@ -34,9 +34,9 @@ public class onItemInHandChange extends CEPLListener {
 		if(player == null) return;
 
 		ItemStack newItem = player.getInventory().getItem(event.getNewSlot());
-		ItemStack prewItem = player.getInventory().getItem(event.getPreviousSlot());
+		ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
 
-		if(!ItemUtil.isEmpty(prewItem)) itemNotInHand(player, prewItem, HandType.MAIN);
+		if(!ItemUtil.isEmpty(previousItem)) itemNotInHand(player, previousItem, HandType.MAIN);
 		if(!ItemUtil.isEmpty(newItem)) itemInHand(player, newItem, HandType.MAIN);
 	}
 

@@ -14,15 +14,15 @@ enchant:
 # No extra args
   errorLessThanOne: "&5The level must be more or equal to 1."
 # '%1$s' is the permission, '%2$s' is the Enchantment
-  noAccesToEnchantment: "&cYou don't have the Permission: %1$s, to enchant Enchantment: %2$s"
+  noAccessToEnchantment: "&cYou don't have the Permission: %1$s, to enchant Enchantment: %2$s"
 #  '%1$s' is the Enchantment
-  succes: "&2Enchanted item in hand with %s"
+  success: "&2Enchanted item in hand with %s"
 #  '%1$s' is the Enchantment
   error: "&cDidn't enchant item with %s"
 unenchant:
 # '%1$s' is the permission, '%2$s' is the Enchantment
-  noAccesToEnchantment: "&cYou don't have the Permission: %1$s, to unenchant Enchantment: %2$s"
+  noAccessToEnchantment: "&cYou don't have the Permission: %1$s, to unenchant Enchantment: %2$s"
 #  '%1$s' is the Enchantment
-  succes: "&2Un-enchanted item in hand with %s"
+  success: "&2Un-enchanted item in hand with %s"
 #  '%1$s' is the Enchantment
   error: "&cDidn't un-enchant item with %s"

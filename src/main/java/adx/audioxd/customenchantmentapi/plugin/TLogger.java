@@ -22,7 +22,7 @@ public class TLogger {
 	}
 
 	public void log(Level ll, String message) {
-		CustomEnchantmentAPI.getCeapiLogger().log(ll, "<" + plugin.getName() + ">: " + message);
+		CustomEnchantmentAPI.getCEAPILogger().log(ll, "<" + plugin.getName() + ">: " + message);
 		if(PUBLIC) plugin.getLogger().log(ll, message);
 	}
 

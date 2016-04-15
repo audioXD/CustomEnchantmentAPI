@@ -13,14 +13,14 @@ public class EventBus {
 
 	// Constructor
 	EventBus(Enchantment listener) {
-		if(listener == null) throw new NullPointerException("Listenr cannot be null!");
+		if(listener == null) throw new NullPointerException("Listener cannot be null!");
 
 		for(Method method : listener.getClass().getMethods()) {
 			if(!method.isAnnotationPresent(EnchantmentEventHandler.class)) continue;
 
-			RegisteredListener rListenr = new RegisteredListener(listener, method);
-			handlers.computeIfAbsent(rListenr.getEventClass(), (eventClass) -> new HandlerList())
-					.registerListener(rListenr);
+			RegisteredListener rListener = new RegisteredListener(listener, method);
+			handlers.computeIfAbsent(rListener.getEventClass(), (eventClass) -> new HandlerList())
+					.registerListener(rListener);
 
 		}
 	}

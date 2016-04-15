@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="adx.audioxd.customenchantmentapi" module="CustomEnchantmentAPI" revision="2.3-RELEASE" status="integration" publication="20160406162328">
+  <info organisation="adx.audioxd.customenchantmentapi" module="CustomEnchantmentAPI" revision="2.4-RELEASE" status="integration" publication="20160415210025">
     <description/>
   </info>
   <configurations>

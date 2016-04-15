@@ -2,7 +2,7 @@ package adx.audioxd.customenchantmentapi.abst.v1_9;
 
 
 import adx.audioxd.customenchantmentapi.abst.api.NSM;
-import adx.audioxd.customenchantmentapi.abst.api.VersionListenr;
+import adx.audioxd.customenchantmentapi.abst.api.VersionListener;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -25,11 +25,11 @@ public class NSMHandler implements NSM {
 		return EquipmentSlot.HAND.equals(event.getHand());
 	}
 
-	public VersionListenr getVersionListener(Method notMain, Method notOff, Method main, Method off) {
+	public VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off) {
 		return new HSL(notMain, notOff, main, off);
 	}
 
-	public static class HSL extends VersionListenr {
+	public static class HSL extends VersionListener {
 		// Constructor
 		HSL(Method notMain, Method notOff, Method main, Method off) {
 			super(notMain, notOff, main, off);

@@ -14,7 +14,7 @@ public class ReflectUtils {
 			Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
 			playerConnection.getClass().getMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, packet);
 		} catch(Exception e) {
-			CustomEnchantmentAPI.getCeapiLogger().printException(e);
+			CustomEnchantmentAPI.getCEAPILogger().printException(e);
 		}
 	}
 
@@ -23,7 +23,7 @@ public class ReflectUtils {
 		try {
 			return Class.forName("net.minecraft.server." + version + "." + name);
 		} catch(ClassNotFoundException e) {
-			CustomEnchantmentAPI.getCeapiLogger().printException(e);
+			CustomEnchantmentAPI.getCEAPILogger().printException(e);
 			return null;
 		}
 	}
@@ -33,7 +33,7 @@ public class ReflectUtils {
 		try {
 			return Class.forName("org.bukkit.craftbukkit." + version + "." + name);
 		} catch(ClassNotFoundException e) {
-			CustomEnchantmentAPI.getCeapiLogger().printException(e);
+			CustomEnchantmentAPI.getCEAPILogger().printException(e);
 			return null;
 		}
 	}

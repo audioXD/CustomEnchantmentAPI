@@ -29,12 +29,12 @@ public class ItemUtil {
 	final public static List<Integer> getSlotsList(Player player, ItemStack item, SlotType slotType) {
 		if(canEnquipt(item, player) && (slotType.equals(SlotType.CONTAINER) || slotType.equals(SlotType.QUICKBAR)))
 			return new ArrayList<Integer>();
-		int strat = 0;
+		int start = 0;
 		if(slotType.equals(SlotType.ARMOR) || slotType.equals(SlotType.QUICKBAR) || slotType.equals(SlotType.CRAFTING)
 				|| slotType.equals(SlotType.RESULT)) {
-			strat = 9;
+			start = 9;
 		}
-		return getSlotsList(strat, player.getInventory(), item);
+		return getSlotsList(start, player.getInventory(), item);
 	}
 
 	public static boolean canEnquipt(ItemStack item, LivingEntity entity) {
@@ -52,10 +52,10 @@ public class ItemUtil {
 		if(index < 0) index = 0;
 		int amount = item.getAmount();
 		if(amount < 1) return result;
-		final int iSlize = inventory.getSize();
+		final int iSize = inventory.getSize();
 		{
 			if(getMaxStackSize(item) > 1) {
-				for(int SlotI = 0; SlotI < iSlize; SlotI++) {
+				for(int SlotI = 0; SlotI < iSize; SlotI++) {
 					ItemStack itemI = inventory.getItem(SlotI);
 					if(isEmpty(itemI)) continue;
 					if(item == itemI) continue;
@@ -67,8 +67,8 @@ public class ItemUtil {
 					}
 				}
 			}
-			for(int i = 0; i < iSlize; i++) {
-				int SlotI = (i + index) % iSlize;
+			for(int i = 0; i < iSize; i++) {
+				int SlotI = (i + index) % iSize;
 				ItemStack itemI = inventory.getItem(SlotI);
 				if(!isEmpty(itemI)) continue;
 				result.add(SlotI);
@@ -111,12 +111,12 @@ public class ItemUtil {
 	public static Map<Integer, ItemStack> getSlots(Player player, ItemStack item, SlotType slotType) {
 		if(canEnquipt(item, player) && (slotType.equals(SlotType.CONTAINER) || slotType.equals(SlotType.QUICKBAR)))
 			return new HashMap<Integer, ItemStack>();
-		int strat = 0;
+		int start = 0;
 		if(slotType.equals(SlotType.ARMOR) || slotType.equals(SlotType.QUICKBAR) || slotType.equals(SlotType.CRAFTING)
 				|| slotType.equals(SlotType.RESULT)) {
-			strat = 9;
+			start = 9;
 		}
-		return getSlotsItem(strat, player.getInventory(), item);
+		return getSlotsItem(start, player.getInventory(), item);
 	}
 
 	final public static Map<Integer, ItemStack> getSlotsItem(int index, final Inventory inventory,
@@ -126,10 +126,10 @@ public class ItemUtil {
 		if(index < 0) index = 0;
 		int amount = item.getAmount();
 		if(amount < 1) return result;
-		final int iSlize = inventory.getSize();
+		final int iSize = inventory.getSize();
 
 		if(getMaxStackSize(item) > 1) {
-			for(int SlotI = 0; SlotI < iSlize; SlotI++) {
+			for(int SlotI = 0; SlotI < iSize; SlotI++) {
 				ItemStack itemI = inventory.getItem(SlotI);
 				if(isEmpty(itemI)) continue;
 				if(item == itemI) continue;
@@ -144,8 +144,8 @@ public class ItemUtil {
 
 			}
 		}
-		for(int i = 0; i < iSlize; i++) {
-			int SlotI = (i + index) % iSlize;
+		for(int i = 0; i < iSize; i++) {
+			int SlotI = (i + index) % iSize;
 			ItemStack itemI = inventory.getItem(SlotI);
 			if(isEmpty(itemI)) {
 				ItemStack j = new ItemStack(item);
@@ -231,11 +231,11 @@ public class ItemUtil {
 	}
 
 	public static ItemStack getMainHandItem(LivingEntity player) {
-		return CustomEnchantmentAPI.getInstace().getNSM().getItemInMainHand(player);
+		return CustomEnchantmentAPI.getInstance().getNSM().getItemInMainHand(player);
 	}
 
 	public static ItemStack getOffHandItem(LivingEntity player) {
-		return CustomEnchantmentAPI.getInstace().getNSM().getItemInOffHand(player);
+		return CustomEnchantmentAPI.getInstance().getNSM().getItemInOffHand(player);
 	}
 
 }

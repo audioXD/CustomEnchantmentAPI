@@ -23,7 +23,7 @@ public class Enchanted implements Lvl {
 		return lvl;
 	}
 
-	public Enchantment getEncnantment() {
+	public Enchantment getEnchantment() {
 		return enchantment;
 	}
 }

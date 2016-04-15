@@ -2,7 +2,7 @@ package adx.audioxd.customenchantmentapi.commands;
 
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
-import adx.audioxd.customenchantmentapi.EnchantmentRegistery;
+import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
@@ -39,13 +39,13 @@ public class PluginTabComplete implements TabExecutor {
 				out.add("reloadConfigs");
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("enchant") || args[0].equalsIgnoreCase("unenchant")) {
-				for(Plugin plugin : EnchantmentRegistery.getEnchantments().keySet()) {
-					if(EnchantmentRegistery.getEnchantments().get(plugin) == null) continue;
-					for(String enchName : EnchantmentRegistery.getEnchantments().get(plugin).keySet()) {
-						Enchantment ench = EnchantmentRegistery.getEnchantments().get(plugin).get(enchName);
-						String o = EnchantmentRegistery.getID(plugin, ench);
+				for(Plugin plugin : EnchantmentRegistry.getEnchantments().keySet()) {
+					if(EnchantmentRegistry.getEnchantments().get(plugin) == null) continue;
+					for(String enchName : EnchantmentRegistry.getEnchantments().get(plugin).keySet()) {
+						Enchantment ench = EnchantmentRegistry.getEnchantments().get(plugin).get(enchName);
+						String o = EnchantmentRegistry.getID(plugin, ench);
 						if(o == null) continue;
-						if(!(sender.hasPermission("adx.ceapi." + args[0].toLowerCase() + "." + EnchantmentRegistery.getID(plugin, ench).toLowerCase()) ||
+						if(!(sender.hasPermission("adx.ceapi." + args[0].toLowerCase() + "." + EnchantmentRegistry.getID(plugin, ench).toLowerCase()) ||
 								sender.hasPermission("adx.ceapi." + args[0].toLowerCase() + ".*"))) continue;
 						if(o.toLowerCase().startsWith(args[1].toLowerCase())) out.add(o);
 					}
@@ -64,14 +64,14 @@ public class PluginTabComplete implements TabExecutor {
 
 		// Methods
 		public static boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-			LanguageConfig lc = CustomEnchantmentAPI.getInstace().getLanguageConfig();
+			LanguageConfig lc = CustomEnchantmentAPI.getInstance().getLanguageConfig();
 
 			if(!sender.hasPermission("adx.ceapi.use")) {
 				sender.sendMessage(lc.NO_PERMISSION.format("adx.ceapi.use", label));
 				return false;
 			}
 			if(args.length <= 0) {
-				sender.sendMessage(lc.NOT_ENOUGHT_ARGUMENTS.format());
+				sender.sendMessage(lc.NOT_ENOUGH_ARGUMENTS.format());
 				return false;
 			}
 			if(args.length >= 1) {
@@ -85,23 +85,23 @@ public class PluginTabComplete implements TabExecutor {
 					}
 				} else if(args[0].equalsIgnoreCase("enchant")) {
 					if(sender.hasPermission("adx.ceapi.enchant.use")) {
-						return enchannt(sender, cmd, label, args);
+						return enchant(sender, label, args);
 					} else {
 						sender.sendMessage(lc.NO_PERMISSION.format("adx.ceapi.enchant.use", label + " " + args[0]));
 						return false;
 					}
 				} else if(args[0].equalsIgnoreCase("unenchant")) {
 					if(sender.hasPermission("adx.ceapi.unenchant.use")) {
-						unenchannt(sender, cmd, label, args);
+						unenchannt(sender, label, args);
 					} else {
 						sender.sendMessage(lc.NO_PERMISSION.format("adx.ceapi.unenchant.use", label + " " + args[0]));
 						return false;
 					}
 				} else if(args[0].equalsIgnoreCase("reloadConfigs")) {
 					if(sender.isOp()) {
-						CustomEnchantmentAPI.getInstace().reloadConfigs();
+						CustomEnchantmentAPI.getInstance().reloadConfigs();
 						sender.sendMessage(
-								CustomEnchantmentAPI.getInstace().getLanguageConfig().RELOAD_CONFIG.format());
+								CustomEnchantmentAPI.getInstance().getLanguageConfig().RELOAD_CONFIG.format());
 					} else {
 						sender.sendMessage(lc.NO_PERMISSION.format("op", label + " " + args[0]));
 					}
@@ -116,9 +116,9 @@ public class PluginTabComplete implements TabExecutor {
 
 		private static void list(CommandSender sender) {
 			sender.sendMessage(ChatColor.GREEN + "============[Enchantments]============");
-			for(Plugin plugin : EnchantmentRegistery.getEnchantments().keySet()) {
+			for(Plugin plugin : EnchantmentRegistry.getEnchantments().keySet()) {
 				sender.sendMessage(ChatColor.BOLD + "[" + plugin.getName() + "]");
-				Map<String, Enchantment> data = EnchantmentRegistery.getEnchantments().get(plugin);
+				Map<String, Enchantment> data = EnchantmentRegistry.getEnchantments().get(plugin);
 				if(data == null) continue;
 				for(String id : data.keySet()) {
 					Enchantment ench = data.get(id);
@@ -129,17 +129,17 @@ public class PluginTabComplete implements TabExecutor {
 			sender.sendMessage(ChatColor.RED + "================[END]================");
 		}
 
-		private static boolean enchannt(CommandSender sender, Command cmd, String label, String[] args) {
-			LanguageConfig lc = CustomEnchantmentAPI.getInstace().getLanguageConfig();
+		private static boolean enchant(CommandSender sender, String label, String[] args) {
+			LanguageConfig lc = CustomEnchantmentAPI.getInstance().getLanguageConfig();
 
 			if(sender instanceof Player) {
 				Player player = (Player) sender;
 				if(args.length >= 2) {
-					Enchantment ench = EnchantmentRegistery.getFromID(args[1]);
+					Enchantment ench = EnchantmentRegistry.getFromID(args[1]);
 					if(ench != null) {
 						if(!(player.hasPermission("adx.ceapi.enchant." + args[1].toLowerCase()) || player
 								.hasPermission("adx.ceapi.enchant.*"))) {
-							sender.sendMessage(lc.ENCHANT_NO_ACCES_TO_ENCHANTMENT
+							sender.sendMessage(lc.ENCHANT_NO_ACCESS_TO_ENCHANTMENT
 									                   .format("adx.ceapi.enchant." + args[1].toLowerCase(), ench.getDisplay("")));
 							return false;
 						}
@@ -152,9 +152,9 @@ public class PluginTabComplete implements TabExecutor {
 							return false;
 						}
 
-						if(EnchantmentRegistery.enchant(ItemUtil.getMainHandItem(player), ench, lvl, true, false)) {
+						if(EnchantmentRegistry.enchant(ItemUtil.getMainHandItem(player), ench, lvl, true, false)) {
 							CEPLListener.itemInHand(player, ItemUtil.getMainHandItem(player), HandType.MAIN);
-							sender.sendMessage(lc.ENCHANT_SUCCES.format(ench.getDisplay(lvl)));
+							sender.sendMessage(lc.ENCHANT_SUCCESS.format(ench.getDisplay(lvl)));
 						} else {
 							sender.sendMessage(lc.ENCHANT_ERROR.format(ench.getDisplay(lvl)));
 						}
@@ -164,7 +164,7 @@ public class PluginTabComplete implements TabExecutor {
 					sender.sendMessage(lc.UNKNOWN_ENCHANTMENT.format(args[1]));
 					return false;
 				} else {
-					sender.sendMessage(lc.NOT_ENOUGHT_ARGUMENTS.format());
+					sender.sendMessage(lc.NOT_ENOUGH_ARGUMENTS.format());
 					return false;
 				}
 
@@ -174,24 +174,24 @@ public class PluginTabComplete implements TabExecutor {
 			}
 		}
 
-		private static boolean unenchannt(CommandSender sender, Command cmd, String label, String[] args) {
-			LanguageConfig lc = CustomEnchantmentAPI.getInstace().getLanguageConfig();
+		private static boolean unenchannt(CommandSender sender, String label, String[] args) {
+			LanguageConfig lc = CustomEnchantmentAPI.getInstance().getLanguageConfig();
 
 			if(sender instanceof Player) {
 				Player player = (Player) sender;
 				if(args.length >= 2) {
-					Enchantment ench = EnchantmentRegistery.getFromID(args[1]);
+					Enchantment ench = EnchantmentRegistry.getFromID(args[1]);
 					if(ench != null) {
 						if(!(player.hasPermission("adx.ceapi.unenchant." + args[1].toLowerCase()) || player
 								.hasPermission("adx.ceapi.unenchant.*"))) {
-							sender.sendMessage(lc.UNENCHANT_NO_ACCES_TO_ENCHANTMENT
+							sender.sendMessage(lc.UNENCHANT_NO_ACCESS_TO_ENCHANTMENT
 									                   .format("adx.ceapi.unenchant." + args[1].toLowerCase(), ench.getDisplay("")));
 							return false;
 						}
-						ItemStack prew = new ItemStack(ItemUtil.getMainHandItem(player));
-						if(EnchantmentRegistery.unenchant(ItemUtil.getMainHandItem(player), ench)) {
-							CEPLListener.itemNotInHand(player, prew, HandType.MAIN);
-							sender.sendMessage(lc.UNENCHANT_SUCCES.format(ench.getDisplay("")));
+						ItemStack previous = new ItemStack(ItemUtil.getMainHandItem(player));
+						if(EnchantmentRegistry.unenchant(ItemUtil.getMainHandItem(player), ench)) {
+							CEPLListener.itemNotInHand(player, previous, HandType.MAIN);
+							sender.sendMessage(lc.UNENCHANT_SUCCESS.format(ench.getDisplay("")));
 						} else {
 							sender.sendMessage(lc.UNENCHANT_ERROR.format(ench.getDisplay("")));
 						}
@@ -200,7 +200,7 @@ public class PluginTabComplete implements TabExecutor {
 					sender.sendMessage(lc.UNKNOWN_ENCHANTMENT.format(args[1]));
 					return false;
 				} else {
-					sender.sendMessage(lc.NOT_ENOUGHT_ARGUMENTS.format());
+					sender.sendMessage(lc.NOT_ENOUGH_ARGUMENTS.format());
 					return false;
 				}
 

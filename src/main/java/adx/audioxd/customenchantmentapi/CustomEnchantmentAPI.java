@@ -88,6 +88,8 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 				Method notOff = CEPLListener.class.getMethod("itemNotInOffHand", LivingEntity.class, ItemStack.class);
 				Method main = CEPLListener.class.getMethod("itemInMainHand", LivingEntity.class, ItemStack.class);
 				Method off = CEPLListener.class.getMethod("itemInOffHand", LivingEntity.class, ItemStack.class);
+				if(notMain == null || notOff == null || main == null || off == null)
+					return;
 				Bukkit.getPluginManager().registerEvents(nsm.getVersionListener(notMain, notOff, main, off), this);
 			} catch(NoSuchMethodException e) {
 				e.printStackTrace();
@@ -107,7 +109,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	public void onDisable() {
 		logger.preEnabled(false);
 		{
-			EnchantmentRegistery.reset();
+			EnchantmentRegistry.reset();
 		}
 		logger.enabled(false);
 		ceapiLogger.closeActiveLogFiles();
@@ -115,11 +117,11 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	}
 
 	// Getters
-	public static CustomEnchantmentAPI getInstace() {
+	public static CustomEnchantmentAPI getInstance() {
 		return instance;
 	}
 
-	public static GameLogger getCeapiLogger() {
+	public static GameLogger getCEAPILogger() {
 		return ceapiLogger;
 	}
 

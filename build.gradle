@@ -6,8 +6,13 @@ configure(allprojects - project(':modules')) {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
 
+    repositories {
+        mavenCentral()
+    }
+
     dependencies {
         compile fileTree(dir: 'libs', include: '*.jar')
+        testCompile 'junit:junit:4.12'
     }
     if (path.startsWith(":modules:")) {
         println "Found module $name"

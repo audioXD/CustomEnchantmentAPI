@@ -28,6 +28,8 @@ configure(allprojects - project(':modules')) {
 /* ********************************************************************************* */
 /*                         [For the main project]                                    */
 /* ********************************************************************************* */
+
+// This is the name of the Project (I know that this is the name of the Jar)
 archivesBaseName = 'CustomEnchantmentAPI'
 def MainClass = group + '.' + archivesBaseName
 
@@ -67,10 +69,7 @@ task javadocZip(type: Zip, dependsOn: javadoc) {
     into('/')
 }
 
-println javadocZip.archivePath
-println javadocZip.archiveName
-println javadocZip.baseName
-
+// Added the JavaDoc as a artifact
 artifacts {
     archives(file(javadocZip.archivePath)) {
         name javadocZip.baseName

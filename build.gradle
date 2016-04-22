@@ -91,6 +91,17 @@ uploadArchives {
 /*                          [For my personal use]                                    */
 /* ********************************************************************************* */
 
+// Deletes every file except .gitignore
+clean.doFirst {
+    if (file("/output").exists()) {
+        new File(rootDir, "/output").eachFile() { file ->
+            if (!file.getName().equalsIgnoreCase(".gitignore")) {
+                delete file.getPath()
+            }
+        }
+    }
+}
+
 uploadArchives {
     repositories {
         flatDir {

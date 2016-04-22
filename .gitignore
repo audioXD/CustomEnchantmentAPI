@@ -4,6 +4,7 @@
 **/build/*
 
 **/*.jar
+!**/*.placeholder
 
 #
 !gradle/*

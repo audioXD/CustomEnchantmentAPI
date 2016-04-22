@@ -1,7 +1,11 @@
 def modules = []
 configure(allprojects - project(':modules')) {
     apply plugin: 'eclipse'
+    apply plugin: 'idea'
     apply plugin: 'java'
+
+    group = 'adx.audioxd.customenchantmentapi'
+    version = '2.4-RELEASE'
 
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
@@ -14,31 +18,41 @@ configure(allprojects - project(':modules')) {
         compile fileTree(dir: 'libs', include: '*.jar')
         testCompile 'junit:junit:4.12'
     }
+
     if (path.startsWith(":modules:")) {
         println "Found module $name"
         modules << path
     }
 }
 
-// For the main project
-
+/* ********************************************************************************* */
+/*                         [For the main project]                                    */
+/* ********************************************************************************* */
 archivesBaseName = 'CustomEnchantmentAPI'
-group = 'adx.audioxd.customenchantmentapi'
-version = '2.4-RELEASE'
+def MainClass = group + '.' + archivesBaseName
 
+// The dependencies
 dependencies {
     compile(project(':modules:API')) {
         transitive = false
     }
 }
 
+// So it includes the modules in the jar file
+jar {
+    from files(modules.collect {
+        project(it).sourceSets.main.output
+    })
+}
+
+// To process the plugin.yml file for ease of access
 processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'plugin.yml'
 
-        expand 'plugin_name': project.archivesBaseName,
-                'plugin_version': project.version,
-                'plugin_main': project.group + '.' + project.archivesBaseName
+        expand 'plugin_name': archivesBaseName,
+                'plugin_version': version,
+                'plugin_main': MainClass
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'plugin.yml'
@@ -46,17 +60,40 @@ processResources {
     }
 }
 
-jar {
-    from files(modules.collect {
-        project(it).sourceSets.main.output
-    })
+// This method is for me to make it Easy to create a JavaDoc(.zip)
+task javadocZip(type: Zip, dependsOn: javadoc) {
+    from "build/docs/javadoc"
+    baseName = "CEAPI-javadoc"
+    into('/')
 }
 
+println javadocZip.archivePath
+println javadocZip.archiveName
+println javadocZip.baseName
+
+artifacts {
+    archives(file(javadocZip.archivePath)) {
+        name javadocZip.baseName
+        type 'zip'
+        builtBy javadocZip
+    }
+}
+
+// Where to upload the output Files
 uploadArchives {
     repositories {
         flatDir {
             dirs '/output'
         }
+    }
+}
+
+/* ********************************************************************************* */
+/*                          [For my personal use]                                    */
+/* ********************************************************************************* */
+
+uploadArchives {
+    repositories {
         flatDir {
             dirs '../_extra/_out'
         }
@@ -66,13 +103,7 @@ uploadArchives {
     }
 }
 
+// This for generating the gradle wrapper
 task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
-}
-
-task javadocZip(type: Zip, dependsOn: javadoc) {
-    from "build/docs/javadoc"
-    baseName = "CEAPI-javadoc"
-    into('/')
-    destinationDir file('/output')
 }

@@ -7,9 +7,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
-/**
- * Created by test on 29/03/2016.
- */
 public interface NSM {
 	ItemStack getItemInMainHand(LivingEntity player);
 
@@ -18,4 +15,7 @@ public interface NSM {
 	boolean isHandMainHAnd(PlayerInteractEvent event);
 
 	VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off);
+
+	// Getters
+	ItemStack getNull();
 }

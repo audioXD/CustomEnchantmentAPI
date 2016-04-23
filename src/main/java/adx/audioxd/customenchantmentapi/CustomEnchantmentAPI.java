@@ -44,6 +44,9 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * This method creates(If they don't exist) and reloads the config Files.
+	 */
 	public void reloadConfigs() {
 		(new DefaultConfig(this)).createFileIfDoesNotExist();
 		(new LanguageConfig(this, "/locale/en-US")).createFileIfDoesNotExist();
@@ -117,26 +120,57 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	}
 
 	// Getters
+
+	/**
+	 * This method returns the currently running instance of Plugin
+	 *
+	 * @return The plugin
+	 */
 	public static CustomEnchantmentAPI getInstance() {
 		return instance;
 	}
 
+	/**
+	 * Returns the logger for all Custom Enchantment API Plugins
+	 *
+	 * @return the Custom Enchantment API Logger
+	 */
 	public static GameLogger getCEAPILogger() {
 		return ceapiLogger;
 	}
 
+	/**
+	 * Returns the logger For the CustomEnchantmentAPI Plugin.
+	 *
+	 * @return The logger
+	 */
 	public TLogger getTLogger() {
 		return logger;
 	}
 
+	/**
+	 * Returns the config.yml file and its options.
+	 *
+	 * @return The config.yml file.
+	 */
 	public DefaultConfig getDefaultConfig() {
 		return dc;
 	}
 
+	/**
+	 * Returns the currently defined LanguageConfig in the DefaultConfig.
+	 *
+	 * @return The current LanguageConfig.
+	 */
 	public LanguageConfig getLanguageConfig() {
 		return lc;
 	}
 
+	/**
+	 * Returns the NSU used dynamic-ly assigned by the current Bukkit version.
+	 *
+	 * @return The dynamic NSU version
+	 */
 	public NSM getNSM() {
 		return nsm;
 	}

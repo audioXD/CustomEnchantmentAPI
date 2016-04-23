@@ -30,7 +30,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 	}
 
 	// Getters
-	public final static HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

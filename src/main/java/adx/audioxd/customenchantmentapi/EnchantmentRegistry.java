@@ -52,8 +52,14 @@ public class EnchantmentRegistry {
 		return false;
 	}
 
-	private static String getEnchantmentsMapID(Enchantment ench) {
-		return ChatColor.stripColor(ench.getName().toUpperCase()).replace(" ", "_");
+	/**
+	 * Returns the name without Color in UpperCase with spaces replaced with '_' (In other words the ID).
+	 *
+	 * @param enchantment The enchantment That you want to get the ID from.
+	 * @return The ID.
+	 */
+	private static String getEnchantmentsMapID(Enchantment enchantment) {
+		return ChatColor.stripColor(enchantment.getName().toUpperCase()).replace(" ", "_");
 	}
 
 	/**
@@ -258,7 +264,7 @@ public class EnchantmentRegistry {
 	/**
 	 * This method in a bake method for synchronization
 	 *
-	 * @return
+	 * @return Returns a list of Enchantments that are thread safe.
 	 */
 	private static Enchantment[] bake() {
 		Enchantment[] baked = backedEnchantments;

@@ -12,17 +12,14 @@ public class GameLogger {
 	// Private global fields
 	private static final Formatter DFormatter = new Formatter() {
 		public String format(LogRecord rec) {
-			StringBuffer buf = new StringBuffer(1000);
-			buf.append('[');
-			buf.append((new SimpleDateFormat("HH:mm:ss ")).format(new Date()));
-			buf.append(rec.getLevel());
-			buf.append(']');
-			buf.append(':');
-			buf.append(' ');
-
-			buf.append(formatMessage(rec));
-			buf.append('\n');
-			return buf.toString();
+			return '['
+					+ (new SimpleDateFormat("HH:mm:ss ")).format(new Date())
+					+ rec.getLevel()
+					+ ']'
+					+ ':'
+					+ ' '
+					+ formatMessage(rec)
+					+ '\n';
 		}
 	};
 	// End of Global Fields
@@ -58,9 +55,15 @@ public class GameLogger {
 		if(file == null) return;
 
 		try {
-			if(file.getParentFile() != null) if(!file.getParentFile().exists()) file.getParentFile().mkdirs();
-
-			if(!file.exists() || reset) file.createNewFile();
+			if(file.getParentFile() != null) {
+				if(!file.getParentFile().exists()) {
+					if(!file.getParentFile().mkdirs())
+						throw new IOException();
+				}
+			}
+			if(!file.exists() || reset) {
+				if(file.createNewFile()) throw new IOException();
+			}
 			addHandler(new FileHandler(file.getPath()), formatter);
 		} catch(IOException e) {
 			error("Could't bind log file to logger!", e);

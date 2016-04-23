@@ -17,7 +17,7 @@ public class Option {
 		loadIfExist(config, this);
 	}
 
-	public static final void loadIfExist(Config config, Option option) {
+	public static void loadIfExist(Config config, Option option) {
 		if(config.getConfig().isSet(option.getPath())) {
 			option.setValue(config.getConfig().get(option.getPath()));
 		} else {
@@ -30,7 +30,7 @@ public class Option {
 		return path;
 	}
 
-	public static final void save(Config config, Option option) {
+	public static void save(Config config, Option option) {
 		config.getConfig().set(option.getPath(), option.getValue());
 	}
 

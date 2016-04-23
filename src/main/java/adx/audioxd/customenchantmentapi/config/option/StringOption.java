@@ -23,7 +23,7 @@ public class StringOption {
 		loadIfExist(config, this);
 	}
 
-	public static final void loadIfExist(Config config, StringOption option) {
+	public static void loadIfExist(Config config, StringOption option) {
 		if(config.getConfig().isSet(option.getPath())) {
 			option.setValue(config.getConfig().getString(option.getPath()));
 		} else {
@@ -36,7 +36,7 @@ public class StringOption {
 		return path;
 	}
 
-	public static final void save(Config config, StringOption option) {
+	public static void save(Config config, StringOption option) {
 		config.getConfig().set(option.getPath(), option.getValue());
 	}
 

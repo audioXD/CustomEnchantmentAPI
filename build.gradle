@@ -82,7 +82,7 @@ artifacts {
 uploadArchives {
     repositories {
         flatDir {
-            dirs '/output'
+            dirs '/output/' + version
         }
     }
 }
@@ -92,7 +92,7 @@ uploadArchives {
 /* ********************************************************************************* */
 
 // Deletes every file except .gitignore
-clean.doFirst {
+/*clean.doFirst {
     if (file("/output").exists()) {
         new File(rootDir, "/output").eachFile() { file ->
             if (!file.getName().equalsIgnoreCase(".gitignore")) {
@@ -100,7 +100,7 @@ clean.doFirst {
             }
         }
     }
-}
+}*/
 
 uploadArchives {
     repositories {

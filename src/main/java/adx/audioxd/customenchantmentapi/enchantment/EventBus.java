@@ -36,7 +36,7 @@ public class EventBus {
 		if(handler == null) return;
 
 		if(sync) {
-			synchronized(handler) {
+			synchronized(EventBus.class) {
 				handler.fireEvent(event);
 			}
 		} else {

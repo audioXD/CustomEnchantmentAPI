@@ -123,7 +123,7 @@ public class EnchantmentRegistry {
 		if(id == null) return null;
 		if(id.trim().length() == 0) return null;
 
-		String[] data = id.split("\\:");
+		String[] data = id.split(":");
 		if(data.length < 2) return null;
 		String plugin = data[0];
 		String ench = data[1];

@@ -27,8 +27,8 @@ public abstract class Config {
 
 	public void createFileIfDoesNotExist() {
 		if(!configFile.exists()) {
-			configFile.getParentFile().mkdirs();
-			copy(plugin.getResource(localFile.getName()), configFile);
+			if(configFile.getParentFile().mkdirs())
+				copy(plugin.getResource(localFile.getName()), configFile);
 		}
 	}
 

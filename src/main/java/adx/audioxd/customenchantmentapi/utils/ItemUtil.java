@@ -96,9 +96,10 @@ public class ItemUtil {
 		if(!item1.getType().equals(item2.getType())) return false;
 		if(item1.hasItemMeta() != item2.hasItemMeta()) return false;
 
-		if(item1.hasItemMeta() && item2.hasItemMeta()) item1.getItemMeta().equals(item2.getItemMeta());
-		else return true;
-
+		if(item1.hasItemMeta() && item2.hasItemMeta()) {
+			if(item1.getItemMeta().equals(item2.getItemMeta()))
+				return true;
+		}
 		return false;
 	}
 

@@ -1,11 +1,11 @@
 def modules = []
 configure(allprojects - project(':modules')) {
+    group = 'adx.audioxd.customenchantmentapi'
+    version = '2.4-RELEASE'
+
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'java'
-
-    group = 'adx.audioxd.customenchantmentapi'
-    version = '2.4-RELEASE'
 
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'

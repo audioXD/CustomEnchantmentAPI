@@ -63,8 +63,15 @@ processResources {
 }
 
 // This method is for me to make it Easy to create a JavaDoc(.zip)
-task javadocZip(type: Zip, dependsOn: javadoc) {
-    from "build/docs/javadoc"
+task docs(type: Javadoc) {
+    source sourceSets.main.allJava
+    source modules.collect { m -> project(m).sourceSets.main.allJava }
+
+    classpath = files(modules.collect {m -> project(m).sourceSets.main.compileClasspath}, sourceSets.main.compileClasspath)
+    destinationDir = new File(projectDir, 'build/docs')
+}
+task javadocZip(type: Zip, dependsOn: docs) {
+    from "build/docs"
     baseName = "CEAPI-javadoc"
     into('/')
 }

@@ -85,6 +85,11 @@ uploadArchives {
             dirs '/output/' + version
         }
     }
+    repositories {
+        flatDir {
+            dirs '/output/latest'
+        }
+    }
 }
 
 /* ********************************************************************************* */
@@ -92,15 +97,15 @@ uploadArchives {
 /* ********************************************************************************* */
 
 // Deletes every file except .gitignore
-/*clean.doFirst {
-    if (file("/output").exists()) {
-        new File(rootDir, "/output").eachFile() { file ->
+clean.doFirst {
+    if (file("/output/latest").exists()) {
+        new File(rootDir, "/output/latest").eachFile() { file ->
             if (!file.getName().equalsIgnoreCase(".gitignore")) {
                 delete file.getPath()
             }
         }
     }
-}*/
+}
 
 uploadArchives {
     repositories {

@@ -3,6 +3,5 @@ configure(subprojects - project(':modules:API')) {
         compile(project(':modules:API')) {
             transitive = false
         }
-        compile fileTree(dir: 'libs', include: '*.jar')
     }
 }

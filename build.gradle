@@ -12,10 +12,17 @@ configure(allprojects - project(':modules')) {
 
     repositories {
         mavenCentral()
+        maven {
+            url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+        }
+        maven {
+            url "http://repo.md-5.net/content/groups/public/#"
+        }
     }
 
     dependencies {
-        compile fileTree(dir: 'libs', include: '*.jar')
+        // Unused
+        // compile fileTree(dir: 'libs', include: '*.jar')
         testCompile 'junit:junit:4.12'
     }
 
@@ -36,7 +43,7 @@ def MainClass = group + '.' + archivesBaseName
 // The dependencies
 dependencies {
     compile(project(':modules:API')) {
-        transitive = false
+        // transitive = false
     }
 }
 

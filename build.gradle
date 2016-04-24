@@ -106,7 +106,7 @@ uploadArchives {
 /* ********************************************************************************* */
 /*                          [For my personal use]                                    */
 /* ********************************************************************************* */
-
+tasks.uploadArchives.dependsOn(clean)
 // Deletes every file except .gitignore
 clean.doFirst {
     if (file("/output/latest").exists()) {

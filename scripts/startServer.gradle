@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+def mcServerVersion = "1.9"
+def mcServerHideGUI = true
+
+def mcServerFileName = "spigot-${mcServerVersion}.jar"
+def serverDir = "run"
+def binDir = "${serverDir}/bin"
+
+task makeDirs << {
+    file(binDir).mkdirs()
+}
+task runServer << {
+    def serverArgs = [new File("bin", mcServerFileName.toString())]
+    if (mcServerHideGUI) {
+        serverArgs.add("nogui")
+    }
+    javaexec {
+        main = "-jar"
+        workingDir = serverDir
+        minHeapSize = "512M"
+        maxHeapSize = "1G"
+        args serverArgs
+    }
+}
+runServer.dependsOn makeDirs
+
+

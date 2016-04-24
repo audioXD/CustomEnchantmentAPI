@@ -3,6 +3,6 @@
 *.sha1
 *.xml
 
-/**
+/*
 !latest
 !.gitignore

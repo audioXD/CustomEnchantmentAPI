@@ -64,11 +64,10 @@ uploadArchives {
 }
 
 
-if (delete_on_upload)
-    tasks.uploadArchives.dependsOn(clean)
+tasks.uploadArchives.dependsOn(clean)
 // Deletes every file except .gitignore
 clean.doFirst {
-    if (file("/output/latest").exists()) {
+    if (file("/output/latest").exists() && delete_on_upload) {
         new File(rootDir, "/output/latest").eachFile() { file ->
             if (!file.getName().equalsIgnoreCase(".gitignore")) {
                 delete file.getPath()

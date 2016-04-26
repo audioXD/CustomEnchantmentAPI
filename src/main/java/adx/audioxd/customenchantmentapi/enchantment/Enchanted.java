@@ -18,6 +18,10 @@ public class Enchanted implements Lvl {
 		if(enchantment != null) enchantment.fireEvent(event);
 	}
 
+	public void fireEvent(EnchantmentEvent event, boolean sync) {
+		if(enchantment != null) enchantment.fireEvent(event, sync);
+	}
+
 	// Getters
 	public int getLvl() {
 		return lvl;

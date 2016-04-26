@@ -108,6 +108,16 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		eb.fireEvent(event);
 	}
 
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The event
+	 * @param sync It i should be synchronized
+	 */
+	public final void fireEvent(EnchantmentEvent event, boolean sync) {
+		eb.fireEvent(event, sync);
+	}
+
 // Getters
 
 	/**

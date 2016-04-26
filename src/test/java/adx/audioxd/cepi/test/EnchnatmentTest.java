@@ -92,6 +92,6 @@ public class EnchnatmentTest {
 
 	@Test
 	public void fireEventsPriority(){
-		tEnch.fireEvent(new EItemInHandEvent(1, null, null, null));
+		tEnch.fireEvent(new EItemInHandEvent(1, null, null, null), true);
 	}
 }

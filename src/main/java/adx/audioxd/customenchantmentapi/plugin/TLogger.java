@@ -2,14 +2,14 @@ package adx.audioxd.customenchantmentapi.plugin;
 
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
+import adx.audioxd.customenchantmentapi.utils.GameLogger;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import java.util.logging.Level;
 
-public class TLogger {
+public class TLogger extends GameLogger {
 	private final Plugin plugin;
-	private boolean DEBUG = false;
 	private boolean PUBLIC = true;
 
 	// Constructor
@@ -17,33 +17,9 @@ public class TLogger {
 		this.plugin = plugin;
 	}
 
-	public void severe(String message) {
-		log(Level.SEVERE, message);
-	}
-
 	public void log(Level ll, String message) {
 		CustomEnchantmentAPI.getCEAPILogger().log(ll, "<" + plugin.getName() + ">: " + message);
 		if(PUBLIC) plugin.getLogger().log(ll, message);
-	}
-
-	public void debug(String message) {
-		if(DEBUG) log(Level.INFO, "[DEBUG] " + message);
-	}
-
-	public void warning(String message) {
-		log(Level.WARNING, message);
-	}
-
-	public void fine(String message) {
-		log(Level.FINE, message);
-	}
-
-	public void finer(String message) {
-		log(Level.FINER, message);
-	}
-
-	public void finest(String message) {
-		log(Level.FINEST, message);
 	}
 
 	public void preEnabled(boolean enabled) {
@@ -56,10 +32,6 @@ public class TLogger {
 		}
 	}
 
-	public void info(String message) {
-		log(Level.INFO, message);
-	}
-
 	public void enabled(boolean enabled) {
 		if(enabled) {
 			PluginDescriptionFile p = plugin.getDescription();
@@ -70,15 +42,7 @@ public class TLogger {
 		}
 	}
 
-	// Getters
-	public boolean isDebug() {
-		return DEBUG;
-	}
-
-	public void setDebug(boolean debug) {
-		DEBUG = debug;
-	}
-
+// Getters
 	public boolean isPublic() {
 		return PUBLIC;
 	}

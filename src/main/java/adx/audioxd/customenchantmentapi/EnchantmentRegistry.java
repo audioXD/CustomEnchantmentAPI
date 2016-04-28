@@ -346,10 +346,8 @@ public class EnchantmentRegistry {
 	 * Rebuild the Enchantments Array.
 	 */
 	public synchronized static void rebuildEnchantmentsArray() {
-		synchronized(backedActiveEnchantments) {
+		if(backedActiveEnchantments != null)
 			backedActiveEnchantments = null;
-			bake();
-		}
 	}
 // Getters
 

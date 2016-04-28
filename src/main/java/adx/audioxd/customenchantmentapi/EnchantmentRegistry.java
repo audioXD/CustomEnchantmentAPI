@@ -63,7 +63,12 @@ public class EnchantmentRegistry {
 				enchantmentsMap.put(plugin, enchs);
 				backedActiveEnchantments = null;
 
-				registeredEnchantment.setActive(true);
+				registeredEnchantment.setActive(
+						CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().isActive(
+								registeredEnchantment.getPlugin(),
+								registeredEnchantment.getEnchantment()
+						)
+				);
 				return true;
 			}
 		}
@@ -340,9 +345,10 @@ public class EnchantmentRegistry {
 	/**
 	 * Rebuild the Enchantments Array.
 	 */
-	private synchronized static void rebuildEnchantmentsArray() {
+	public synchronized static void rebuildEnchantmentsArray() {
 		synchronized(backedActiveEnchantments) {
 			backedActiveEnchantments = null;
+			bake();
 		}
 	}
 // Getters

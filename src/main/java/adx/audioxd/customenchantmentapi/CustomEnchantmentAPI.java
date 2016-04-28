@@ -59,6 +59,8 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		dc.load();
 		ec.load();
 		lc = new LanguageConfig(this, "locale/" + dc.MESSAGE_LOCALIZATION_FILE.getValue());
+
+		EnchantmentRegistry.rebuildEnchantmentsArray();
 	}
 
 	@Override

@@ -313,7 +313,6 @@ public class EnchantmentRegistry {
 					Map<String, Enchantment> active = new HashMap<>();
 
 					for(RegisteredEnchantment en : enchantments) {
-						// TODO Get Active from config.
 						if(CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().isActive(
 								en.getPlugin(),
 								en.getEnchantment()

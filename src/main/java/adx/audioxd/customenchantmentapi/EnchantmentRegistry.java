@@ -17,10 +17,10 @@ import java.util.*;
 
 public class EnchantmentRegistry {
 	// Global fields
-	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<Plugin, Map<String, Enchantment>>();
+	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<>();
 
-	private static final Set<Enchantment> enchantments = new HashSet<Enchantment>();
-	private static volatile Enchantment[] backedEnchantments = null;
+	private static final Set<RegisteredEnchantment> enchantments = new HashSet<>();
+	private static volatile Enchantment[] backedActiveEnchantments = null;
 // End of Global Fields
 
 	// Constructor
@@ -36,17 +36,36 @@ public class EnchantmentRegistry {
 	 */
 	public static synchronized boolean register(Plugin plugin, Enchantment enchantment) {
 		if(plugin == null || enchantment == null) return false;
-		// throw new NullPointerException("The input arguments cannot be null");
-		if(enchantments.add(enchantment)) {
-			Map<String, Enchantment> enchs = enchantmentsMap.containsKey(plugin) ?
-					enchantmentsMap.get(plugin) :
-					new HashMap<String, Enchantment>();
+		return register(new RegisteredEnchantment(enchantment, plugin));
+	}
 
-			enchs.put(getEnchantmentsMapID(enchantment), enchantment);
+	/**
+	 * This method registers the Enchantment.
+	 *
+	 * @param registeredEnchantment A RegisteredEnchantment.
+	 * @return If the Enchantment has been registered.(Like if some other plugin
+	 * has a Enchantment with the same display name)
+	 */
+	public static synchronized boolean register(RegisteredEnchantment registeredEnchantment) {
+		if(registeredEnchantment == null) return false;
 
-			enchantmentsMap.put(plugin, enchs);
-			backedEnchantments = null;
-			return true;
+		Plugin plugin = registeredEnchantment.getPlugin();
+		Enchantment enchantment = registeredEnchantment.getEnchantment();
+		String enchMapID = getEnchantmentsMapID(enchantment);
+
+		Map<String, Enchantment> enchs = enchantmentsMap.containsKey(plugin) ?
+				enchantmentsMap.get(plugin) :
+				new HashMap<>();
+
+		if(!enchs.containsKey(enchMapID)) {
+			if(enchantments.add(registeredEnchantment)) {
+				enchs.put(enchMapID, enchantment);
+				enchantmentsMap.put(plugin, enchs);
+				backedActiveEnchantments = null;
+
+				registeredEnchantment.setActive(true);
+				return true;
+			}
 		}
 
 		return false;
@@ -58,7 +77,7 @@ public class EnchantmentRegistry {
 	 * @param enchantment The enchantment That you want to get the ID from.
 	 * @return The ID.
 	 */
-	private static String getEnchantmentsMapID(Enchantment enchantment) {
+	public static String getEnchantmentsMapID(Enchantment enchantment) {
 		return ChatColor.stripColor(enchantment.getName().toUpperCase()).replace(" ", "_");
 	}
 
@@ -71,15 +90,32 @@ public class EnchantmentRegistry {
 	 */
 	public static synchronized boolean unregister(Plugin plugin, Enchantment enchantment) {
 		if(plugin == null || enchantment == null) return false;
+		return unregister(new RegisteredEnchantment(enchantment, plugin));
+	}
 
-		if(enchantments.remove(enchantment)) {
+	/**
+	 * Unregisters a Enchantment.
+	 *
+	 * @param registeredEnchantment The Registered Enchantment.
+	 * @return If the Enchantment has ben unregistered.
+	 */
+	public static synchronized boolean unregister(RegisteredEnchantment registeredEnchantment) {
+		if(registeredEnchantment == null) return false;
+
+		Plugin plugin = registeredEnchantment.getPlugin();
+		Enchantment enchantment = registeredEnchantment.getEnchantment();
+		String enchMapID = getEnchantmentsMapID(enchantment);
+
+		if(enchantments.remove(registeredEnchantment)) {
 			if(enchantmentsMap.containsKey(plugin)) {
 				Map<String, Enchantment> enchs = enchantmentsMap.get(plugin);
-				if(enchs.containsKey(getEnchantmentsMapID(enchantment)))
-					enchs.remove(getEnchantmentsMapID(enchantment));
+
+				if(enchs.containsKey(enchMapID))
+					enchs.remove(enchMapID);
+
 				if(enchs.isEmpty()) enchantmentsMap.remove(plugin);
 			}
-			backedEnchantments = null;
+			backedActiveEnchantments = null;
 			return true;
 		}
 
@@ -96,8 +132,9 @@ public class EnchantmentRegistry {
 
 		if(enchantmentsMap.containsKey(plugin)) {
 			for(Enchantment en : enchantmentsMap.get(plugin).values()) {
-				if(enchantments.remove(en)) {
-					backedEnchantments = null;
+
+				if(enchantments.remove(new RegisteredEnchantment(en, plugin))) {
+					backedActiveEnchantments = null;
 				}
 			}
 			enchantmentsMap.remove(plugin);
@@ -110,7 +147,7 @@ public class EnchantmentRegistry {
 	public static synchronized void reset() {
 		enchantments.clear();
 		enchantmentsMap.clear();
-		backedEnchantments = null;
+		backedActiveEnchantments = null;
 	}
 
 	/**
@@ -152,6 +189,7 @@ public class EnchantmentRegistry {
 		if(enchantment == null) return null;
 		return plugin.getName() + ":" + getEnchantmentsMapID(enchantment);
 	}
+
 
 	/**
 	 * Unenchants a Enchantment from a Item
@@ -240,7 +278,7 @@ public class EnchantmentRegistry {
 	 * @return A array of Enchanted Enchantments.
 	 */
 	public static synchronized Enchanted[] getEnchantments(ItemStack item) {
-		List<Enchanted> res = new ArrayList<Enchanted>();
+		List<Enchanted> res = new ArrayList<>();
 		if(ItemUtil.isEmpty(item)) return res.toArray(new Enchanted[res.size()]);
 		if(!item.hasItemMeta()) return res.toArray(new Enchanted[res.size()]);
 		ItemMeta data = item.getItemMeta();
@@ -267,14 +305,31 @@ public class EnchantmentRegistry {
 	 * @return Returns a list of Enchantments that are thread safe.
 	 */
 	private static Enchantment[] bake() {
-		Enchantment[] baked = backedEnchantments;
+		Enchantment[] baked = backedActiveEnchantments;
 		if(baked == null) {
 			// Set -> array
 			synchronized(EnchantmentRegistry.class) {
-				if((baked = backedEnchantments) == null) {
-					baked = enchantments.toArray(new Enchantment[enchantments.size()]);
+				if((baked = backedActiveEnchantments) == null) {
+					Map<String, Enchantment> active = new HashMap<>();
+
+					for(RegisteredEnchantment en : enchantments) {
+						// TODO Get Active from config.
+						if(CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().isActive(
+								en.getPlugin(),
+								en.getEnchantment()
+						)) {
+							if(active.containsKey(en.getEnchantment().getDisplay(""))) {
+								en.setActive(false);
+								continue;
+							}
+
+							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());
+						}
+					}
+
+					baked = active.values().toArray(new Enchantment[active.values().size()]);
 					Arrays.sort(baked);
-					backedEnchantments = baked;
+					backedActiveEnchantments = baked;
 
 				}
 			}
@@ -283,6 +338,14 @@ public class EnchantmentRegistry {
 		return baked;
 	}
 
+	/**
+	 * Rebuild the Enchantments Array.
+	 */
+	private synchronized static void rebuildEnchantmentsArray() {
+		synchronized(backedActiveEnchantments) {
+			backedActiveEnchantments = null;
+		}
+	}
 // Getters
 
 	/**
@@ -291,7 +354,7 @@ public class EnchantmentRegistry {
 	 * @return Returns a Enchantment[].
 	 */
 	public static synchronized Enchantment[] getEnchantmentsArray() {
-		if(backedEnchantments != null) return backedEnchantments;
+		if(backedActiveEnchantments != null) return backedActiveEnchantments;
 		return bake();
 	}
 

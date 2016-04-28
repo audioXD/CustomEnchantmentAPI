@@ -4,6 +4,7 @@ package adx.audioxd.customenchantmentapi;
 import adx.audioxd.customenchantmentapi.abst.api.NSM;
 import adx.audioxd.customenchantmentapi.commands.PluginTabComplete;
 import adx.audioxd.customenchantmentapi.config.DefaultConfig;
+import adx.audioxd.customenchantmentapi.config.EnchantmentsConfig;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.listeners.*;
 import adx.audioxd.customenchantmentapi.plugin.TLogger;
@@ -23,6 +24,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	// End of Global Fields
 	private final TLogger logger;
 	private final DefaultConfig dc;
+	private final EnchantmentsConfig ec;
 	private final String version;
 	private LanguageConfig lc;
 	private NSM nsm;
@@ -40,6 +42,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		ceapiLogger.createDefaultLogFiles(this.getDataFolder());
 		{
 			dc = new DefaultConfig(this);
+			ec = new EnchantmentsConfig(this);
 			reloadConfigs();
 		}
 	}
@@ -48,11 +51,13 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	 * This method creates(If they don't exist) and reloads the config Files.
 	 */
 	public void reloadConfigs() {
-		(new DefaultConfig(this)).createFileIfDoesNotExist();
+		dc.createFileIfDoesNotExist();
+		ec.createFileIfDoesNotExist();
 		(new LanguageConfig(this, "/locale/en-US")).createFileIfDoesNotExist();
 		(new LanguageConfig(this, "/locale/Template-en-US")).createFileIfDoesNotExist();
 
 		dc.load();
+		ec.load();
 		lc = new LanguageConfig(this, "locale/" + dc.MESSAGE_LOCALIZATION_FILE.getValue());
 	}
 
@@ -173,5 +178,14 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	 */
 	public NSM getNSM() {
 		return nsm;
+	}
+
+	/**
+	 * Returns the Enchantments.yml file.
+	 *
+	 * @return The Enchantments.yml file.
+	 */
+	public EnchantmentsConfig getEnchantmentsConfig() {
+		return ec;
 	}
 }

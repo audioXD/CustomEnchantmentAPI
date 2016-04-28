@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -120,10 +121,14 @@ public class PluginTabComplete implements TabExecutor {
 				sender.sendMessage(ChatColor.BOLD + "[" + plugin.getName() + "]");
 				Map<String, Enchantment> data = EnchantmentRegistry.getEnchantments().get(plugin);
 				if(data == null) continue;
+
+				List<Enchantment> ective = Arrays.asList(EnchantmentRegistry.getEnchantmentsArray());
+
 				for(String id : data.keySet()) {
 					Enchantment ench = data.get(id);
 					if(ench == null) continue;
-					sender.sendMessage(ChatColor.GOLD + " - " + ench.getDisplay(""));
+
+					sender.sendMessage(ChatColor.GOLD + " - " + ench.getDisplay("") + " : " + (ective.contains(ench) ? ChatColor.GREEN + "Active" : ChatColor.DARK_RED + "Disabled"));
 				}
 			}
 			sender.sendMessage(ChatColor.RED + "================[END]================");

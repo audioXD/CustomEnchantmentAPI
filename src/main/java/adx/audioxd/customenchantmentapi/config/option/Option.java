@@ -45,4 +45,12 @@ public class Option {
 	public final void save(Config config) {
 		save(config, this);
 	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if(o == this) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		Option other = (Option) o;
+		return getPath().equalsIgnoreCase(other.getPath());
+	}
 }

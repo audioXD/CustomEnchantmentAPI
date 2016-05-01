@@ -88,8 +88,12 @@ public class onItemInHandChange extends CEPLListener {
 		if(shift) {
 			ItemStack item = event.getCurrentItem();
 			if(ItemUtil.canEquip(item, player)
-					&& event.getInventory().getName().equalsIgnoreCase("container.crafting"))
+					&& event.getInventory().getName().equalsIgnoreCase("container.crafting")) {
+				if(event.getClickedInventory().getType().equals(InventoryType.PLAYER) && event.getSlotType().equals(SlotType.QUICKBAR) && event.getSlot() == player.getInventory().getHeldItemSlot())
+					itemNotInHand(player, event.getCurrentItem(), HandType.MAIN);
+
 				return;
+			}
 			if(event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
 				Map<Integer, ItemStack> items = ItemUtil.getSlots(player, item, event.getSlotType());
 

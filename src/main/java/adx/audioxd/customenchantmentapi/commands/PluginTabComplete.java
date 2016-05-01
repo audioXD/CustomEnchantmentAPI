@@ -122,13 +122,13 @@ public class PluginTabComplete implements TabExecutor {
 				Map<String, Enchantment> data = EnchantmentRegistry.getEnchantments().get(plugin);
 				if(data == null) continue;
 
-				List<Enchantment> ective = Arrays.asList(EnchantmentRegistry.getEnchantmentsArray());
+				List<Enchantment> active = Arrays.asList(EnchantmentRegistry.getEnchantmentsArray());
 
 				for(String id : data.keySet()) {
 					Enchantment ench = data.get(id);
 					if(ench == null) continue;
 
-					sender.sendMessage(ChatColor.GOLD + " - " + ench.getDisplay("") + " : " + (ective.contains(ench) ? ChatColor.GREEN + "Active" : ChatColor.DARK_RED + "Disabled"));
+					sender.sendMessage(ChatColor.GOLD + " - " + ench.getDisplay("") + " : " + (active.contains(ench) ? ChatColor.GREEN + "Active" : ChatColor.DARK_RED + "Disabled"));
 				}
 			}
 			sender.sendMessage(ChatColor.RED + "================[END]================");

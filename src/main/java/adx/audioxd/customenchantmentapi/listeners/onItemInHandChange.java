@@ -87,7 +87,7 @@ public class onItemInHandChange extends CEPLListener {
 
 		if(shift) {
 			ItemStack item = event.getCurrentItem();
-			if(ItemUtil.canEnquipt(item, player)
+			if(ItemUtil.canEquip(item, player)
 					&& event.getInventory().getName().equalsIgnoreCase("container.crafting"))
 				return;
 			if(event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {

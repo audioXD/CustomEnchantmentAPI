@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * Created by test on 26/04/2016.
  */
-public class EnchnatmentTest {
+public class EnchantmentTest {
 	// Global fields
 	public static TestEnch tEnch = new TestEnch();
 // End of Global Fields

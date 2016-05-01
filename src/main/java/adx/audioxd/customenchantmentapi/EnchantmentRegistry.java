@@ -185,7 +185,7 @@ public class EnchantmentRegistry {
 	/**
 	 * Returns a ID. That can be used from getFromID().
 	 *
-	 * @param plugin      The Plugin that registered the Encahntment.
+	 * @param plugin      The Plugin that registered the Enchantment.
 	 * @param enchantment The Enchantment.
 	 * @return The ID
 	 */

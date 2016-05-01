@@ -82,7 +82,7 @@ public class onArmorListener extends CEPLListener {
 			ItemStack hotbar = null;
 			if(e.getAction().equals(InventoryAction.HOTBAR_SWAP)) {
 				hotbar = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
-				if(!ItemUtil.isEmpty(hotbar) && ItemUtil.canEnquipt(hotbar, e.getWhoClicked())) {
+				if(!ItemUtil.isEmpty(hotbar) && ItemUtil.canEquip(hotbar, e.getWhoClicked())) {
 					newArmorType = ArmorType.matchType(hotbar);
 					hotbarSwap = true;
 				}

@@ -164,11 +164,11 @@ public class GameLogger {
 
 	// Getters
 	// Getters and Setters
-	public boolean isDebuging() {
+	public boolean isDebugging() {
 		return DEBUG;
 	}
 
-	public void setDebuging(boolean debug) {
+	public void setDebugging(boolean debug) {
 		info("Debugging set to " + debug);
 		DEBUG = debug;
 	}

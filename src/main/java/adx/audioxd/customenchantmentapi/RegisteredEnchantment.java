@@ -56,7 +56,7 @@ public class RegisteredEnchantment {
 	/**
 	 * Gets the ID of the Registered Enchantment.
 	 *
-	 * @return
+	 * @return Returns the enchantment id plugin:name
 	 */
 	public String getID() {
 		return id;

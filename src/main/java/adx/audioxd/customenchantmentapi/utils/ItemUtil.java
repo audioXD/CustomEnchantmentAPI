@@ -27,7 +27,7 @@ public class ItemUtil {
 
 	// Methods
 	final public static List<Integer> getSlotsList(Player player, ItemStack item, SlotType slotType) {
-		if(canEnquipt(item, player) && (slotType.equals(SlotType.CONTAINER) || slotType.equals(SlotType.QUICKBAR)))
+		if(canEquip(item, player) && (slotType.equals(SlotType.CONTAINER) || slotType.equals(SlotType.QUICKBAR)))
 			return new ArrayList<Integer>();
 		int start = 0;
 		if(slotType.equals(SlotType.ARMOR) || slotType.equals(SlotType.QUICKBAR) || slotType.equals(SlotType.CRAFTING)
@@ -37,7 +37,7 @@ public class ItemUtil {
 		return getSlotsList(start, player.getInventory(), item);
 	}
 
-	public static boolean canEnquipt(ItemStack item, LivingEntity entity) {
+	public static boolean canEquip(ItemStack item, LivingEntity entity) {
 		if(isEmpty(item)) return false;
 		if(entity == null) return false;
 		return (isEmpty(entity.getEquipment().getHelmet()) && ItemType.HELMET.matchType(item)) || (
@@ -110,7 +110,7 @@ public class ItemUtil {
 	}
 
 	public static Map<Integer, ItemStack> getSlots(Player player, ItemStack item, SlotType slotType) {
-		if(canEnquipt(item, player) && (slotType.equals(SlotType.CONTAINER) || slotType.equals(SlotType.QUICKBAR)))
+		if(canEquip(item, player) && (slotType.equals(SlotType.CONTAINER) || slotType.equals(SlotType.QUICKBAR)))
 			return new HashMap<Integer, ItemStack>();
 		int start = 0;
 		if(slotType.equals(SlotType.ARMOR) || slotType.equals(SlotType.QUICKBAR) || slotType.equals(SlotType.CRAFTING)

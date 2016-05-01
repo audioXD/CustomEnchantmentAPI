@@ -128,7 +128,7 @@ processResources {
 uploadArchives {
     repositories {
         flatDir {
-            dirs '../_extra/_out'
+            dirs '../_extra/output/' + archivesBaseName
         }
         flatDir {
             dirs '../_extra/run/plugins'

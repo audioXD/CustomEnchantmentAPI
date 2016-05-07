@@ -9,6 +9,7 @@ import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.listeners.*;
 import adx.audioxd.customenchantmentapi.plugin.TLogger;
 import adx.audioxd.customenchantmentapi.utils.GameLogger;
+import adx.audioxd.customenchantmentapi.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.LivingEntity;
@@ -69,7 +70,6 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		ceapiLogger.createDefaultLogFiles(this.getDataFolder());
 		logger.preEnabled(true);
 		{
-			logger.info("Bukkit version: " + version);
 			try {
 				final Class<?> clazz = Class.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSMHandler");
 				if(NSM.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
@@ -111,6 +111,15 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 
 			getCommand(this.getDescription().getName()).setTabCompleter(te);
 			getCommand(this.getDescription().getName()).setExecutor(te);
+
+			if(dc.CHECK_FOR_UPDATES.getValue()) {
+				UpdateChecker uc = new UpdateChecker("http://dev.bukkit.org/bukkit-plugins/customeenchantmentapi/files.rss");
+				if(uc.isUpdateNeeded(this)) {
+					logger.info(lc.NEW_VERSION_AVAILABLE.format(uc.getLatestVersion(), uc.getDownloadLink()));
+				} else {
+					logger.info(lc.NO_VERSION_AVAILABLE.format());
+				}
+			}
 		}
 		logger.enabled(true);
 	}

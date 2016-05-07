@@ -23,6 +23,9 @@ public class LanguageConfig extends Config {
 	public final StringOption UNENCHANT_SUCCESS;
 	public final StringOption UNENCHANT_ERROR;
 
+	public final StringOption NEW_VERSION_AVAILABLE;
+	public final StringOption NO_VERSION_AVAILABLE;
+
 
 	// Constructor
 	public LanguageConfig(Plugin plugin, String file) {
@@ -53,6 +56,8 @@ public class LanguageConfig extends Config {
 		UNENCHANT_SUCCESS = new StringOption("unenchant.success", "&2Un-enchanted item in hand with %s");
 		UNENCHANT_ERROR = new StringOption("unenchant.error", "&cDidn't un-enchant item with %s");
 
+		NEW_VERSION_AVAILABLE = new StringOption("info.newVersionAvailable", "A new version is available version: %1$s, download link: %2$s");
+		NO_VERSION_AVAILABLE = new StringOption("info.noVersionAvailable", "No new version are available.");
 		load();
 	}
 
@@ -74,9 +79,11 @@ public class LanguageConfig extends Config {
 		UNENCHANT_NO_ACCESS_TO_ENCHANTMENT.loadIfExist(this);
 		UNENCHANT_SUCCESS.loadIfExist(this);
 		UNENCHANT_ERROR.loadIfExist(this);
+
+		NEW_VERSION_AVAILABLE.loadIfExist(this);
+		NO_VERSION_AVAILABLE.loadIfExist(this);
 	}
 
-	public void onSave(YamlConfiguration config) {
-	}
+	public void onSave(YamlConfiguration config) {}
 
 }

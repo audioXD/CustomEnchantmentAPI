@@ -1,4 +1,10 @@
 # This fille accepts color codes with '&'
+info:
+# '%1$s' is the latest version, '%2$s' is the download link
+  newVersionAvailable: "A new version is available version: %1$s, download link: %2$s"
+# No extra args
+  noVersionAvailable: "No new version are available."
+
 messages:
   reloadConfig: "&2Reloaded config files."
 error:

@@ -1,2 +1,5 @@
 # The file to be loaded with the localization messages (Without the .yml)
 messageLocalizationFile: en-US
+
+# Activates the update checker that gives you feedback if a new version is available (Doesn't work without an Internet connection(Gives errors!)).
+checkForUpdates: true

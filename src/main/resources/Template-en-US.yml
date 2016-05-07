@@ -4,7 +4,6 @@ info:
   newVersionAvailable: "A new version is available version: %1$s, download link: %2$s"
 # No extra args
   noVersionAvailable: "No new version are available."
-
 messages:
   reloadConfig: "&2Reloaded config files."
 error:

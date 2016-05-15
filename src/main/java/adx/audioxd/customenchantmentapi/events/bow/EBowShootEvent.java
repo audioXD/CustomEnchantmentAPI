@@ -1,19 +1,21 @@
 package adx.audioxd.customenchantmentapi.events.bow;
 
 
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventWithLevel;
 import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEventWithOwnerAndItem;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
+@EnchantmentEventWithLevel
 public class EBowShootEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
 	private final Entity projectile;
 	private boolean cancelled = false;
 
 	// Constructor
-	public EBowShootEvent(int lvl, ItemStack item, LivingEntity owner, Entity projectile) {
-		super(lvl, owner, item);
+	public EBowShootEvent(ItemStack item, LivingEntity owner, Entity projectile) {
+		super(owner, item);
 		this.projectile = projectile;
 	}
 

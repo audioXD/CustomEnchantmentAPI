@@ -3,14 +3,18 @@ package adx.audioxd.customenchantmentapi;
 
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.events.enchant.EEnchantEvent;
 import adx.audioxd.customenchantmentapi.events.enchant.EUnenchantEvent;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
@@ -196,6 +200,10 @@ public class EnchantmentRegistry {
 	}
 
 
+	/* ************************** */
+	/*          Items             */
+	/* ************************** */
+
 	/**
 	 * Unenchants a Enchantment from a Item
 	 *
@@ -272,7 +280,7 @@ public class EnchantmentRegistry {
 			data.setLore(lore);
 		}
 		item.setItemMeta(data);
-		if(flag) enchantment.fireEvent(new EEnchantEvent(level, item));
+		if(flag) enchantment.fireEvent(new EEnchantEvent(item));
 		return flag;
 	}
 
@@ -296,7 +304,7 @@ public class EnchantmentRegistry {
 			for(Enchantment ench : bake()) {
 				if(ench.hasCustomEnchantment(line)) {
 					int lvl = RomanNumeral.getIntFromRoman(line.substring(line.lastIndexOf(" ") + 1));
-					res.add(new Enchanted(lvl, ench));
+					res.add(new Enchanted(ench, lvl));
 				}
 			}
 		}
@@ -304,6 +312,82 @@ public class EnchantmentRegistry {
 		return res.toArray(new Enchanted[res.size()]);
 	}
 
+	/* ************************** */
+	/*          Entities          */
+	/* ************************** */
+
+	private static final String salt = "adx_536_";
+
+	private synchronized static String getTagID(Enchantment enchantment) {
+		if(enchantment == null) return null;
+		return salt + enchantment.getName();
+
+	}
+
+	public synchronized static boolean unenchnat(Entity entity, Enchantment enchantment) {
+		if(entity == null || enchantment == null) return false;
+
+		String tagID = getTagID(enchantment);
+		List<MetadataValue> mValues = entity.getMetadata(tagID);
+
+		if(!mValues.isEmpty()) {
+			for(MetadataValue mV : mValues.toArray(new MetadataValue[mValues.size()])) {
+				if(mV.getOwningPlugin().equals(CustomEnchantmentAPI.getInstance())) {
+					entity.removeMetadata(tagID, CustomEnchantmentAPI.getInstance());
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public synchronized static boolean enchnat(Entity entity, Enchantment enchantment, int lvl, boolean override, boolean override_if_larger_level) {
+		if(entity == null || enchantment == null || lvl < 1) return false;
+		if(lvl > enchantment.getMaxLvl()) return false;
+
+		String tagID = getTagID(enchantment);
+		List<MetadataValue> mValues = entity.getMetadata(tagID);
+
+		if(mValues.isEmpty() || override) {
+			entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
+			return true;
+		} else if(override_if_larger_level) {
+			int largest_lvl = 0;
+
+			for(MetadataValue mV : mValues) {
+				int current = mV.asInt();
+
+				if(current > largest_lvl)
+					largest_lvl = current;
+			}
+
+			if(largest_lvl < lvl) {
+				entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public synchronized static Enchanted[] getEnchantments(Entity entity) {
+		List<Enchanted> enchanted = new ArrayList<>();
+		{
+			for(Enchantment enchantment : bake()) {
+				String tagID = getTagID(enchantment);
+				if(entity.hasMetadata(tagID)) {
+					int lvl = entity.getMetadata(tagID).get(0).asInt();
+					enchanted.add(new Enchanted(enchantment, lvl));
+				}
+			}
+		}
+		return enchanted.toArray(new Enchanted[enchanted.size()]);
+	}
+
+	/* ************************** */
+	/*          Other             */
+	/* ************************** */
+
+	/*
 	/**
 	 * This method in a bake method for synchronization
 	 *
@@ -348,6 +432,34 @@ public class EnchantmentRegistry {
 	public synchronized static void rebuildEnchantmentsArray() {
 		if(backedActiveEnchantments != null)
 			backedActiveEnchantments = null;
+	}
+
+	/**
+	 * Fires the Event for every Enchanted Enchantment.
+	 *
+	 * @param enchantedEnchantments The array of Enchanted Enchantments.
+	 * @param event                 The instance of the EnchantmentEvent.
+	 */
+	public static void fireEvents(Enchanted[] enchantedEnchantments, EnchantmentEvent event) {
+		if(enchantedEnchantments == null || event == null) return;
+
+		for(Enchanted ench : enchantedEnchantments) {
+			ench.fireEvent(event);
+		}
+	}
+
+	/**
+	 * Fires the Event for every Enchanted Enchantment.
+	 *
+	 * @param enchantments The array of Enchantments.
+	 * @param event        The instance of the EnchantmnetEvent.
+	 */
+	public static void fireEvents(Enchantment[] enchantments, EnchantmentEvent event) {
+		if(enchantments == null || event == null) return;
+
+		for(Enchantment ench : enchantments) {
+			ench.fireEvent(event);
+		}
 	}
 // Getters
 

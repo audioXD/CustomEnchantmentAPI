@@ -1,16 +1,16 @@
 package adx.audioxd.customenchantmentapi.enchantment.event.extra;
 
 
-import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.hasItem;
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
+import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.Item;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class EnchantmentEventWithItem extends EnchantmentEvent implements hasItem {
+public abstract class EnchantmentEventWithItem implements EnchantmentEvent, Item {
 
 	private final ItemStack item;
 
 	// Constructor
-	public EnchantmentEventWithItem(int lvl, ItemStack item) {
-		super(lvl);
+	public EnchantmentEventWithItem(ItemStack item) {
 		this.item = item;
 	}
 

@@ -34,6 +34,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	public Enchantment(String name, ItemType type, int maxLvl, EnchantmentPriority priority) {
 		this.name = name;
 		this.type = type;
+		if(maxLvl < 1) throw new IllegalArgumentException("The Max Level must be at least 1.");
 		this.maxLvl = maxLvl;
 		this.priority = priority;
 		eb = new EventBus(this);
@@ -98,27 +99,49 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		return getDisplay("").hashCode();
 	}
 
+	//Fire event
 
 	/**
 	 * Fires the event.
 	 *
-	 * @param event The event
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 * @param sync  If it's going to be ran synchronized.
 	 */
-	public final void fireEvent(EnchantmentEvent event) {
-		eb.fireEvent(event);
+	public void fireEvent(EnchantmentEvent event, boolean sync) {
+		fireEvent(event, 1, sync);
 	}
 
 	/**
 	 * Fires the event.
 	 *
-	 * @param event The event
-	 * @param sync It i should be synchronized
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 * @param lvl   The level.
+	 * @param sync  If it's going to be ran synchronized.
 	 */
-	public final void fireEvent(EnchantmentEvent event, boolean sync) {
-		eb.fireEvent(event, sync);
+	public void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
+		eb.fireEvent(event, lvl, sync);
 	}
 
-// Getters
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 */
+	public void fireEvent(EnchantmentEvent event) {
+		fireEvent(event, 1);
+	}
+
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 * @param lvl   The level.
+	 */
+	public void fireEvent(EnchantmentEvent event, int lvl) {
+		fireEvent(event, lvl, true);
+	}
+
+	// Getters
 
 	/**
 	 * Gets the Enchantment name

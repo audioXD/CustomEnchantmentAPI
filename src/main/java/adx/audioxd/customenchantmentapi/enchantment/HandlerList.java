@@ -17,11 +17,11 @@ public class HandlerList {
 		listeners = new HashSet<>();
 	}
 
-	public void fireEvent(EnchantmentEvent event) {
+	void fireEvent(EnchantmentEvent event, int lvl) {
 		for(RegisteredListener listener : bake()) {
 			boolean cancelled = event instanceof Cancellable ? ((Cancellable) event).isCancelled() : false;
 			if(!(cancelled && listener.isIgnoreCancelled()))
-				listener.fireEvent(event);
+				listener.fireEvent(event, lvl);
 		}
 	}
 
@@ -40,13 +40,13 @@ public class HandlerList {
 		return baked;
 	}
 
-	public void registerListener(RegisteredListener listener) {
+	void registerListener(RegisteredListener listener) {
 		if(listeners.add(listener)) {
 			backedListeners = null;
 		}
 	}
 
-	public void unregisterListener(RegisteredListener listener) {
+	void unregisterListener(RegisteredListener listener) {
 		if(listeners.remove(listener)) {
 			backedListeners = null;
 		}

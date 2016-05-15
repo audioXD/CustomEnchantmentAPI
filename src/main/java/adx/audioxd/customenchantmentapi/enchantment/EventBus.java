@@ -24,11 +24,7 @@ public class EventBus {
 		}
 	}
 
-	public void fireEvent(EnchantmentEvent event) {
-		fireEvent(event, true);
-	}
-
-	public void fireEvent(EnchantmentEvent event, boolean sync) {
+	void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
 		if(event == null) throw new NullPointerException("Event cannot be null");
 
 		HandlerList handler = handlers.get(event.getClass());
@@ -36,10 +32,10 @@ public class EventBus {
 
 		if(sync) {
 			synchronized(EventBus.class) {
-				handler.fireEvent(event);
+				handler.fireEvent(event, lvl);
 			}
 		} else {
-			handler.fireEvent(event);
+			handler.fireEvent(event, lvl);
 		}
 	}
 }

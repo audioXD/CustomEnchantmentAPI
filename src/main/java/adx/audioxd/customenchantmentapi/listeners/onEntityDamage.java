@@ -2,7 +2,7 @@ package adx.audioxd.customenchantmentapi.listeners;
 
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
-import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
+import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.enums.ItemType;
 import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedEvent;
 import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedEvent.Type;
@@ -29,96 +29,86 @@ public class onEntityDamage extends CEPLListener {
 		ItemStack mainHand = ItemUtil.getMainHandItem(le), offHand = ItemUtil.getOffHandItem(le);
 		// Main hand
 		if(ItemType.SHIELD.matchType(mainHand)) {
-			for(Enchanted ench : getEnchantments(mainHand)) {
-				EOwnerDamagedEvent e = new EOwnerDamagedEvent(ench.getLvl(), mainHand, le, event.getDamage(),
-				                                              event.getCause(), Type.SHIELD
-				);
-				e.setCancelled(event.isCancelled());
-				{
-					ench.fireEvent(e);
-				}
-				event.setCancelled(e.isCancelled());
-				event.setDamage(e.getDamage());
+			EOwnerDamagedEvent e = new EOwnerDamagedEvent(mainHand, le, event.getDamage(),
+			                                              event.getCause(), Type.SHIELD
+			);
+			e.setCancelled(event.isCancelled());
+			{
+				EnchantmentRegistry.fireEvents(getEnchantments(mainHand), e);
 			}
+			event.setCancelled(e.isCancelled());
+			event.setDamage(e.getDamage());
+
 		} else {
-			for(Enchanted ench : getEnchantments(mainHand)) {
-				EOwnerDamagedEvent e = new EOwnerDamagedEvent(ench.getLvl(), mainHand, le, event.getDamage(),
-				                                              event.getCause(), Type.IN_HAND
-				);
-				e.setCancelled(event.isCancelled());
-				{
-					ench.fireEvent(e);
-				}
-				event.setCancelled(e.isCancelled());
-				event.setDamage(e.getDamage());
+			EOwnerDamagedEvent e = new EOwnerDamagedEvent(mainHand, le, event.getDamage(),
+			                                              event.getCause(), Type.IN_HAND
+			);
+			e.setCancelled(event.isCancelled());
+			{
+				EnchantmentRegistry.fireEvents(getEnchantments(mainHand), e);
 			}
+			event.setCancelled(e.isCancelled());
+			event.setDamage(e.getDamage());
 		}
 		// OFf hand
 		if(ItemType.SHIELD.matchType(offHand)) {
-			for(Enchanted ench : getEnchantments(offHand)) {
-				EOwnerDamagedEvent e = new EOwnerDamagedEvent(ench.getLvl(), offHand, le, event.getDamage(),
-				                                              event.getCause(), Type.SHIELD
-				);
-				e.setCancelled(event.isCancelled());
-				{
-					ench.fireEvent(e);
-				}
-				event.setCancelled(e.isCancelled());
-				event.setDamage(e.getDamage());
+			EOwnerDamagedEvent e = new EOwnerDamagedEvent(offHand, le, event.getDamage(),
+			                                              event.getCause(), Type.SHIELD
+			);
+			e.setCancelled(event.isCancelled());
+			{
+				EnchantmentRegistry.fireEvents(getEnchantments(offHand), e);
 			}
+			event.setCancelled(e.isCancelled());
+			event.setDamage(e.getDamage());
 		} else {
-			for(Enchanted ench : getEnchantments(offHand)) {
-				EOwnerDamagedEvent e = new EOwnerDamagedEvent(ench.getLvl(), offHand, le, event.getDamage(),
-				                                              event.getCause(), Type.IN_HAND
-				);
-				e.setCancelled(event.isCancelled());
-				{
-					ench.fireEvent(e);
-				}
-				event.setCancelled(e.isCancelled());
-				event.setDamage(e.getDamage());
+			EOwnerDamagedEvent e = new EOwnerDamagedEvent(offHand, le, event.getDamage(),
+			                                              event.getCause(), Type.IN_HAND
+			);
+			e.setCancelled(event.isCancelled());
+			{
+				EnchantmentRegistry.fireEvents(getEnchantments(offHand), e);
 			}
+			event.setCancelled(e.isCancelled());
+			event.setDamage(e.getDamage());
 		}
 		// Armor
 		for(ItemStack item : le.getEquipment().getArmorContents()) {
-			for(Enchanted ench : getEnchantments(item)) {
-				EOwnerDamagedEvent e = new EOwnerDamagedEvent(ench.getLvl(), item, le, event.getDamage(),
-				                                              event.getCause(), Type.ARMOR
-				);
-				e.setCancelled(event.isCancelled());
-				{
-					ench.fireEvent(e);
-				}
-				event.setCancelled(e.isCancelled());
-				event.setDamage(e.getDamage());
-
+			EOwnerDamagedEvent e = new EOwnerDamagedEvent(item, le, event.getDamage(),
+			                                              event.getCause(), Type.ARMOR
+			);
+			e.setCancelled(event.isCancelled());
+			{
+				EnchantmentRegistry.fireEvents(getEnchantments(item), e);
 			}
+			event.setCancelled(e.isCancelled());
+			event.setDamage(e.getDamage());
 		}
 		/// for horses
 		if(le instanceof Horse) {
 			Horse horse = (Horse) le;
-
-			for(Enchanted ench : getEnchantments(horse.getInventory().getArmor())) {
-				EOwnerDamagedEvent e = new EOwnerDamagedEvent(ench.getLvl(), horse.getInventory().getArmor(), horse,
+			{
+				EOwnerDamagedEvent e = new EOwnerDamagedEvent(horse.getInventory().getArmor(), horse,
 				                                              event.getDamage(), event.getCause(), Type.HORSE_ARMOR
 				);
 				e.setCancelled(event.isCancelled());
 				{
-					ench.fireEvent(e);
+					EnchantmentRegistry.fireEvents(getEnchantments(horse.getInventory().getArmor()), e);
 				}
 				event.setCancelled(e.isCancelled());
 				event.setDamage(e.getDamage());
 			}
-			for(Enchanted ench : getEnchantments(horse.getInventory().getSaddle())) {
-				EOwnerDamagedEvent e = new EOwnerDamagedEvent(ench.getLvl(), horse.getInventory().getSaddle(), horse,
+			{
+				EOwnerDamagedEvent e = new EOwnerDamagedEvent(horse.getInventory().getSaddle(), horse,
 				                                              event.getDamage(), event.getCause(), Type.SADDLE
 				);
 				e.setCancelled(event.isCancelled());
 				{
-					ench.fireEvent(e);
+					EnchantmentRegistry.fireEvents(getEnchantments(horse.getInventory().getSaddle()), e);
 				}
 				event.setCancelled(e.isCancelled());
 				event.setDamage(e.getDamage());
+
 			}
 		}
 	}

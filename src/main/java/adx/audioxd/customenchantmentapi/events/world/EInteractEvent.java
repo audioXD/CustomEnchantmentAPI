@@ -1,6 +1,7 @@
 package adx.audioxd.customenchantmentapi.events.world;
 
 
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventWithLevel;
 import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEventWithOwnerAndItem;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
 import org.bukkit.block.Block;
@@ -10,6 +11,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
+@EnchantmentEventWithLevel
 public class EInteractEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
 	private final HandType handType;
 	private boolean cancelled = false;
@@ -18,9 +20,9 @@ public class EInteractEvent extends EnchantmentEventWithOwnerAndItem implements 
 	private Block clickedBlock;
 
 	// Constructor
-	public EInteractEvent(int lvl, ItemStack item, LivingEntity owner, Action action, BlockFace blockFace,
+	public EInteractEvent(ItemStack item, LivingEntity owner, Action action, BlockFace blockFace,
 	                      Block clickedBlock, HandType handType) {
-		super(lvl, owner, item);
+		super(owner, item);
 		this.action = action;
 		this.blockFace = blockFace;
 		this.clickedBlock = clickedBlock;

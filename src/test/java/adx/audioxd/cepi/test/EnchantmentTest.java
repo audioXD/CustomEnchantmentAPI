@@ -90,13 +90,13 @@ public class EnchantmentTest {
 
 	@Test
 	public void fireEventsPriority() {
-		EItemInHandEvent e = new EItemInHandEvent(1, null, null, null);
+		EItemInHandEvent e = new EItemInHandEvent(null, null, null);
 		tEnch.fireEvent(e);
 	}
 
 	@Test
 	public void testIgnoreCancelled() {
-		EBowShootEvent e = new EBowShootEvent(1, null, null, null);
+		EBowShootEvent e = new EBowShootEvent(null, null, null);
 		e.setCancelled(false);
 
 		tEnch.fireEvent(e);

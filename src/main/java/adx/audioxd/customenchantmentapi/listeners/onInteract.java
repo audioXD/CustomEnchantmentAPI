@@ -2,7 +2,7 @@ package adx.audioxd.customenchantmentapi.listeners;
 
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
-import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
+import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
 import adx.audioxd.customenchantmentapi.events.world.EInteractEvent;
 import org.bukkit.entity.Player;
@@ -31,13 +31,14 @@ public class onInteract extends CEPLListener {
 		ItemStack item = event.getItem();
 		HandType hT = CustomEnchantmentAPI.getInstance().getNSM().isHandMainHAnd(event) ? HandType.MAIN : HandType.OFF;
 
-		for(Enchanted ench : getEnchantments(item)) {
-			EInteractEvent e = new EInteractEvent(ench.getLvl(), item, player, event.getAction(), event.getBlockFace(),
-			                                      event.getClickedBlock(), hT
-			);
-			ench.fireEvent(e);
-			if(e.isCancelled()) event.setCancelled(true);
+		EInteractEvent e = new EInteractEvent(item, player, event.getAction(), event.getBlockFace(),
+		                                      event.getClickedBlock(), hT
+		);
+		e.setCancelled(event.isCancelled());
+		{
+			EnchantmentRegistry.fireEvents(getEnchantments(item), e);
 		}
+		event.setCancelled(e.isCancelled());
 	}
 
 }

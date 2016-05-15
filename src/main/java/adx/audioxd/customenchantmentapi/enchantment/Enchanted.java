@@ -9,17 +9,32 @@ public class Enchanted implements Lvl {
 	private final Enchantment enchantment;
 
 	// Constructor
-	public Enchanted(int lvl, Enchantment enchantment) {
+	public Enchanted(Enchantment enchantment) {
+		this(enchantment, 1);
+	}
+
+	public Enchanted(Enchantment enchantment, int lvl) {
 		this.lvl = lvl;
 		this.enchantment = enchantment;
 	}
 
-	public void fireEvent(EnchantmentEvent event) {
-		if(enchantment != null) enchantment.fireEvent(event);
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 * @param sync  If it's going to be ran synchronized.
+	 */
+	public void fireEvent(EnchantmentEvent event, boolean sync) {
+		enchantment.fireEvent(event, lvl, sync);
 	}
 
-	public void fireEvent(EnchantmentEvent event, boolean sync) {
-		if(enchantment != null) enchantment.fireEvent(event, sync);
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 */
+	public void fireEvent(EnchantmentEvent event) {
+		enchantment.fireEvent(event, lvl);
 	}
 
 	// Getters

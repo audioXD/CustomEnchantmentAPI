@@ -1,6 +1,7 @@
 package adx.audioxd.customenchantmentapi.events.world;
 
 
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventWithLevel;
 import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEventWithOwnerAndItem;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -8,6 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
+@EnchantmentEventWithLevel
 public class EBlockPlaceEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
 	private boolean canBuild = true;
 	private Block block, blockAgainst, blockPlaced;
@@ -15,9 +17,9 @@ public class EBlockPlaceEvent extends EnchantmentEventWithOwnerAndItem implement
 	private boolean cancelled = false;
 
 	// Constructor
-	public EBlockPlaceEvent(int lvl, ItemStack item, LivingEntity owner, Block block, Block blockAgainst,
+	public EBlockPlaceEvent(ItemStack item, LivingEntity owner, Block block, Block blockAgainst,
 	                        Block blockPlaced, BlockState blockReplacedState) {
-		super(lvl, owner, item);
+		super(owner, item);
 		this.block = block;
 		this.blockAgainst = blockAgainst;
 		this.blockPlaced = blockPlaced;

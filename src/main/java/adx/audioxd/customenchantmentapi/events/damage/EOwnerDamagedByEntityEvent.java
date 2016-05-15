@@ -10,9 +10,9 @@ public class EOwnerDamagedByEntityEvent extends EOwnerDamagedEvent {
 	private Entity damager;
 
 	// Constructor
-	public EOwnerDamagedByEntityEvent(int lvl, ItemStack item, LivingEntity owner, double damage, DamageCause cause,
+	public EOwnerDamagedByEntityEvent(ItemStack item, LivingEntity owner, double damage, DamageCause cause,
 	                                  Type type, Entity damager) {
-		super(lvl, item, owner, damage, cause, type);
+		super(item, owner, damage, cause, type);
 		this.damager = damager;
 	}
 

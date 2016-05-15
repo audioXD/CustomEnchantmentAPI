@@ -1,21 +1,22 @@
 package adx.audioxd.customenchantmentapi.events.bow;
 
 
-import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEvent;
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventWithLevel;
 import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.Damage;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;
 
-public class EArrowHitEvent extends EnchantmentEvent implements Cancellable, Damage {
+@EnchantmentEventWithLevel
+public class EArrowHitEvent implements EnchantmentEvent, Cancellable, Damage {
 	private final LivingEntity target;
 	private final Arrow arrow;
 	private double damage;
 	private boolean cancelled = false;
 
 	// Constructor
-	public EArrowHitEvent(int lvl, LivingEntity target, Arrow arrow, double damage) {
-		super(lvl);
+	public EArrowHitEvent(LivingEntity target, Arrow arrow, double damage) {
 		this.target = target;
 		this.arrow = arrow;
 		this.damage = damage;

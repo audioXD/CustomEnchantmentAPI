@@ -2,10 +2,11 @@ package adx.audioxd.customenchantmentapi.events.enchant;
 
 
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
-import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.hasItem;
+import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.Item;
 import org.bukkit.inventory.ItemStack;
 
-public class EUnenchantEvent implements EnchantmentEvent, hasItem {
+
+public class EUnenchantEvent implements EnchantmentEvent, Item {
 
 	private final ItemStack item;
 

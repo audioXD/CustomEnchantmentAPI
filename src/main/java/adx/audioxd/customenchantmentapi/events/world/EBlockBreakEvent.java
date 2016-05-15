@@ -1,20 +1,22 @@
 package adx.audioxd.customenchantmentapi.events.world;
 
 
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventWithLevel;
 import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEventWithOwnerAndItem;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
+@EnchantmentEventWithLevel
 public class EBlockBreakEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
 	private Block block;
 	private int ExpToDrop = 0;
 	private boolean cancelled = false;
 
 	// Constructor
-	public EBlockBreakEvent(int lvl, ItemStack item, LivingEntity owner, Block block, int exp) {
-		super(lvl, owner, item);
+	public EBlockBreakEvent(ItemStack item, LivingEntity owner, Block block, int exp) {
+		super(owner, item);
 		this.block = block;
 		this.ExpToDrop = exp;
 	}

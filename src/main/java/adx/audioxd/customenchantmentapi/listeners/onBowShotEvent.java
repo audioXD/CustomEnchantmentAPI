@@ -4,7 +4,6 @@ package adx.audioxd.customenchantmentapi.listeners;
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
-import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import adx.audioxd.customenchantmentapi.events.bow.EArrowHitEvent;
 import adx.audioxd.customenchantmentapi.events.bow.EArrowLandEvent;
 import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
@@ -15,7 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class onBowShotEvent extends CEPLListener {
 
@@ -29,46 +27,35 @@ public class onBowShotEvent extends CEPLListener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void bowShoot(
-			EntityShootBowEvent event) {
-		for(Enchanted ench : getEnchantments(event.getBow())) {
-
-			event.getProjectile().setMetadata(
-					salt + ench.getEnchantment().getName(),
-					new FixedMetadataValue(this.plugin, ench.getLvl())
-			);
-
-			EBowShootEvent e = new EBowShootEvent(ench.getLvl(), event.getBow(), event.getEntity(),
-			                                      event.getProjectile()
-			);
-			e.setCancelled(event.isCancelled());
-			ench.fireEvent(e);
-			event.setCancelled(e.isCancelled());
-
+	public void bowShoot(EntityShootBowEvent event) {
+		EBowShootEvent eEvent = new EBowShootEvent(event.getBow(), event.getEntity(),
+		                                           event.getProjectile()
+		);
+		eEvent.setCancelled(event.isCancelled());
+		{
+			for(Enchanted ench : getEnchantments(event.getBow())) {
+				ench.fireEvent(eEvent);
+				EnchantmentRegistry.enchnat(event.getProjectile(), ench.getEnchantment(), ench.getLvl(), false, false);
+			}
 		}
+		event.setCancelled(eEvent.isCancelled());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void hitByArrow(
-			EntityDamageByEntityEvent event) {
+	public void hitByArrow(EntityDamageByEntityEvent event) {
 		if(!(event.getDamager() instanceof Arrow)) return;
 		if(!(event.getEntity() instanceof LivingEntity)) return;
 
 		LivingEntity target = (LivingEntity) event.getEntity();
 		Arrow arrow = (Arrow) event.getDamager();
 
-		for(Enchantment ench : EnchantmentRegistry.getEnchantmentsArray()) {
-			if(arrow.hasMetadata(salt + ench.getName())) {
-				int lvl = arrow.getMetadata(salt + ench.getName()).get(0).asInt();
-				EArrowHitEvent e = new EArrowHitEvent(lvl, target, arrow, event.getDamage());
-				e.setCancelled(event.isCancelled());
-				{
-					ench.fireEvent(e);
-				}
-				event.setDamage(e.getDamage());
-				event.setCancelled(e.isCancelled());
-			}
+		EArrowHitEvent eEvent = new EArrowHitEvent(target, arrow, event.getDamage());
+		eEvent.setCancelled(event.isCancelled());
+		{
+			EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getDamager()), eEvent);
 		}
+		event.setDamage(eEvent.getDamage());
+		event.setCancelled(eEvent.isCancelled());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -76,14 +63,8 @@ public class onBowShotEvent extends CEPLListener {
 		if(!(event.getEntity() instanceof Arrow)) return;
 		Arrow arrow = (Arrow) event.getEntity();
 
-		for(Enchantment ench : EnchantmentRegistry.getEnchantmentsArray()) {
-			if(arrow.hasMetadata(salt + ench.getName())) {
-				int lvl = arrow.getMetadata(salt + ench.getName()).get(0).asInt();
-
-				EArrowLandEvent e = new EArrowLandEvent(lvl, arrow);
-				ench.fireEvent(e);
-			}
-		}
+		EArrowLandEvent eEvent = new EArrowLandEvent(arrow);
+		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getEntity()), eEvent);
 	}
 
 }

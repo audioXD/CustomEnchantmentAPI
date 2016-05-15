@@ -4,13 +4,16 @@ package adx.audioxd.customenchantmentapi.enchantment;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventHandler;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventPriority;
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventWithLevel;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 public class RegisteredListener implements Comparable<RegisteredListener> {
 	private final Enchantment enchantment;
 	private final Method method;
+	private final Type type;
 
 	// Constructor
 	RegisteredListener(Enchantment listener, Method method) {
@@ -18,15 +21,44 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 		this.method = method;
 		method.setAccessible(true);
 
-		if(method.getParameterCount() != 1) {
-			throw new IllegalArgumentException(
-					"Method must have a Event as the only parameter: " + this);
+		if(method.getParameterCount() == 1) {
+			Parameter event_EnchantmentEvent = method.getParameters()[0];
+			if(!EnchantmentEvent.class.isAssignableFrom(event_EnchantmentEvent.getType()))
+				exception("The only Parameter of the method must be an instance of EnchantmentEvent");
+			type = Type.EVENT;
+			return;
+		} else if(method.getParameterCount() == 2) {
+			Parameter event_EnchantmentEvent = method.getParameters()[0];
+			if(!EnchantmentEvent.class.isAssignableFrom(event_EnchantmentEvent.getType()))
+				exception("The first Parameter of the method must be an instance of EnchantmentEvent");
+
+			Parameter lvl_int = method.getParameters()[1];
+			if(!int.class.equals(lvl_int.getType()))
+				exception("The second Parameter of the method must be an int(Lvl)");
+
+			if(event_EnchantmentEvent.getType().getAnnotation(EnchantmentEventWithLevel.class) == null)
+				exception("Method can't contain a int(lvl) as the second parameter, because the Event doesn't support it");
+
+			type = Type.EVENT_LVL;
+			return;
+		} else {
+			type = Type.INVALID;
+			exception("Method must have a EnchantmentEvent(event), [int(lvl)] as the only parameter/s");
 		}
 	}
 
-	public void fireEvent(EnchantmentEvent event) {
+	private void exception(String message) throws IllegalArgumentException {
+		throw new IllegalArgumentException(message + ": " + this);
+
+	}
+
+	void fireEvent(EnchantmentEvent event, int lvl) {
 		try {
-			method.invoke(enchantment, event);
+			if(Type.EVENT.equals(type)) {
+				method.invoke(enchantment, event);
+			} else if(Type.EVENT_LVL.equals(type)) {
+				method.invoke(enchantment, event, lvl);
+			}
 		} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new EnchantmentEventException("Exception in: " + this + "(" + e.getMessage() + ")", e.getCause());
 		}
@@ -42,7 +74,7 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 		return other.getPriority().compareTo(getPriority());
 	}
 
-	public EnchantmentEventPriority getPriority() {
+	EnchantmentEventPriority getPriority() {
 		return method.getAnnotation(EnchantmentEventHandler.class).priority();
 	}
 
@@ -62,19 +94,25 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 	}
 
 	// Getters
-	public Class<?> getEventClass() {
+	Class<?> getEventClass() {
 		return method.getParameterTypes()[0];
 	}
 
-	public Enchantment getEnchantment() {
+	Enchantment getEnchantment() {
 		return enchantment;
 	}
 
-	public Method getMethod() {
+	Method getMethod() {
 		return method;
 	}
 
-	public boolean isIgnoreCancelled() {
+	boolean isIgnoreCancelled() {
 		return method.getAnnotation(EnchantmentEventHandler.class).ignoreCancelled();
+	}
+
+	private enum Type {
+		EVENT,
+		EVENT_LVL,
+		INVALID
 	}
 }

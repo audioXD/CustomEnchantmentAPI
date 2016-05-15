@@ -16,9 +16,9 @@ public class EOwnerDamagesEntityEvent extends EnchantmentEventWithOwnerAndItem i
 	private Entity victim;
 
 	// Constructor
-	public EOwnerDamagesEntityEvent(int lvl, ItemStack item, LivingEntity owner, Entity victim, double damage,
+	public EOwnerDamagesEntityEvent(ItemStack item, LivingEntity owner, Entity victim, double damage,
 	                                DamageCause cause) {
-		super(lvl, owner, item);
+		super(owner, item);
 		this.victim = victim;
 		this.damage = damage;
 		this.cause = cause;

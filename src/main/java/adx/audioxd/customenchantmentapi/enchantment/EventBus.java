@@ -21,7 +21,6 @@ public class EventBus {
 			RegisteredListener rListener = new RegisteredListener(listener, method);
 			handlers.computeIfAbsent(rListener.getEventClass(), (eventClass) -> new HandlerList())
 					.registerListener(rListener);
-
 		}
 	}
 

@@ -2,13 +2,11 @@ package adx.audioxd.cepi.test;
 
 
 import adx.audioxd.customenchantmentapi.enums.EnchantmentPriority;
+import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInHandEvent;
 import org.bukkit.Material;
 import org.junit.Test;
 
-/**
- * Created by test on 26/04/2016.
- */
 public class EnchantmentTest {
 	// Global fields
 	public static TestEnch tEnch = new TestEnch();
@@ -91,7 +89,17 @@ public class EnchantmentTest {
 	}
 
 	@Test
-	public void fireEventsPriority(){
-		tEnch.fireEvent(new EItemInHandEvent(1, null, null, null), true);
+	public void fireEventsPriority() {
+		EItemInHandEvent e = new EItemInHandEvent(1, null, null, null);
+		tEnch.fireEvent(e);
+	}
+
+	@Test
+	public void testIgnoreCancelled() {
+		EBowShootEvent e = new EBowShootEvent(1, null, null, null);
+		e.setCancelled(false);
+
+		tEnch.fireEvent(e);
+		System.out.println("Cancelled: " + e.isCancelled());
 	}
 }

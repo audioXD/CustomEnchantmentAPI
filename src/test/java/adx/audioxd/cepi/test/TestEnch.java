@@ -5,19 +5,15 @@ import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventHandler;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventPriority;
 import adx.audioxd.customenchantmentapi.enums.ItemType;
+import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInHandEvent;
 
-/**
- * Created by test on 26/04/2016.
- */
+
 public class TestEnch extends Enchantment {
 
+	// Constructor
 	public TestEnch() {
-		this("Test Ench", ItemType.ALL_OFF_THE_ABOVE, 10);
-	}
-
-	public TestEnch(String name, ItemType type, int maxLvl) {
-		super(name, type, maxLvl);
+		super("Test Ench", ItemType.ALL_OFF_THE_ABOVE, 10);
 	}
 
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.MONITOR)
@@ -48,5 +44,23 @@ public class TestEnch extends Enchantment {
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.HIGHEST)
 	public void event5(EItemInHandEvent e) {
 		System.out.println("Fired event with priority HIGHEST");
+	}
+
+	@EnchantmentEventHandler(priority = EnchantmentEventPriority.HIGHEST)
+	public void testCancelled(EBowShootEvent e) {
+		e.setCancelled(true);
+		System.out.println("Cancelled event " + EBowShootEvent.class.getName());
+	}
+
+	@EnchantmentEventHandler(priority = EnchantmentEventPriority.HIGH, ignoreCancelled = true)
+	public void testCancelled1(EBowShootEvent e) {
+		e.setCancelled(true);
+		System.out.println("Error this shouldn't fire!");
+	}
+
+	@EnchantmentEventHandler(priority = EnchantmentEventPriority.HIGH)
+	public void testCancelled2(EBowShootEvent e) {
+		e.setCancelled(true);
+		System.out.println("This should fire! Cancelled: " + e.isCancelled());
 	}
 }

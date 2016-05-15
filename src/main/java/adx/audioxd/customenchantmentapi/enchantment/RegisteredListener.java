@@ -73,4 +73,8 @@ public class RegisteredListener implements Comparable<RegisteredListener> {
 	public Method getMethod() {
 		return method;
 	}
+
+	public boolean isIgnoreCancelled() {
+		return method.getAnnotation(EnchantmentEventHandler.class).ignoreCancelled();
+	}
 }

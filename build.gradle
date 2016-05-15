@@ -33,10 +33,10 @@ configure(allprojects - project(':modules')) {
 
 archivesBaseName = 'CustomEnchantmentAPI'
 group = 'adx.audioxd.customenchantmentapi'
-version = '2.5.3-RELEASE'
+version = '2.5.4-RELEASE'
 
 def MainClass = group + '.' + archivesBaseName
-def delete_on_upload = false
+def delete_on_upload = true
 
 // The dependencies
 dependencies {
@@ -48,6 +48,10 @@ dependencies {
 /* ********************************************************************************* */
 /*                         [Processing Project data]                                 */
 /* ********************************************************************************* */
+// To est the code
+test {
+    testLogging.showStandardStreams = true
+}
 
 // Where to upload the output Files
 uploadArchives {

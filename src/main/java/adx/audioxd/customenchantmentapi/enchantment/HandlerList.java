@@ -2,6 +2,7 @@ package adx.audioxd.customenchantmentapi.enchantment;
 
 
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
+import org.bukkit.event.Cancellable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,7 +19,9 @@ public class HandlerList {
 
 	public void fireEvent(EnchantmentEvent event) {
 		for(RegisteredListener listener : bake()) {
-			listener.fireEvent(event);
+			boolean cancelled = event instanceof Cancellable ? ((Cancellable) event).isCancelled() : false;
+			if(!(cancelled && listener.isIgnoreCancelled()))
+				listener.fireEvent(event);
 		}
 	}
 

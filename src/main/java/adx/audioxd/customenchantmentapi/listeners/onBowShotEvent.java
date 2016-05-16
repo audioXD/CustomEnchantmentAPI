@@ -35,7 +35,7 @@ public class onBowShotEvent extends CEPLListener {
 		{
 			for(Enchanted ench : getEnchantments(event.getBow())) {
 				ench.fireEvent(eEvent);
-				EnchantmentRegistry.enchnat(event.getProjectile(), ench.getEnchantment(), ench.getLvl(), false, false);
+				EnchantmentRegistry.enchant(event.getProjectile(), ench.getEnchantment(), ench.getLvl(), false, false);
 			}
 		}
 		event.setCancelled(eEvent.isCancelled());

@@ -24,9 +24,10 @@ public class EnchantmentRegistry {
 	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<>();
 
 	private static final Set<RegisteredEnchantment> enchantments = new HashSet<>();
+	private static final String salt = "adx_536_";
 	private static volatile Enchantment[] backedActiveEnchantments = null;
-// End of Global Fields
 
+	// End of Global Fields
 	// Constructor
 	private EnchantmentRegistry() {}
 
@@ -186,6 +187,11 @@ public class EnchantmentRegistry {
 		return null;
 	}
 
+
+	/* ************************** */
+	/*          Items             */
+	/* ************************** */
+
 	/**
 	 * Returns a ID. That can be used from getFromID().
 	 *
@@ -198,11 +204,6 @@ public class EnchantmentRegistry {
 		if(enchantment == null) return null;
 		return plugin.getName() + ":" + getEnchantmentsMapID(enchantment);
 	}
-
-
-	/* ************************** */
-	/*          Items             */
-	/* ************************** */
 
 	/**
 	 * Unenchants a Enchantment from a Item
@@ -237,7 +238,7 @@ public class EnchantmentRegistry {
 	}
 
 	/**
-	 * Enchantnts a plugin with a Enchantment.
+	 * Enchants a ItemStack with a Enchantment.
 	 *
 	 * @param item                     The item you want to enchant.
 	 * @param enchantment              The Enchantment you want to enchant on a item.
@@ -284,6 +285,10 @@ public class EnchantmentRegistry {
 		return flag;
 	}
 
+	/* ************************** */
+	/*          Entities          */
+	/* ************************** */
+
 	/**
 	 * Gets a array of Enchanted Enchantments on the item.
 	 *
@@ -311,81 +316,6 @@ public class EnchantmentRegistry {
 
 		return res.toArray(new Enchanted[res.size()]);
 	}
-
-	/* ************************** */
-	/*          Entities          */
-	/* ************************** */
-
-	private static final String salt = "adx_536_";
-
-	private synchronized static String getTagID(Enchantment enchantment) {
-		if(enchantment == null) return null;
-		return salt + enchantment.getName();
-
-	}
-
-	public synchronized static boolean unenchnat(Entity entity, Enchantment enchantment) {
-		if(entity == null || enchantment == null) return false;
-
-		String tagID = getTagID(enchantment);
-		List<MetadataValue> mValues = entity.getMetadata(tagID);
-
-		if(!mValues.isEmpty()) {
-			for(MetadataValue mV : mValues.toArray(new MetadataValue[mValues.size()])) {
-				if(mV.getOwningPlugin().equals(CustomEnchantmentAPI.getInstance())) {
-					entity.removeMetadata(tagID, CustomEnchantmentAPI.getInstance());
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public synchronized static boolean enchnat(Entity entity, Enchantment enchantment, int lvl, boolean override, boolean override_if_larger_level) {
-		if(entity == null || enchantment == null || lvl < 1) return false;
-		if(lvl > enchantment.getMaxLvl()) return false;
-
-		String tagID = getTagID(enchantment);
-		List<MetadataValue> mValues = entity.getMetadata(tagID);
-
-		if(mValues.isEmpty() || override) {
-			entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
-			return true;
-		} else if(override_if_larger_level) {
-			int largest_lvl = 0;
-
-			for(MetadataValue mV : mValues) {
-				int current = mV.asInt();
-
-				if(current > largest_lvl)
-					largest_lvl = current;
-			}
-
-			if(largest_lvl < lvl) {
-				entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public synchronized static Enchanted[] getEnchantments(Entity entity) {
-		List<Enchanted> enchanted = new ArrayList<>();
-		{
-			for(Enchantment enchantment : bake()) {
-				String tagID = getTagID(enchantment);
-				if(entity.hasMetadata(tagID)) {
-					int lvl = entity.getMetadata(tagID).get(0).asInt();
-					enchanted.add(new Enchanted(enchantment, lvl));
-				}
-			}
-		}
-		return enchanted.toArray(new Enchanted[enchanted.size()]);
-	}
-
-	/* ************************** */
-	/*          Other             */
-	/* ************************** */
 
 	/*
 	/**
@@ -424,6 +354,98 @@ public class EnchantmentRegistry {
 
 		}
 		return baked;
+	}
+
+	/**
+	 * Removes the Enchantment enchanted on the Entity.
+	 *
+	 * @param entity      The Entity you want to unenchant.
+	 * @param enchantment The Enchantment that you want to unenchant.
+	 * @return If the Enchantment has been unenchanted.
+	 */
+	public synchronized static boolean unenchant(Entity entity, Enchantment enchantment) {
+		if(entity == null || enchantment == null) return false;
+
+		String tagID = getTagID(enchantment);
+		List<MetadataValue> mValues = entity.getMetadata(tagID);
+
+		if(!mValues.isEmpty()) {
+			for(MetadataValue mV : mValues.toArray(new MetadataValue[mValues.size()])) {
+				if(mV.getOwningPlugin().equals(CustomEnchantmentAPI.getInstance())) {
+					entity.removeMetadata(tagID, CustomEnchantmentAPI.getInstance());
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private synchronized static String getTagID(Enchantment enchantment) {
+		if(enchantment == null) return null;
+		return salt + enchantment.getName();
+
+	}
+
+	/**
+	 * Enchants a Entity with a Enchantment.
+	 *
+	 * @param entity                   The Entity that you want to enchant.
+	 * @param enchantment              Enchantment you want to enchant on a item.
+	 * @param lvl                      The level of the enchantment.
+	 * @param override                 If it overrides the current enchantment.
+	 * @param override_if_larger_level If it overrides if there's a larger level.
+	 * @return If the enchant method was successful.
+	 */
+	public synchronized static boolean enchant(Entity entity, Enchantment enchantment, int lvl, boolean override, boolean override_if_larger_level) {
+		if(entity == null || enchantment == null || lvl < 1) return false;
+		if(lvl > enchantment.getMaxLvl()) return false;
+
+		String tagID = getTagID(enchantment);
+		List<MetadataValue> mValues = entity.getMetadata(tagID);
+
+		if(mValues.isEmpty() || override) {
+			entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
+			return true;
+		} else if(override_if_larger_level) {
+			int largest_lvl = 0;
+
+			for(MetadataValue mV : mValues) {
+				int current = mV.asInt();
+
+				if(current > largest_lvl)
+					largest_lvl = current;
+			}
+
+			if(largest_lvl < lvl) {
+				entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/* ************************** */
+	/*          Other             */
+	/* ************************** */
+
+	/**
+	 * Gets the Enchanted Enchantments on the Entity.
+	 *
+	 * @param entity The Entity that you want to scan.
+	 * @return A Enchanted[] array.
+	 */
+	public synchronized static Enchanted[] getEnchantments(Entity entity) {
+		List<Enchanted> enchanted = new ArrayList<>();
+		{
+			for(Enchantment enchantment : bake()) {
+				String tagID = getTagID(enchantment);
+				if(entity.hasMetadata(tagID)) {
+					int lvl = entity.getMetadata(tagID).get(0).asInt();
+					enchanted.add(new Enchanted(enchantment, lvl));
+				}
+			}
+		}
+		return enchanted.toArray(new Enchanted[enchanted.size()]);
 	}
 
 	/**

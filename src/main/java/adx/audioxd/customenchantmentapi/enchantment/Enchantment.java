@@ -5,7 +5,6 @@ import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.enums.EnchantmentPriority;
 import adx.audioxd.customenchantmentapi.enums.ItemType;
 import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
-import org.apache.commons.lang.StringUtils;
 
 public abstract class Enchantment implements Comparable<Enchantment> {
 	protected final String name;
@@ -71,15 +70,15 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		if(line == null) return false;
 		if(line.trim().equals("")) return false;
 
-
 		String display = this.getDisplay("");
 		int displayLength = display.length();
 
 		if(displayLength >= line.length()) return false;
 		if(!line.startsWith(display)) return false;
-		if(line.replaceFirst(line.substring(0, line.length()), "").split(" ").length == 1) return true;
 
-		return false;
+		String[] lastWorld_s = line.replaceFirst(line.substring(0, displayLength), "").split(" ");
+		if(lastWorld_s.length > 1) return false;
+		return RomanNumeral.isRoman(lastWorld_s[0].trim());
 	}
 
 	@Override

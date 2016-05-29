@@ -1,6 +1,8 @@
 package adx.audioxd.customenchantmentapi.utils;
 
 
+import java.util.regex.Pattern;
+
 public class RomanNumeral {
 	// Global fields
 	private static int[] numbers = {
@@ -39,9 +41,13 @@ public class RomanNumeral {
 	public static String getRomanFromInt(int number) {
 		return new RN(number).toString();
 	}
-
 	public static int getIntFromRoman(String num) {
 		return new RN(num).toInt();
+	}
+
+	private final static Pattern regex = Pattern.compile("M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})");
+	public static boolean isRoman(String s){
+		return s!=null && !"".equals(s) && regex.matcher(s.toUpperCase()).matches();
 	}
 
 	private static class RN {
@@ -126,7 +132,6 @@ public class RomanNumeral {
 			}
 			return roman;
 		}
-
 		public int toInt() {
 			return num;
 		}

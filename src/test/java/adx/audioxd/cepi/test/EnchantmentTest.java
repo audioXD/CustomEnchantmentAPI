@@ -61,23 +61,19 @@ public class EnchantmentTest {
 		System.out.println("To String: " + tEnch.toString());
 	}
 
+
+	private static final String[] toVerify = new String[] {
+			tEnch.getDisplay(tEnch.getMaxLvl()),
+			". Some text",
+			tEnch.getDisplay(""),
+			tEnch.getDisplay("bla"),
+			"Smite II"
+	};
 	@Test
 	public void parseText() {
-		String line = tEnch.getDisplay(tEnch.getMaxLvl());
 		System.out.println("===========[START]===========");
-		{
-			System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
-
-			line = line + ". Some text";
-			System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
-
-			line = tEnch.getDisplay("");
-			System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
-
-			line = ". Some text";
-			System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
-
-			line = "Smite II";
+		for(int i = 0; i < toVerify.length; i++) {
+			String line = toVerify[i];
 			System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
 		}
 		System.out.println("============[END]============");

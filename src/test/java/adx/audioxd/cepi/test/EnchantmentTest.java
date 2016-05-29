@@ -44,16 +44,9 @@ public class EnchantmentTest {
 		}
 	}
 
-	@Test
+	@Test(expected = NumberFormatException.class)
 	public void getDisplayExceptionTest() {
-		try {
-			tEnch.getDisplay(-1);
-		} catch(Exception e) {
-			System.out.println("Exception!");
-			return;
-		}
-
-		System.out.println("No Exception.");
+		tEnch.getDisplay(-1);
 	}
 
 	@Test
@@ -69,6 +62,7 @@ public class EnchantmentTest {
 			tEnch.getDisplay("bla"),
 			"Smite II"
 	};
+
 	@Test
 	public void parseText() {
 		System.out.println("===========[START]===========");
@@ -77,6 +71,13 @@ public class EnchantmentTest {
 			System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
 		}
 		System.out.println("============[END]============");
+	}
+
+	@Test
+	public void parseTestStressTest() {
+		for(int i = 0; i < 1000000; i++) {
+			tEnch.hasCustomEnchantment(toVerify[0]);
+		}
 	}
 
 	@Test

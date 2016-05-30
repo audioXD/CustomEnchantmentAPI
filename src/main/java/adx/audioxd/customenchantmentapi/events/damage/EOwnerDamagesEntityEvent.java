@@ -1,6 +1,7 @@
 package adx.audioxd.customenchantmentapi.events.damage;
 
 
+import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventWithLevel;
 import adx.audioxd.customenchantmentapi.enchantment.event.extra.EnchantmentEventWithOwnerAndItem;
 import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.Damage;
 import org.bukkit.entity.Entity;
@@ -9,6 +10,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
+@EnchantmentEventWithLevel
 public class EOwnerDamagesEntityEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable, Damage {
 	private final DamageCause cause;
 	private boolean cancelled = false;

@@ -74,7 +74,7 @@ public class EnchantmentTest {
 	}
 
 	@Test
-	public void parseTestStressTest() {
+	public void parseTextStressTest() {
 		for(int i = 0; i < 1000000; i++) {
 			tEnch.hasCustomEnchantment(toVerify[0]);
 		}

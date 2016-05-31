@@ -1,13 +1,16 @@
 package adx.audioxd.customenchantmentapi.enchantment;
 
 
+import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.enums.EnchantmentPriority;
 import adx.audioxd.customenchantmentapi.enums.ItemType;
 import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
+import org.bukkit.ChatColor;
 
 public abstract class Enchantment implements Comparable<Enchantment> {
 	protected final String name;
+	protected final String displayName;
 	protected final ItemType type;
 	protected final int maxLvl;
 	protected final EnchantmentPriority priority;
@@ -31,7 +34,9 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 * @param priority The priority that the Enchantment has.
 	 */
 	public Enchantment(String name, ItemType type, int maxLvl, EnchantmentPriority priority) {
-		this.name = name;
+		this.name = CustomEnchantmentAPI.getInstance().getDefaultConfig().CHECK_FOR_UPDATES.getValue() ? name : ChatColor.stripColor(name);
+		this.displayName = this.name;
+
 		this.type = type;
 		if(maxLvl < 1) throw new IllegalArgumentException("The Max Level must be at least 1.");
 		this.maxLvl = maxLvl;
@@ -56,8 +61,8 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 * @param romanNumeral The roman numeral.
 	 * @return The display name.
 	 */
-	public String getDisplay(String romanNumeral) {
-		return name + " " + romanNumeral;
+	public final String getDisplay(String romanNumeral) {
+		return displayName + " " + romanNumeral;
 	}
 
 	/**
@@ -71,6 +76,10 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		if(line.trim().equals("")) return false;
 
 		String display = this.getDisplay("");
+		if(!CustomEnchantmentAPI.getInstance().getDefaultConfig().COLOR_CODE_SPECIFIC.getValue()) {
+			line = ChatColor.stripColor(line);
+			display = this.getName() + " ";
+		}
 		int displayLength = display.length();
 
 		if(displayLength >= line.length()) return false;

@@ -7,16 +7,10 @@ import org.bukkit.inventory.ItemStack;
 
 
 public class EUnenchantEvent implements EnchantmentEvent, Item {
-
 	private final ItemStack item;
+	final public ItemStack getItem() { return item; }
 
-	// Constructor
 	public EUnenchantEvent(ItemStack item) {
 		this.item = item;
-	}
-
-	// Getters
-	final public ItemStack getItem() {
-		return item;
 	}
 }

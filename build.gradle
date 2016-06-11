@@ -33,10 +33,11 @@ configure(allprojects - project(':modules')) {
 
 archivesBaseName = 'CustomEnchantmentAPI'
 group = 'adx.audioxd.customenchantmentapi'
-version = '2.6.4-RELEASE'
+version = '2.7-RELEASE'
 
 def MainClass = group + '.' + archivesBaseName
 def delete_on_upload = true
+def create_doc = false
 
 // The dependencies
 dependencies {
@@ -103,10 +104,12 @@ task javadocZip(type: Zip, dependsOn: docs) {
 
 // Added the JavaDoc as a artifact
 artifacts {
-    archives(file(javadocZip.archivePath)) {
-        name javadocZip.baseName
-        type 'zip'
-        builtBy javadocZip
+    if (create_doc) {
+        archives(file(javadocZip.archivePath)) {
+            name javadocZip.baseName
+            type 'zip'
+            builtBy javadocZip
+        }
     }
 }
 

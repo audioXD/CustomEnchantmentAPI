@@ -7,8 +7,6 @@ import org.bukkit.inventory.ItemStack;
 
 @EnchantmentEventWithLevel
 public class EEnchantEvent extends EnchantmentEventWithItem {
-
-	// Constructor
 	public EEnchantEvent(ItemStack item) {
 		super(item);
 	}

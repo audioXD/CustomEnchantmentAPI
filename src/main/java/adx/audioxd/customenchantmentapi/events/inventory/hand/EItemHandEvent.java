@@ -11,24 +11,14 @@ import org.bukkit.inventory.ItemStack;
 @EnchantmentEventWithLevel
 public class EItemHandEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
 	private final HandType handType;
-	private boolean cancelled = false;
+	public HandType getHandType() { return this.handType; }
 
-	// Constructor
+	private boolean cancelled = false;
+	public boolean isCancelled(){ return cancelled; }
+	public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+
 	public EItemHandEvent(ItemStack item, LivingEntity owner, HandType handType) {
 		super(owner, item);
 		this.handType = handType;
-	}
-
-	// Getters
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-
-	public HandType getHandType() {
-		return this.handType;
 	}
 }

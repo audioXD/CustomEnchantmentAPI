@@ -6,13 +6,15 @@ import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.Lvl;
 
 public class Enchanted implements Lvl {
 	private final int lvl;
+	public int getLvl() { return lvl; }
+
 	private final Enchantment enchantment;
+	public Enchantment getEnchantment() { return enchantment; }
 
 	// Constructor
 	public Enchanted(Enchantment enchantment) {
 		this(enchantment, 1);
 	}
-
 	public Enchanted(Enchantment enchantment, int lvl) {
 		this.lvl = lvl;
 		this.enchantment = enchantment;
@@ -35,14 +37,5 @@ public class Enchanted implements Lvl {
 	 */
 	public void fireEvent(EnchantmentEvent event) {
 		enchantment.fireEvent(event, lvl);
-	}
-
-	// Getters
-	public int getLvl() {
-		return lvl;
-	}
-
-	public Enchantment getEnchantment() {
-		return enchantment;
 	}
 }

@@ -20,10 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemUtil {
-	// Global fields
-	// Global Fields
 	public static final ItemStack NULL = new ItemStack(Material.AIR, 0);
-// End of Global Fields
 
 	// Methods
 	final public static List<Integer> getSlotsList(Player player, ItemStack item, SlotType slotType) {

@@ -7,12 +7,18 @@ info:
 messages:
   reloadConfig: "&2Reloaded config files."
 error:
+# '%1$s' is the string(text) that is invalid.
+  invalid: "&c'%1$s' is not valid."
 # '%1$s' is the permission, '%2$s' is the command (without the '/')
   errorYouDoNotHavePermission: "&cYou don't have  permission: %1$s, to use Command: /%2$s"
+# '%1$s' the list of arguments that are to many.
+  errorToManyArguments: '&cTo many arguments (%1$s).'
 # No extra args
   errorNotEnoughArguments: "&cNot enought arguments."
 # '%1$s' is the command (without the '/')
   unknownCommand: "&cUnknown command: %1$s"
+# No extra args
+  noItemInHand: "&cYou must have an item in your main hand."
 # No extra args
   notPlayer: "&cThis command must be executed by a player!"
 enchant:

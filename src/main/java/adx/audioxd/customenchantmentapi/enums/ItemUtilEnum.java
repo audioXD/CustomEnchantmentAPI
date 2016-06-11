@@ -2,15 +2,9 @@ package adx.audioxd.customenchantmentapi.enums;
 
 
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-public enum ItemUtilEnum {
-	OTHER_UNSTACKABLE_ITEMS(new Material[] {
+public class ItemUtilEnum {
+	public static final ItemType OTHER_UNSTACKABLE_ITEMS = new ItemType(new Material[] {
 			Material.ENCHANTED_BOOK,
 			Material.POTION,
 			Material.BOOK_AND_QUILL,
@@ -40,9 +34,8 @@ public enum ItemUtilEnum {
 			Material.RECORD_3,
 			Material.GOLD_RECORD,
 			Material.GREEN_RECORD
-	}),
-
-	INTERFACABLE_TILE_ENTITIES(new Material[] {
+	});
+	public static final ItemType INTERFACABLE_TILE_ENTITIES = new ItemType(new Material[] {
 			Material.DISPENSER,
 			Material.NOTE_BLOCK,
 			Material.BED_BLOCK,
@@ -87,49 +80,4 @@ public enum ItemUtilEnum {
 			Material.DROPPER
 
 	});
-
-	private final Material[] types;
-	private final List<Material> typesList;
-
-	// Constructor
-	ItemUtilEnum(ItemUtilEnum[] sub) {
-		List<Material> materials = new ArrayList<Material>();
-		for(ItemUtilEnum type : sub) {
-			materials.addAll(type.getTypesList());
-		}
-
-		Collections.sort(materials);
-
-		this.typesList = materials;
-		this.types = materials.toArray(new Material[materials.size()]);
-	}
-
-	public List<Material> getTypesList() {
-		return typesList;
-	}
-
-	ItemUtilEnum(Material[] types) {
-		this.types = types;
-		this.typesList = Arrays.asList(types);
-	}
-
-	ItemUtilEnum(List<Material> typesList) {
-		this.typesList = typesList;
-		this.types = typesList.toArray(new Material[typesList.size()]);
-	}
-
-	public boolean matchType(ItemStack item) {
-		if(adx.audioxd.customenchantmentapi.utils.ItemUtil.isEmpty(item)) return false;
-		return typesList.contains(item.getType());
-	}
-
-	public boolean matchType(Material material) {
-		if(material == null) return false;
-		return typesList.contains(material);
-	}
-
-	// Getters
-	public Material[] getTypes() {
-		return types;
-	}
 }

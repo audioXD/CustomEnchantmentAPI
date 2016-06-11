@@ -6,10 +6,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
 public class EItemNotInHandEvent extends EItemHandEvent {
-
-	// Constructor
 	public EItemNotInHandEvent(ItemStack item, LivingEntity owner, HandType handType) {
 		super(item, owner, handType);
 	}
-
 }

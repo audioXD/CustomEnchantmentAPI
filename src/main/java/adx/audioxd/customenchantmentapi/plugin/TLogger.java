@@ -11,6 +11,11 @@ import java.util.logging.Level;
 public class TLogger extends GameLogger {
 	private final Plugin plugin;
 	private boolean PUBLIC = true;
+	public boolean isPublic() { return PUBLIC; }
+	public <T extends TLogger>T setPublic(boolean isPublic) {
+		PUBLIC = isPublic;
+		return (T) this;
+	}
 
 	// Constructor
 	public TLogger(Plugin plugin) {
@@ -31,7 +36,6 @@ public class TLogger extends GameLogger {
 			info(p.getName() + " Version: " + p.getVersion() + " Is being Disabled!");
 		}
 	}
-
 	public void enabled(boolean enabled) {
 		if(enabled) {
 			PluginDescriptionFile p = plugin.getDescription();
@@ -40,14 +44,5 @@ public class TLogger extends GameLogger {
 			PluginDescriptionFile p = plugin.getDescription();
 			info(p.getName() + " Version: " + p.getVersion() + " Has ben Disabled!");
 		}
-	}
-
-// Getters
-	public boolean isPublic() {
-		return PUBLIC;
-	}
-
-	public void setPublic(boolean isPublic) {
-		PUBLIC = isPublic;
 	}
 }

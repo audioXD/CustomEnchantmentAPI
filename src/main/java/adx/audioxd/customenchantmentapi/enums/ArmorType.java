@@ -11,6 +11,7 @@ public enum ArmorType {
 	BOOTS(8);
 
 	private final int slot;
+	public int getSlot() { return slot; }
 
 	// Constructor
 	ArmorType(int slot) {
@@ -38,10 +39,5 @@ public enum ArmorType {
 		} else {
 			return null;
 		}
-	}
-
-	// Getters
-	public int getSlot() {
-		return slot;
 	}
 }

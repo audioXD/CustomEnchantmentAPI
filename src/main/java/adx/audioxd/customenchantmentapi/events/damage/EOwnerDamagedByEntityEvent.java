@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 @EnchantmentEventWithLevel
 public class EOwnerDamagedByEntityEvent extends EOwnerDamagedEvent {
 	private Entity damager;
+	public Entity getDamager() { return damager; }
 
 	// Constructor
 	public EOwnerDamagedByEntityEvent(ItemStack item, LivingEntity owner, double damage, DamageCause cause,
@@ -17,10 +18,4 @@ public class EOwnerDamagedByEntityEvent extends EOwnerDamagedEvent {
 		super(item, owner, damage, cause, type);
 		this.damager = damager;
 	}
-
-	// Getters
-	public Entity getDamager() {
-		return damager;
-	}
-
 }

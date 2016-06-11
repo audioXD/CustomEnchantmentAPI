@@ -9,8 +9,12 @@ import java.io.*;
 public abstract class Config {
 	protected final File configFile;
 	protected final File localFile;
+	public final File getFile() { return configFile; }
+
 	protected final Plugin plugin;
 	protected YamlConfiguration config;
+	public YamlConfiguration getConfig() { return config; }
+
 
 	// Constructor
 	public Config(Plugin plugin, String file) {
@@ -24,6 +28,7 @@ public abstract class Config {
 		config = YamlConfiguration.loadConfiguration(configFile);
 		onLoad(config);
 	}
+	public abstract void onLoad(YamlConfiguration config);
 
 	public void createFileIfDoesNotExist() {
 		if(!configFile.exists()) {
@@ -31,8 +36,6 @@ public abstract class Config {
 				copy(plugin.getResource(localFile.getName()), configFile);
 		}
 	}
-
-	public abstract void onLoad(YamlConfiguration config);
 
 	private void copy(InputStream in, File file) {
 		if(in == null || file == null) return;
@@ -58,15 +61,5 @@ public abstract class Config {
 			e.printStackTrace();
 		}
 	}
-
 	public abstract void onSave(YamlConfiguration config);
-
-	// Getters
-	public final File getFile() {
-		return configFile;
-	}
-
-	public YamlConfiguration getConfig() {
-		return config;
-	}
 }

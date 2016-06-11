@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class CEPLPlugin extends JavaPlugin {
 	private final TLogger logger;
+	public final TLogger getPluginLogger() { return logger; }
 
 	// Constructor
 	public CEPLPlugin() {
@@ -18,7 +19,6 @@ public abstract class CEPLPlugin extends JavaPlugin {
 		Enable();
 		logger.enabled(true);
 	}
-
 	public abstract void Enable();
 
 	@Override
@@ -28,12 +28,5 @@ public abstract class CEPLPlugin extends JavaPlugin {
 		EnchantmentRegistry.unregisterAll(this);
 		logger.enabled(false);
 	}
-
 	public abstract void Disable();
-
-	// Getters
-	public final TLogger getPluginLogger() {
-		return logger;
-	}
-
 }

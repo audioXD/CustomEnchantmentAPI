@@ -10,14 +10,69 @@ import org.bukkit.ChatColor;
 
 public abstract class Enchantment implements Comparable<Enchantment> {
 	protected final String name;
+	/**
+	 * Gets the Enchantment name
+	 *
+	 * @return The Enchantment name.
+	 */
+	public String getName() {
+		return name;
+	}
+
 	protected final String displayName;
+	/**
+	 * Gets the display name that the enchantment will have when enchanted.
+	 *
+	 * @param lvl The level that the display name will have.(If 0 or less it
+	 *            throws a Exception)
+	 * @return The display name
+	 */
+	public final String getDisplay(int lvl) {
+		return getDisplay(RomanNumeral.getRomanFromInt(lvl));
+	}
+	/**
+	 * Gets the display name that the enchantment will have when enchanted.
+	 *
+	 * @param romanNumeral The roman numeral.
+	 * @return The display name.
+	 */
+	public final String getDisplay(String romanNumeral) {
+		return displayName + " " + romanNumeral;
+	}
+
 	protected final ItemType type;
+	/**
+	 * Gets the items on which the Enchantment can be enchanted on.
+	 *
+	 * @return A TemType object.
+	 */
+	public ItemType getType() {
+		return type;
+	}
+
 	protected final int maxLvl;
+	/**
+	 * Gets the max level of the Enchantment.
+	 *
+	 * @return The max level.
+	 */
+	public int getMaxLvl() {
+		return maxLvl;
+	}
+
 	protected final EnchantmentPriority priority;
+	/**
+	 * Gets the priority of the Enchantment.
+	 *
+	 * @return The Enchantments priority.
+	 */
+	public EnchantmentPriority getPriority() {
+		return priority;
+	}
+
 	private final EventBus eb;
 
 // Constructor
-
 	/**
 	 * @param name   The name of the enchantment
 	 * @param type   The ItemType that the Enchantment can be enchanted on.
@@ -44,25 +99,55 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		eb = new EventBus(this);
 	}
 
+	// Fire event
 	/**
-	 * Gets the display name that the enchantment will have when enchanted.
+	 * Fires the event.
 	 *
-	 * @param lvl The level that the display name will have.(If 0 or less it
-	 *            throws a Exception)
-	 * @return The display name
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 * @param sync  If it's going to be ran synchronized.
 	 */
-	public final String getDisplay(int lvl) {
-		return getDisplay(RomanNumeral.getRomanFromInt(lvl));
+	public void fireEvent(EnchantmentEvent event, boolean sync) {
+		fireEvent(event, 1, sync);
+	}
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 * @param lvl   The level.
+	 * @param sync  If it's going to be ran synchronized.
+	 */
+	public void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
+		eb.fireEvent(event, lvl, sync);
+	}
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 */
+	public void fireEvent(EnchantmentEvent event) {
+		fireEvent(event, 1);
+	}
+	/**
+	 * Fires the event.
+	 *
+	 * @param event The instance of the EnchantmentEvent you want to fire.
+	 * @param lvl   The level.
+	 */
+	public void fireEvent(EnchantmentEvent event, int lvl) {
+		fireEvent(event, lvl, true);
 	}
 
-	/**
-	 * Gets the display name that the enchantment will have when enchanted.
-	 *
-	 * @param romanNumeral The roman numeral.
-	 * @return The display name.
-	 */
-	public final String getDisplay(String romanNumeral) {
-		return displayName + " " + romanNumeral;
+	@Override
+	public final int compareTo(Enchantment other) {
+		return other.priority.compareTo(priority);
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if(o == this) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		Enchantment other = (Enchantment) o;
+		return other.getDisplay("").equals(getDisplay(""));
 	}
 
 	/**
@@ -90,18 +175,6 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		return RomanNumeral.isRoman(lastWorld_s[0].trim());
 	}
 
-	@Override
-	public final int compareTo(Enchantment other) {
-		return other.priority.compareTo(priority);
-	}
-
-	@Override
-	public final boolean equals(Object o) {
-		if(o == this) return true;
-		if(o == null || getClass() != o.getClass()) return false;
-		Enchantment other = (Enchantment) o;
-		return other.getDisplay("").equals(getDisplay(""));
-	}
 
 	@Override
 	public final String toString() {
@@ -111,85 +184,5 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	@Override
 	public final int hashCode() {
 		return getDisplay("").hashCode();
-	}
-
-	//Fire event
-
-	/**
-	 * Fires the event.
-	 *
-	 * @param event The instance of the EnchantmentEvent you want to fire.
-	 * @param sync  If it's going to be ran synchronized.
-	 */
-	public void fireEvent(EnchantmentEvent event, boolean sync) {
-		fireEvent(event, 1, sync);
-	}
-
-	/**
-	 * Fires the event.
-	 *
-	 * @param event The instance of the EnchantmentEvent you want to fire.
-	 * @param lvl   The level.
-	 * @param sync  If it's going to be ran synchronized.
-	 */
-	public void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
-		eb.fireEvent(event, lvl, sync);
-	}
-
-	/**
-	 * Fires the event.
-	 *
-	 * @param event The instance of the EnchantmentEvent you want to fire.
-	 */
-	public void fireEvent(EnchantmentEvent event) {
-		fireEvent(event, 1);
-	}
-
-	/**
-	 * Fires the event.
-	 *
-	 * @param event The instance of the EnchantmentEvent you want to fire.
-	 * @param lvl   The level.
-	 */
-	public void fireEvent(EnchantmentEvent event, int lvl) {
-		fireEvent(event, lvl, true);
-	}
-
-	// Getters
-
-	/**
-	 * Gets the Enchantment name
-	 *
-	 * @return The Enchantment name.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Gets the items on which the Enchantment can be enchanted on.
-	 *
-	 * @return A TemType object.
-	 */
-	public ItemType getType() {
-		return type;
-	}
-
-	/**
-	 * Gets the max level of the Enchantment.
-	 *
-	 * @return The max level.
-	 */
-	public int getMaxLvl() {
-		return maxLvl;
-	}
-
-	/**
-	 * Gets the priority of the Enchantment.
-	 *
-	 * @return The Enchantments priority.
-	 */
-	public EnchantmentPriority getPriority() {
-		return priority;
 	}
 }

@@ -11,11 +11,9 @@ public class EnchantmentEventException extends RuntimeException {
 	EnchantmentEventException(String message) {
 		super(message);
 	}
-
 	EnchantmentEventException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
 	EnchantmentEventException(Throwable cause) {
 		super(cause);
 	}

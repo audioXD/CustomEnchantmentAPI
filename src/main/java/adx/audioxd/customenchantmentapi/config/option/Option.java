@@ -5,7 +5,12 @@ import adx.audioxd.customenchantmentapi.config.Config;
 
 public class Option {
 	private final String path;
+	public String getPath() { return path; }
+
 	private Object value;
+	public Object getValue() { return value; }
+	public void setValue(Object value) { this.value = value; }
+
 
 	// Constructor
 	public Option(String path, Object value) {
@@ -13,10 +18,10 @@ public class Option {
 		this.value = value;
 	}
 
+
 	public final void loadIfExist(Config config) {
 		loadIfExist(config, this);
 	}
-
 	public static void loadIfExist(Config config, Option option) {
 		if(config.getConfig().isSet(option.getPath())) {
 			option.setValue(config.getConfig().get(option.getPath()));
@@ -26,25 +31,13 @@ public class Option {
 		}
 	}
 
-	public String getPath() {
-		return path;
+	public final void save(Config config) {
+		save(config, this);
 	}
-
 	public static void save(Config config, Option option) {
 		config.getConfig().set(option.getPath(), option.getValue());
 	}
 
-	public Object getValue() {
-		return value;
-	}
-
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
-	public final void save(Config config) {
-		save(config, this);
-	}
 
 	@Override
 	public final boolean equals(Object o) {

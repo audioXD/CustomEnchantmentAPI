@@ -13,9 +13,12 @@ import java.util.Map;
 public class EnchantmentsConfig extends Config {
 	private Map<String, BooleanOption> options = new HashMap<>();
 
+
+	// Constructor
 	public EnchantmentsConfig(Plugin plugin) {
 		super(plugin, "Enchantments");
 	}
+
 
 	@Override
 	public void onLoad(YamlConfiguration config) {

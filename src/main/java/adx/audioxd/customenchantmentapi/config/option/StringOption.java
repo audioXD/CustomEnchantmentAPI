@@ -2,11 +2,15 @@ package adx.audioxd.customenchantmentapi.config.option;
 
 
 import adx.audioxd.customenchantmentapi.config.Config;
-import org.bukkit.ChatColor;
+import adx.audioxd.customenchantmentapi.utils.Text;
 
 public class StringOption {
 	private final String path;
+	public String getPath() { return path; }
+
 	private String value;
+	public String getValue() { return value; }
+	public void setValue(String value) { this.value = value; }
 
 	// Constructor
 	public StringOption(String path, String value) {
@@ -14,15 +18,9 @@ public class StringOption {
 		this.value = value;
 	}
 
-	public final String format(String... o) {
-		String out = String.format(value, (Object[]) o);
-		return ChatColor.translateAlternateColorCodes('&', out);
-	}
-
 	public final void loadIfExist(Config config) {
 		loadIfExist(config, this);
 	}
-
 	public static void loadIfExist(Config config, StringOption option) {
 		if(config.getConfig().isSet(option.getPath())) {
 			option.setValue(config.getConfig().getString(option.getPath()));
@@ -32,25 +30,17 @@ public class StringOption {
 		}
 	}
 
-	public String getPath() {
-		return path;
+	public final void save(Config config) {
+		save(config, this);
 	}
-
 	public static void save(Config config, StringOption option) {
 		config.getConfig().set(option.getPath(), option.getValue());
 	}
 
-	public String getValue() {
-		return value;
+	public final String format(String... o) {
+		return Text.parse(value, o);
 	}
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public final void save(Config config) {
-		save(config, this);
-	}
 
 	@Override
 	public final boolean equals(Object o) {

@@ -13,9 +13,18 @@ import org.bukkit.inventory.ItemStack;
 @EnchantmentEventWithLevel
 public class EOwnerDamagesEntityEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable, Damage {
 	private final DamageCause cause;
+	public DamageCause getCause() { return cause; }
+
 	private boolean cancelled = false;
+	public boolean isCancelled() { return cancelled; }
+	public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+
 	private double damage;
+	public double getDamage() { return damage; }
+	public void setDamage(double damage) { this.damage = damage; }
+
 	private Entity victim;
+	public Entity getVictim() { return victim; }
 
 	// Constructor
 	public EOwnerDamagesEntityEvent(ItemStack item, LivingEntity owner, Entity victim, double damage,
@@ -24,30 +33,5 @@ public class EOwnerDamagesEntityEvent extends EnchantmentEventWithOwnerAndItem i
 		this.victim = victim;
 		this.damage = damage;
 		this.cause = cause;
-	}
-
-	// Getters
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-
-	public double getDamage() {
-		return damage;
-	}
-
-	public void setDamage(double damage) {
-		this.damage = damage;
-	}
-
-	public Entity getVictim() {
-		return victim;
-	}
-
-	public DamageCause getCause() {
-		return cause;
 	}
 }

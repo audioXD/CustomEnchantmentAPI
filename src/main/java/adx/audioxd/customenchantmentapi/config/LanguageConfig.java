@@ -10,10 +10,13 @@ public class LanguageConfig extends Config {
 
 	public final StringOption NO_PERMISSION;
 	public final StringOption NOT_ENOUGH_ARGUMENTS;
+	public final StringOption TO_MANY_ENOUGH_ARGUMENTS;
 	public final StringOption UNKNOWN_COMMAND;
 	public final StringOption UNKNOWN_ENCHANTMENT;
 	public final StringOption NOT_PLAYER;
+	public final StringOption NO_ITEM_IN_HAND;
 	public final StringOption LEVEL_LESS_THAN_ONE;
+	public final StringOption INVALID;
 
 	public final StringOption ENCHANT_NO_ACCESS_TO_ENCHANTMENT;
 	public final StringOption ENCHANT_SUCCESS;
@@ -32,14 +35,17 @@ public class LanguageConfig extends Config {
 		super(plugin, file);
 		RELOAD_CONFIG = new StringOption("messages.reloadConfig", "&2Reloaded config files.");
 
+		INVALID = new StringOption("error.invalid", "&c'%1$s' is not valid.");
 		NO_PERMISSION = new StringOption(
 				"error.errorYouDoNotHavePermission",
 				"&cYou don't have access to use that command."
 		);
+		TO_MANY_ENOUGH_ARGUMENTS = new StringOption("error.errorToManyArguments", "&cTo many arguments.");
 		NOT_ENOUGH_ARGUMENTS = new StringOption("error.errorNotEnoughArguments", "&cNot enough arguments.");
 		UNKNOWN_COMMAND = new StringOption("error.unknownCommand", "&cUnknown command!");
 		UNKNOWN_ENCHANTMENT = new StringOption("error.unknownCommand", "&cUnknown Enchantment!");
 		NOT_PLAYER = new StringOption("error.notPlayer", "&cThis command must be executed by a player!");
+		NO_ITEM_IN_HAND = new StringOption("error.noItemInHand", "&cYou must have an item in your main hand.");
 
 		ENCHANT_NO_ACCESS_TO_ENCHANTMENT = new StringOption(
 				"enchant.noAccessToEnchantment",
@@ -65,10 +71,13 @@ public class LanguageConfig extends Config {
 	public void onLoad(YamlConfiguration config) {
 		RELOAD_CONFIG.loadIfExist(this);
 
+		INVALID.loadIfExist(this);
 		NO_PERMISSION.loadIfExist(this);
+		TO_MANY_ENOUGH_ARGUMENTS.loadIfExist(this);
 		NOT_ENOUGH_ARGUMENTS.loadIfExist(this);
 		UNKNOWN_COMMAND.loadIfExist(this);
 		UNKNOWN_ENCHANTMENT.loadIfExist(this);
+		NO_ITEM_IN_HAND.loadIfExist(this);
 		NOT_PLAYER.loadIfExist(this);
 		LEVEL_LESS_THAN_ONE.loadIfExist(this);
 
@@ -84,6 +93,6 @@ public class LanguageConfig extends Config {
 		NO_VERSION_AVAILABLE.loadIfExist(this);
 	}
 
-	public void onSave(YamlConfiguration config) {}
+	public void onSave(YamlConfiguration config) { }
 
 }

@@ -12,6 +12,7 @@ public class DefaultConfig extends Config {
 	public final StringOption MESSAGE_LOCALIZATION_FILE;
 	public final BooleanOption CHECK_FOR_UPDATES;
 
+
 	// Constructor
 	public DefaultConfig(Plugin plugin) {
 		super(plugin, "config");
@@ -29,8 +30,5 @@ public class DefaultConfig extends Config {
 	}
 
 	@Override
-	public void onSave(YamlConfiguration config) {
-
-	}
-
+	public void onSave(YamlConfiguration config) { }
 }

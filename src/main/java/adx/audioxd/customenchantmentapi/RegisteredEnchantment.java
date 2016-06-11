@@ -6,9 +6,44 @@ import org.bukkit.plugin.Plugin;
 
 public class RegisteredEnchantment {
 	private final Enchantment enchantment;
+	/**
+	 * Gets the Registered Enchantment.
+	 *
+	 * @return The Enchantment.
+	 */
+	public Enchantment getEnchantment() { return enchantment; }
+
 	private final Plugin plugin;
+	/**
+	 * Gets the Plugin that registered the Enchantment.
+	 *
+	 * @return The Plugin.
+	 */
+	public Plugin getPlugin() { return plugin; }
+
 	private final String id;
+	/**
+	 * Gets the ID of the Registered Enchantment.
+	 *
+	 * @return Returns the enchantment id plugin:name
+	 */
+	public String getID() { return id; }
+
 	private boolean active;
+	/**
+	 * Gets if the Enchantment can be use / is active.
+	 *
+	 * @return if the Enchantment can be use / is active.
+	 */
+	public boolean isActive() {
+		return active;
+	}
+	/**
+	 * Sets if the Enchantment can be use / is active.
+	 *
+	 * @param active If the Enchantment can be use / is active.
+	 */
+	void setActive(boolean active) { this.active = active; }
 
 // Constructor
 
@@ -21,7 +56,6 @@ public class RegisteredEnchantment {
 	public RegisteredEnchantment(Enchantment enchantment, Plugin plugin) {
 		this(enchantment, plugin, false);
 	}
-
 	/**
 	 * The Constructor.
 	 *
@@ -52,60 +86,10 @@ public class RegisteredEnchantment {
 	public String toString() {
 		return getID();
 	}
-
-	/**
-	 * Gets the ID of the Registered Enchantment.
-	 *
-	 * @return Returns the enchantment id plugin:name
-	 */
-	public String getID() {
-		return id;
-	}
-
-// Getters
-
-	/**
-	 * Gets the Registered Enchantment.
-	 *
-	 * @return The Enchantment.
-	 */
-	public Enchantment getEnchantment() {
-		return enchantment;
-	}
-
-	/**
-	 * Gets the Plugin that registered the Enchantment.
-	 *
-	 * @return The Plugin.
-	 */
-	public Plugin getPlugin() {
-		return plugin;
-	}
-
-	/**
-	 * Gets if the Enchantment can be use / is active.
-	 *
-	 * @return if the Enchantment can be use / is active.
-	 */
-	public boolean isActive() {
-		return active;
-	}
-
-	/**
-	 * Sets if the Enchantment can be use / is active.
-	 *
-	 * @param active If the Enchantment can be use / is active.
-	 */
-	void setActive(boolean active) {
-		this.active = active;
-	}
-
-	@Override
-	public final boolean equals(Object o) {
+	@Override public final boolean equals(Object o) {
 		if(o == this) return true;
 		if(o == null || getClass() != o.getClass()) return false;
 		RegisteredEnchantment other = (RegisteredEnchantment) o;
 		return id.equals(other.id);
 	}
-
 }

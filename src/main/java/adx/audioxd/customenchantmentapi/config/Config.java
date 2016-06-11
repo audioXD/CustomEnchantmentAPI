@@ -15,6 +15,7 @@ public abstract class Config {
 	protected YamlConfiguration config;
 	public YamlConfiguration getConfig() { return config; }
 
+
 	// Constructor
 	public Config(Plugin plugin, String file) {
 		this.localFile = new File(file + ".yml");

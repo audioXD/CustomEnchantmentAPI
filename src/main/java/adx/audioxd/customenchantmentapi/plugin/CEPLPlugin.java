@@ -19,7 +19,7 @@ public abstract class CEPLPlugin extends JavaPlugin {
 		Enable();
 		logger.enabled(true);
 	}
-	public abstract void Enable();
+	public void Enable() { }
 
 	@Override
 	public final void onDisable() {
@@ -28,5 +28,5 @@ public abstract class CEPLPlugin extends JavaPlugin {
 		EnchantmentRegistry.unregisterAll(this);
 		logger.enabled(false);
 	}
-	public abstract void Disable();
+	public  void Disable() { }
 }

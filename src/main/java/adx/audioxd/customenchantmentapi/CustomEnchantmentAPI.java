@@ -183,6 +183,9 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 			InputStream in = null;
 			FileOutputStream out = null;
 			try {
+				newFile.getParentFile().mkdir();
+				newFile.createNewFile();
+
 				in = this.getResource(languageConfig + ".yml");
 				out = new FileOutputStream(newFile);
 				int read;

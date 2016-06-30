@@ -16,6 +16,8 @@ public interface NSM {
 
 	VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off);
 
+	int getOffHandSlot();
+
 	// Getters
 	ItemStack getNull();
 }

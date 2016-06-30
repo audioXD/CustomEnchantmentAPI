@@ -1,4 +1,4 @@
-package adx.audioxd.customenchantmentapi.abst.v1_9;
+package adx.audioxd.customenchantmentapi.abst.v1_10;
 
 
 import adx.audioxd.customenchantmentapi.abst.api.NSM;
@@ -34,9 +34,8 @@ public class NSMHandler implements NSM {
 		return new HSL(notMain, notOff, main, off);
 	}
 	public int getOffHandSlot() {
-		return 9;
+		return 40;
 	}
-
 	// Getters
 	public ItemStack getNull() {
 		return NULL;

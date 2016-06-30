@@ -31,6 +31,11 @@ public class NSMHandler implements NSM {
 		return new VersionListener(notMain, notOff, main, off);
 	}
 
+	@Override
+	public int getOffHandSlot() {
+		return -1;
+	}
+
 	// Getters
 	public ItemStack getNull() {
 		return NULL;

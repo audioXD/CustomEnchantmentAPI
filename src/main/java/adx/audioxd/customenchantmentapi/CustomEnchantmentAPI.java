@@ -16,11 +16,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class CustomEnchantmentAPI extends JavaPlugin {
 	// Global fields
@@ -73,20 +74,44 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	 */
 	public LanguageConfig getLanguageConfig() { return lc; }
 
-	private final String version;
+
+	private final String serverVersion;
+	/**
+	 * Gets the server NSMVersion like v1_8.. (IDK) i newer checked.
+	 * @return The full server NSMVersion.
+	 */
+	public final String getServerVersion(){ return serverVersion; }
+
+	private final String[] supportedVersions;
+	/**
+	 * Gets the supported versions of bukkit/spigot.
+	 * @return Return s a array with the versions like v1_8, v1_9 ,...
+	 */
+	public final String[] getSupportedVersions() { return supportedVersions; }
+
+	public final String NSMVersion;
+	/**
+	 * Gets the closest string resembling the {@code getServerVersion()} String.
+	 * @return The NSMVersion used for the {@code NSM}
+	 */
+	public final String getNSMVersion(){ return NSMVersion; }
+
 	private NSM nsm;
 	/**
-	 * Returns the NSU used dynamic-ly assigned by the current Bukkit version.
+	 * Returns the NSU used dynamic-ly assigned by the current Bukkit NSMVersion.
 	 *
-	 * @return The dynamic NSU version
+	 * @return The dynamic NSU NSMVersion
 	 */
 	public NSM getNSM() { return nsm; }
 
 	// Constructor
 	public CustomEnchantmentAPI() {
+		this.supportedVersions = loadSupportedVersions();
+
 		String packageName = this.getServer().getClass().getPackage().getName();
-		String v1 = packageName.substring(packageName.lastIndexOf('.') + 1);
-		version = v1.split("_")[0] + "_" + v1.split("_")[1];
+		serverVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
+
+		this.NSMVersion = loadVersion();
 
 		instance = this;
 		logger = new TLogger(this);
@@ -99,6 +124,43 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 			reloadConfigs();
 		}
 	}
+	private String[] loadSupportedVersions(){
+		Set<String> supportedVersions = new HashSet<>();
+		try {
+			ZipInputStream zip = new ZipInputStream(new FileInputStream(this.getFile().getPath()));
+			String prefix = this.getClass().getPackage().getName() + ".abst.";
+
+			for(ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+				if(!entry.isDirectory()) continue;
+
+				String path = entry.getName()
+						.replace(File.separatorChar, '.')
+						.replace('/', '.');
+				if(!path.startsWith(prefix)) continue;
+
+				String version = path
+						.replaceFirst(path.substring(0, prefix.length()), "")
+						.split("\\\\.")[0]
+						.replace('.', ' ')
+						.trim();
+				if(version.length() == 0 || version.startsWith("api")) continue;
+
+				supportedVersions.add(version);
+			}
+			zip.close();
+		} catch(Exception e) {}
+		return supportedVersions.toArray(new String[supportedVersions.size()]);
+	}
+	private String loadVersion(){
+		String current = "";
+		for(String v: this.supportedVersions){
+			if(!serverVersion.toLowerCase().startsWith(v.toLowerCase())) continue;
+			if(v.length() < current.length()) continue;
+			current = v;
+
+		}
+		return current;
+	}
 
 	private static final String[] languageConfigs = new String[]{
 			"en-US",
@@ -110,6 +172,8 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	public void reloadConfigs() {
 		dc.createFileIfDoesNotExist();
 		ec.createFileIfDoesNotExist();
+
+
 
 		for(String languageConfig: languageConfigs){
 			File newFile = new File(this.getDataFolder(), "/locale/" + languageConfig + ".yml");
@@ -151,13 +215,13 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		logger.preEnabled(true);
 		{
 			try {
-				final Class<?> clazz = Class.forName("adx.audioxd.customenchantmentapi.abst." + version + ".NSMHandler");
+				final Class<?> clazz = Class.forName("adx.audioxd.customenchantmentapi.abst." + NSMVersion + ".NSMHandler");
 				if(NSM.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
 					this.nsm = (NSM) clazz.getConstructor().newInstance(); // Set our handler
 				}
 			} catch(final Exception e) {
 				logger.info(e.getMessage());
-				logger.severe("Could not find support for Spigot " + version + ".");
+				logger.severe("Could not find support for Spigot " + serverVersion + ".");
 				this.setEnabled(false);
 				onDisable();
 				return;

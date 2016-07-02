@@ -9,15 +9,9 @@ import java.lang.reflect.Method;
 
 public interface NSM {
 	ItemStack getItemInMainHand(LivingEntity player);
-
 	ItemStack getItemInOffHand(LivingEntity player);
 
 	boolean isHandMainHAnd(PlayerInteractEvent event);
 
 	VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off);
-
-	int getOffHandSlot();
-
-	// Getters
-	ItemStack getNull();
 }

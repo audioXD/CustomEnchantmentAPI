@@ -11,8 +11,25 @@ import org.bukkit.inventory.ItemStack;
 @EnchantmentEventWithLevel
 public class EBlockBreakEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
 	private Block block;
+	public Block getBlock() {
+		return block;
+	}
+
 	private int ExpToDrop = 0;
+	public int getExpToDrop() {
+		return ExpToDrop;
+	}
+	public void setExpToDrop(int expToDrop) {
+		ExpToDrop = expToDrop;
+	}
+
 	private boolean cancelled = false;
+	public boolean isCancelled() {
+		return cancelled;
+	}
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
 
 	// Constructor
 	public EBlockBreakEvent(ItemStack item, LivingEntity owner, Block block, int exp) {
@@ -20,26 +37,4 @@ public class EBlockBreakEvent extends EnchantmentEventWithOwnerAndItem implement
 		this.block = block;
 		this.ExpToDrop = exp;
 	}
-
-	// Getters
-	public Block getBlock() {
-		return block;
-	}
-
-	public int getExpToDrop() {
-		return ExpToDrop;
-	}
-
-	public void setExpToDrop(int expToDrop) {
-		ExpToDrop = expToDrop;
-	}
-
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-
 }

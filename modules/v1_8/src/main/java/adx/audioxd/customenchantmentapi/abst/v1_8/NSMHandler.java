@@ -11,14 +11,11 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.Method;
 
 public class NSMHandler implements NSM {
-	// Global fields
-	private static ItemStack NULL = new ItemStack(Material.AIR);
-// End of Global Fields
-
 	public ItemStack getItemInMainHand(LivingEntity player) {
 		return player.getEquipment().getItemInHand();
 	}
 
+	private static ItemStack NULL = new ItemStack(Material.AIR);
 	public ItemStack getItemInOffHand(LivingEntity player) {
 		return NULL;
 	}
@@ -30,15 +27,4 @@ public class NSMHandler implements NSM {
 	public VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off) {
 		return new VersionListener(notMain, notOff, main, off);
 	}
-
-	@Override
-	public int getOffHandSlot() {
-		return -1;
-	}
-
-	// Getters
-	public ItemStack getNull() {
-		return NULL;
-	}
-
 }

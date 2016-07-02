@@ -38,7 +38,6 @@ public class EOwnerDamagedEvent extends EnchantmentEventWithOwnerAndItem impleme
 		IN_HAND,
 		ARMOR,
 		SHIELD,
-		SADDLE,
 		HORSE_ARMOR
 	}
 }

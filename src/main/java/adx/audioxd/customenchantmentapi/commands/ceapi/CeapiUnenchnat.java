@@ -5,7 +5,6 @@ import adx.audioxd.customenchantmentapi.CEAPIPermissions;
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.commands.CEAPICommand;
-import adx.audioxd.customenchantmentapi.commands.Visibility;
 import adx.audioxd.customenchantmentapi.commands.ceapi.type.TypeCustomEnchantment;
 import adx.audioxd.customenchantmentapi.commands.exceptions.CEAPICommandException;
 import adx.audioxd.customenchantmentapi.commands.requirement.RequirementHasItemInHand;
@@ -14,7 +13,7 @@ import adx.audioxd.customenchantmentapi.commands.requirement.RequirementIsPlayer
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
-import adx.audioxd.customenchantmentapi.listeners.CEPLListener;
+import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,7 +38,7 @@ public class CeapiUnenchnat extends CEAPICommand {
 
 		ItemStack previous = new ItemStack(ItemUtil.getMainHandItem(me));
 		if(EnchantmentRegistry.unenchant(ItemUtil.getMainHandItem(me), ench) ){
-			CEPLListener.itemNotInHand(me, previous, HandType.MAIN);
+			CEAPIListenerUtils.itemNotInHand(me, previous, HandType.MAIN);
 			throw new CEAPICommandException(lc.UNENCHANT_SUCCESS.format(ench.getDisplay("")));
 		}
 		throw new CEAPICommandException(lc.UNENCHANT_ERROR.format(ench.getDisplay("")));

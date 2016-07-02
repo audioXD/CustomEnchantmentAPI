@@ -77,7 +77,7 @@ public class ItemUtil {
 
 	public static boolean isEmpty(ItemStack itemStack) {
 		if(itemStack == null) return true;
-		if(itemStack.getAmount() <= 0) return true;
+		if(itemStack.getAmount() < 0) return true;
 		return itemStack.getType() == Material.AIR;
 	}
 

@@ -15,16 +15,20 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-public class onBowShotEvent extends CEPLListener {
-
-	// Global fields
+public class BowListener extends CEAPIListenerUtils {
 	private static String salt = "adx_536_";
-// End of Global Fields
 
-	// Constructor
-	public onBowShotEvent(CustomEnchantmentAPI plugin) {
+	// ---------------------------------------------------------- //
+	//                      CONSTRUCTOR                           //
+	// ---------------------------------------------------------- //
+
+	public BowListener(CustomEnchantmentAPI plugin) {
 		super(plugin);
 	}
+
+	// ---------------------------------------------------------- //
+	//                 EVENTS FOR CUSTOM BOWS                     //
+	// ---------------------------------------------------------- //
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void bowShoot(EntityShootBowEvent event) {
@@ -33,7 +37,7 @@ public class onBowShotEvent extends CEPLListener {
 		);
 		eEvent.setCancelled(event.isCancelled());
 		{
-			for(Enchanted ench : getEnchantments(event.getBow())) {
+			for(Enchanted ench : EnchantmentRegistry.getEnchantments(event.getBow())) {
 				ench.fireEvent(eEvent);
 				EnchantmentRegistry.enchant(event.getProjectile(), ench.getEnchantment(), ench.getLvl(), false, false);
 			}
@@ -58,7 +62,7 @@ public class onBowShotEvent extends CEPLListener {
 		event.setCancelled(eEvent.isCancelled());
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void arrowLandEvent(ProjectileHitEvent event) {
 		if(!(event.getEntity() instanceof Arrow)) return;
 		Arrow arrow = (Arrow) event.getEntity();

@@ -8,6 +8,8 @@ import adx.audioxd.customenchantmentapi.config.DefaultConfig;
 import adx.audioxd.customenchantmentapi.config.EnchantmentsConfig;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.listeners.*;
+import adx.audioxd.customenchantmentapi.listeners.InventoryListener;
+import adx.audioxd.customenchantmentapi.listeners.extra.EEquip;
 import adx.audioxd.customenchantmentapi.plugin.TLogger;
 import adx.audioxd.customenchantmentapi.utils.GameLogger;
 import adx.audioxd.customenchantmentapi.utils.UpdateChecker;
@@ -232,19 +234,18 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 
 			reloadConfigs();
 
-			Bukkit.getPluginManager().registerEvents(new onArmorListener(this), this);
-			Bukkit.getPluginManager().registerEvents(new onItemInHandChange(this), this);
-			Bukkit.getPluginManager().registerEvents(new onBlockBreakEvent(this), this);
-			Bukkit.getPluginManager().registerEvents(new onBlockPlaceEvent(this), this);
-			Bukkit.getPluginManager().registerEvents(new onBowShotEvent(this), this);
-			Bukkit.getPluginManager().registerEvents(new onEntityDamage(this), this);
-			Bukkit.getPluginManager().registerEvents(new onEntityDamagedByEntity(this), this);
-			Bukkit.getPluginManager().registerEvents(new onInteract(this), this);
+			EEquip.clear();
+			this.getServer().getOnlinePlayers().forEach(EEquip::loadPlayer);
+			Bukkit.getPluginManager().registerEvents(new InventoryListener(this), this);
+			Bukkit.getPluginManager().registerEvents(new ToolsListener(this), this);
+			Bukkit.getPluginManager().registerEvents(new DamageListener(this), this);
+			Bukkit.getPluginManager().registerEvents(new BowListener(this), this);
+
 			try {
-				Method notMain = CEPLListener.class.getMethod("itemNotInMainHand", LivingEntity.class, ItemStack.class);
-				Method notOff = CEPLListener.class.getMethod("itemNotInOffHand", LivingEntity.class, ItemStack.class);
-				Method main = CEPLListener.class.getMethod("itemInMainHand", LivingEntity.class, ItemStack.class);
-				Method off = CEPLListener.class.getMethod("itemInOffHand", LivingEntity.class, ItemStack.class);
+				Method notMain = CEAPIListenerUtils.class.getMethod("itemNotInMainHand", LivingEntity.class, ItemStack.class);
+				Method notOff = CEAPIListenerUtils.class.getMethod("itemNotInOffHand", LivingEntity.class, ItemStack.class);
+				Method main = CEAPIListenerUtils.class.getMethod("itemInMainHand", LivingEntity.class, ItemStack.class);
+				Method off = CEAPIListenerUtils.class.getMethod("itemInOffHand", LivingEntity.class, ItemStack.class);
 				if(notMain == null || notOff == null || main == null || off == null)
 					return;
 				Bukkit.getPluginManager().registerEvents(nsm.getVersionListener(notMain, notOff, main, off), this);

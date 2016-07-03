@@ -1,22 +1,23 @@
-info:
-  newVersionAvailable: 'A new version is available version: %1$s, download link: %2$s'
-  noVersionAvailable: 'No new version are available.'
 messages:
   reloadConfig: '&2Reloaded config files.'
 error:
-  invalid: "&c'%1$s' is not valid."
+  invalid: '&c''%1$s'' is not valid.'
   errorYouDoNotHavePermission: '&cYou don''t have access to use that command.'
   errorToManyArguments: '&cTo many arguments.'
   errorNotEnoughArguments: '&cNot enough arguments.'
   unknownCommand: '&cUnknown command!'
-  noItemInHand: "&cYou must have an item in your main hand."
+  unknownEnchantment: '&cUnknown Enchantment!'
+  noItemInHand: '&cYou must have an item in your main hand.'
   notPlayer: '&cThis command must be executed by a player!'
+  onlinePlayerNotFound: '&5Player not found.'
+  offlinePlayerNotFound: '&5Player not found.'
 enchant:
   errorLessThanOne: '&5The level must be more or equal to 1.'
-  noAccessToEnchantment: '&cYou don''t have access to enchant that Enchantment'
   success: '&2Enchanted item in hand with %s'
   error: '&cDidn''t enchant item with %s'
 unenchant:
-  noAccessToEnchantment: '&cYou don''t have access to unenchant that Enchantment'
   success: '&2Un-enchanted item in hand with %s'
   error: '&cDidn''t un-enchant item with %s'
+info:
+  newVersionAvailable: 'A new version is available version: %1$s, download link: %2$s'
+  noVersionAvailable: 'No new versions are available.'

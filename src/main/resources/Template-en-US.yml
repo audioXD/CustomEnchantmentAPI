@@ -21,18 +21,18 @@ error:
   noItemInHand: "&cYou must have an item in your main hand."
 # No extra args
   notPlayer: "&cThis command must be executed by a player!"
+# '%1$s' is the name entered
+  onlinePlayerNotFound: "&5Online Player '%1$s' wasn't found."
+# '%1$s' is the name entered
+  offlinePlayerNotFound: "&5Offline Player '%1$s' wasn't found."
 enchant:
 # No extra args
   errorLessThanOne: "&5The level must be more or equal to 1."
-# '%1$s' is the permission, '%2$s' is the Enchantment
-  noAccessToEnchantment: "&cYou don't have the Permission: %1$s, to enchant Enchantment: %2$s"
 #  '%1$s' is the Enchantment
   success: "&2Enchanted item in hand with %s"
 #  '%1$s' is the Enchantment
   error: "&cDidn't enchant item with %s"
 unenchant:
-# '%1$s' is the permission, '%2$s' is the Enchantment
-  noAccessToEnchantment: "&cYou don't have the Permission: %1$s, to unenchant Enchantment: %2$s"
 #  '%1$s' is the Enchantment
   success: "&2Un-enchanted item in hand with %s"
 #  '%1$s' is the Enchantment

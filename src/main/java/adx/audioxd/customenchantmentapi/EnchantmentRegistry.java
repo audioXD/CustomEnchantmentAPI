@@ -322,14 +322,17 @@ public class EnchantmentRegistry {
 		List<String> lore = data.getLore();
 		if(lore.isEmpty()) return false;
 
-		List<String> newLore = new ArrayList<String>();
-
-		for(String line : lore) {
-			if(!enchantment.hasCustomEnchantment(line)) newLore.add(line);
+		Iterator<String> iterator = lore.iterator();
+		boolean flag = false;
+		while(iterator.hasNext()){
+			if(enchantment.hasCustomEnchantment(iterator.next())){
+				iterator.remove();
+				flag = true;
+			}
 		}
-		if(lore.equals(newLore)) return false;
+		if(!flag) return false;
 
-		data.setLore(newLore);
+		data.setLore(lore);
 		item.setItemMeta(data);
 		CustomEnchantmentAPI.getCEAPILogger().info("Unenchanted item with: " + enchantment.getDisplay(""));
 		enchantment.fireEvent(new EUnenchantEvent(item));
@@ -428,15 +431,18 @@ public class EnchantmentRegistry {
 
 		String tagID = getTagID(enchantment);
 		List<MetadataValue> mValues = entity.getMetadata(tagID);
+		if(mValues == null || mValues.isEmpty()) return false;
 
-		if(!mValues.isEmpty()) {
-			for(MetadataValue mV : mValues.toArray(new MetadataValue[mValues.size()])) {
-				if(mV.getOwningPlugin().equals(CustomEnchantmentAPI.getInstance())) {
-					entity.removeMetadata(tagID, CustomEnchantmentAPI.getInstance());
-					return true;
-				}
+		Iterator<MetadataValue> iterator = mValues.iterator();
+		while(iterator.hasNext()){
+			MetadataValue mV = iterator.next();
+			if(mV.getOwningPlugin().equals(CustomEnchantmentAPI.getInstance())) {
+				iterator.remove();
+				entity.removeMetadata(tagID, CustomEnchantmentAPI.getInstance());
+				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -500,10 +506,10 @@ public class EnchantmentRegistry {
 	}
 
 	/**
-	 * Fires the Event for every Enchanted Enchantment.
+	 * Fires the Event/s for every Enchanted Enchantment.
 	 *
 	 * @param enchantments The array of Enchantments.
-	 * @param event        The instance of the EnchantmnetEvent.
+	 * @param events        The instance of the EnchantmentEvent/s.
 	 */
 	public static void fireEvents(Enchantment[] enchantments, EnchantmentEvent... events) {
 		if(enchantments == null || events == null || events.length < 1) return;

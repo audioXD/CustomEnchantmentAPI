@@ -497,9 +497,13 @@ public class EnchantmentRegistry {
 	public static void fireEvents(Enchanted[] enchantedEnchantments, EnchantmentEvent... events) {
 		if(enchantedEnchantments == null || events == null || events.length < 1) return;
 
+		int count = 0;
+		for(int i = 0; i < events.length; i++){ if(events[i] == null) count++; }
+		if(count >= events.length) return;
+
 		for(Enchanted ench : enchantedEnchantments) {
 			for(EnchantmentEvent event : events) {
-				if(event == null) return;
+				if(event == null) continue;
 				ench.fireEvent(event);
 			}
 		}
@@ -514,9 +518,13 @@ public class EnchantmentRegistry {
 	public static void fireEvents(Enchantment[] enchantments, EnchantmentEvent... events) {
 		if(enchantments == null || events == null || events.length < 1) return;
 
+		int count = 0;
+		for(int i = 0; i < events.length; i++){ if(events[i] == null) count++; }
+		if(count >= events.length) return;
+
 		for(Enchantment ench : enchantments) {
 			for(EnchantmentEvent event : events) {
-				if(event == null) return;
+				if(event == null) continue;
 				ench.fireEvent(event);
 			}
 		}

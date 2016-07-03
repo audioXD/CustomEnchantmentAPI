@@ -20,16 +20,83 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 public class EnchantmentRegistry {
-	// Global fields
 	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<>();
+	/**
+	 * Gets all Enchantments registered in a HashMap.
+	 *
+	 * @return Returns a Map.
+	 */
+	public static synchronized Map<Plugin, Map<String, Enchantment>> getEnchantments() {
+		return enchantmentsMap;
+	}
+
 
 	private static final Set<RegisteredEnchantment> enchantments = new HashSet<>();
-	private static final String salt = "adx_536_";
-	private static volatile Enchantment[] backedActiveEnchantments = null;
 
-	// End of Global Fields
-	// Constructor
+
+	private static volatile Enchantment[] backedActiveEnchantments = null;
+	/**
+	 * returns a array of Enchantment[].
+	 *
+	 * @return Returns a Enchantment[].
+	 */
+	public static synchronized Enchantment[] getEnchantmentsArray() {
+		if(backedActiveEnchantments != null) return backedActiveEnchantments;
+		return bake();
+	}
+	/**
+	 * This method in a bake method for synchronization
+	 *
+	 * @return Returns a list of Enchantments that are thread safe.
+	 */
+	private static Enchantment[] bake() {
+		Enchantment[] baked = backedActiveEnchantments;
+		if(baked == null) {
+			// Set -> array
+			synchronized(EnchantmentRegistry.class) {
+				if((baked = backedActiveEnchantments) == null) {
+					Map<String, Enchantment> active = new HashMap<>();
+
+					for(RegisteredEnchantment en : enchantments) {
+						if(CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().isActive(
+								en.getPlugin(),
+								en.getEnchantment()
+						)) {
+							if(active.containsKey(en.getEnchantment().getDisplay(""))) {
+								en.setActive(false);
+								continue;
+							}
+
+							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());
+						}
+					}
+
+					baked = active.values().toArray(new Enchantment[active.values().size()]);
+					Arrays.sort(baked);
+					backedActiveEnchantments = baked;
+
+				}
+			}
+
+		}
+		return baked;
+	}
+	/**
+	 * Rebuild the Enchantments Array.
+	 */
+	public synchronized static void rebuildEnchantmentsArray() {
+		if(backedActiveEnchantments != null)
+			backedActiveEnchantments = null;
+	}
+
+	// -------------------------------------------------- //
+	//                    CONSTRUCTOR                     //
+	// -------------------------------------------------- //
 	private EnchantmentRegistry() {}
+
+	// -------------------------------------------------- //
+	//              ENCHANTMENT REGISTRATION              //
+	// -------------------------------------------------- //
 
 	/**
 	 * This method registers the Enchantment.
@@ -160,6 +227,10 @@ public class EnchantmentRegistry {
 		backedActiveEnchantments = null;
 	}
 
+	// -------------------------------------------------- //
+	//                 ENCHNATMNT IDs                     //
+	// -------------------------------------------------- //
+
 	/**
 	 * Gets the Enchantment from the ID.
 	 *
@@ -187,11 +258,6 @@ public class EnchantmentRegistry {
 		return null;
 	}
 
-
-	/* ************************** */
-	/*          Items             */
-	/* ************************** */
-
 	/**
 	 * Returns a ID. That can be used from getFromID().
 	 *
@@ -203,6 +269,39 @@ public class EnchantmentRegistry {
 		if(plugin == null) return null;
 		if(enchantment == null) return null;
 		return plugin.getName() + ":" + getEnchantmentsMapID(enchantment);
+	}
+
+
+	// -------------------------------------------------- //
+	//                ITEM ENCHANTMENT                    //
+	// -------------------------------------------------- //
+
+	/**
+	 * Gets a array of Enchanted Enchantments on the item.
+	 *
+	 * @param item The item you want to list a array of Enchanted.
+	 * @return A array of Enchanted Enchantments.
+	 */
+	public static synchronized Enchanted[] getEnchantments(ItemStack item) {
+		List<Enchanted> res = new ArrayList<>();
+		if(ItemUtil.isEmpty(item)) return res.toArray(new Enchanted[res.size()]);
+		if(!item.hasItemMeta()) return res.toArray(new Enchanted[res.size()]);
+		ItemMeta data = item.getItemMeta();
+		if(!data.hasLore()) return res.toArray(new Enchanted[res.size()]);
+
+		for(String line : data.getLore()) {
+			if(line == null) continue;
+			if(line.equalsIgnoreCase("")) continue;
+
+			for(Enchantment ench : bake()) {
+				if(ench.hasCustomEnchantment(line)) {
+					int lvl = RomanNumeral.getIntFromRoman(line.substring(line.lastIndexOf(" ") + 1));
+					res.add(new Enchanted(ench, lvl));
+				}
+			}
+		}
+
+		return res.toArray(new Enchanted[res.size()]);
 	}
 
 	/**
@@ -285,75 +384,36 @@ public class EnchantmentRegistry {
 		return flag;
 	}
 
-	/* ************************** */
-	/*          Entities          */
-	/* ************************** */
+	// -------------------------------------------------- //
+	//                ENTITY ENCHANTMENT                  //
+	// -------------------------------------------------- //
 
-	/**
-	 * Gets a array of Enchanted Enchantments on the item.
-	 *
-	 * @param item The item you want to list a array of Enchanted.
-	 * @return A array of Enchanted Enchantments.
-	 */
-	public static synchronized Enchanted[] getEnchantments(ItemStack item) {
-		List<Enchanted> res = new ArrayList<>();
-		if(ItemUtil.isEmpty(item)) return res.toArray(new Enchanted[res.size()]);
-		if(!item.hasItemMeta()) return res.toArray(new Enchanted[res.size()]);
-		ItemMeta data = item.getItemMeta();
-		if(!data.hasLore()) return res.toArray(new Enchanted[res.size()]);
+	private static final String SALT = "adx_5367890987767_";
 
-		for(String line : data.getLore()) {
-			if(line == null) continue;
-			if(line.equalsIgnoreCase("")) continue;
+	private synchronized static String getTagID(Enchantment enchantment) {
+		if(enchantment == null) return null;
+		return SALT + enchantment.getName();
 
-			for(Enchantment ench : bake()) {
-				if(ench.hasCustomEnchantment(line)) {
-					int lvl = RomanNumeral.getIntFromRoman(line.substring(line.lastIndexOf(" ") + 1));
-					res.add(new Enchanted(ench, lvl));
-				}
-			}
-		}
-
-		return res.toArray(new Enchanted[res.size()]);
 	}
 
-	/*
 	/**
-	 * This method in a bake method for synchronization
+	 * Gets the Enchanted Enchantments on the Entity.
 	 *
-	 * @return Returns a list of Enchantments that are thread safe.
+	 * @param entity The Entity that you want to scan.
+	 * @return A Enchanted[] array.
 	 */
-	private static Enchantment[] bake() {
-		Enchantment[] baked = backedActiveEnchantments;
-		if(baked == null) {
-			// Set -> array
-			synchronized(EnchantmentRegistry.class) {
-				if((baked = backedActiveEnchantments) == null) {
-					Map<String, Enchantment> active = new HashMap<>();
-
-					for(RegisteredEnchantment en : enchantments) {
-						if(CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().isActive(
-								en.getPlugin(),
-								en.getEnchantment()
-						)) {
-							if(active.containsKey(en.getEnchantment().getDisplay(""))) {
-								en.setActive(false);
-								continue;
-							}
-
-							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());
-						}
-					}
-
-					baked = active.values().toArray(new Enchantment[active.values().size()]);
-					Arrays.sort(baked);
-					backedActiveEnchantments = baked;
-
+	public synchronized static Enchanted[] getEnchantments(Entity entity) {
+		List<Enchanted> enchanted = new ArrayList<>();
+		{
+			for(Enchantment enchantment : bake()) {
+				String tagID = getTagID(enchantment);
+				if(entity.hasMetadata(tagID)) {
+					int lvl = entity.getMetadata(tagID).get(0).asInt();
+					enchanted.add(new Enchanted(enchantment, lvl));
 				}
 			}
-
 		}
-		return baked;
+		return enchanted.toArray(new Enchanted[enchanted.size()]);
 	}
 
 	/**
@@ -378,12 +438,6 @@ public class EnchantmentRegistry {
 			}
 		}
 		return false;
-	}
-
-	private synchronized static String getTagID(Enchantment enchantment) {
-		if(enchantment == null) return null;
-		return salt + enchantment.getName();
-
 	}
 
 	/**
@@ -424,49 +478,24 @@ public class EnchantmentRegistry {
 		return false;
 	}
 
-	/* ************************** */
-	/*          Other             */
-	/* ************************** */
+	// -------------------------------------------------- //
+	//                  EVENT FIRING                      //
+	// -------------------------------------------------- //
 
 	/**
-	 * Gets the Enchanted Enchantments on the Entity.
-	 *
-	 * @param entity The Entity that you want to scan.
-	 * @return A Enchanted[] array.
-	 */
-	public synchronized static Enchanted[] getEnchantments(Entity entity) {
-		List<Enchanted> enchanted = new ArrayList<>();
-		{
-			for(Enchantment enchantment : bake()) {
-				String tagID = getTagID(enchantment);
-				if(entity.hasMetadata(tagID)) {
-					int lvl = entity.getMetadata(tagID).get(0).asInt();
-					enchanted.add(new Enchanted(enchantment, lvl));
-				}
-			}
-		}
-		return enchanted.toArray(new Enchanted[enchanted.size()]);
-	}
-
-	/**
-	 * Rebuild the Enchantments Array.
-	 */
-	public synchronized static void rebuildEnchantmentsArray() {
-		if(backedActiveEnchantments != null)
-			backedActiveEnchantments = null;
-	}
-
-	/**
-	 * Fires the Event for every Enchanted Enchantment.
+	 * Fires the Event/s for every Enchanted Enchantment.
 	 *
 	 * @param enchantedEnchantments The array of Enchanted Enchantments.
-	 * @param event                 The instance of the EnchantmentEvent.
+	 * @param events                 The instance of the EnchantmentEvent/s.
 	 */
-	public static void fireEvents(Enchanted[] enchantedEnchantments, EnchantmentEvent event) {
-		if(enchantedEnchantments == null || event == null) return;
+	public static void fireEvents(Enchanted[] enchantedEnchantments, EnchantmentEvent... events) {
+		if(enchantedEnchantments == null || events == null || events.length < 1) return;
 
 		for(Enchanted ench : enchantedEnchantments) {
-			ench.fireEvent(event);
+			for(EnchantmentEvent event : events) {
+				if(event == null) return;
+				ench.fireEvent(event);
+			}
 		}
 	}
 
@@ -476,31 +505,14 @@ public class EnchantmentRegistry {
 	 * @param enchantments The array of Enchantments.
 	 * @param event        The instance of the EnchantmnetEvent.
 	 */
-	public static void fireEvents(Enchantment[] enchantments, EnchantmentEvent event) {
-		if(enchantments == null || event == null) return;
+	public static void fireEvents(Enchantment[] enchantments, EnchantmentEvent... events) {
+		if(enchantments == null || events == null || events.length < 1) return;
 
 		for(Enchantment ench : enchantments) {
-			ench.fireEvent(event);
+			for(EnchantmentEvent event : events) {
+				if(event == null) return;
+				ench.fireEvent(event);
+			}
 		}
-	}
-// Getters
-
-	/**
-	 * returns a array of Enchantment[].
-	 *
-	 * @return Returns a Enchantment[].
-	 */
-	public static synchronized Enchantment[] getEnchantmentsArray() {
-		if(backedActiveEnchantments != null) return backedActiveEnchantments;
-		return bake();
-	}
-
-	/**
-	 * Gets all Enchantments registered in a HashMap.
-	 *
-	 * @return Returns a Map.
-	 */
-	public static synchronized Map<Plugin, Map<String, Enchantment>> getEnchantments() {
-		return enchantmentsMap;
 	}
 }

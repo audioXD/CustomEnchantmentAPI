@@ -9,16 +9,6 @@ import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
 import org.bukkit.ChatColor;
 
 public abstract class Enchantment implements Comparable<Enchantment> {
-	protected final String name;
-	/**
-	 * Gets the Enchantment name
-	 *
-	 * @return The Enchantment name.
-	 */
-	public String getName() {
-		return name;
-	}
-
 	protected final String displayName;
 	/**
 	 * Gets the display name that the enchantment will have when enchanted.
@@ -36,7 +26,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 * @param romanNumeral The roman numeral.
 	 * @return The display name.
 	 */
-	public final String getDisplay(String romanNumeral) {
+	public String getDisplay(String romanNumeral) {
 		return displayName + " " + romanNumeral;
 	}
 
@@ -89,8 +79,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 * @param priority The priority that the Enchantment has.
 	 */
 	public Enchantment(String name, ItemType type, int maxLvl, EnchantmentPriority priority) {
-		this.name = CustomEnchantmentAPI.getInstance().getDefaultConfig().CHECK_FOR_UPDATES.getValue() ? name : ChatColor.stripColor(name);
-		this.displayName = this.name;
+		this.displayName = name;
 
 		this.type = type;
 		if(maxLvl < 1) throw new IllegalArgumentException("The Max Level must be at least 1.");
@@ -163,7 +152,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		String display = this.getDisplay("");
 		if(!CustomEnchantmentAPI.getInstance().getDefaultConfig().COLOR_CODE_SPECIFIC.getValue()) {
 			line = ChatColor.stripColor(line);
-			display = this.getName() + " ";
+			display = ChatColor.stripColor(display);
 		}
 		int displayLength = display.length();
 

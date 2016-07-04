@@ -155,7 +155,7 @@ public class EnchantmentRegistry {
 	 * @return The ID.
 	 */
 	public static String getEnchantmentsMapID(Enchantment enchantment) {
-		return ChatColor.stripColor(enchantment.getName().toUpperCase()).replace(" ", "_");
+		return ChatColor.stripColor(enchantment.getDisplay("").trim().toUpperCase()).replace(" ", "_");
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class EnchantmentRegistry {
 
 	private synchronized static String getTagID(Enchantment enchantment) {
 		if(enchantment == null) return null;
-		return SALT + enchantment.getName();
+		return SALT + enchantment.getDisplay("").trim().replace(' ', '_');
 
 	}
 

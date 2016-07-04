@@ -35,7 +35,6 @@ public class BowListener extends CEAPIListenerUtils {
 		EBowShootEvent eEvent = new EBowShootEvent(event.getBow(), event.getEntity(),
 		                                           event.getProjectile()
 		);
-		eEvent.setCancelled(event.isCancelled());
 		{
 			for(Enchanted ench : EnchantmentRegistry.getEnchantments(event.getBow())) {
 				ench.fireEvent(eEvent);
@@ -54,7 +53,6 @@ public class BowListener extends CEAPIListenerUtils {
 		Arrow arrow = (Arrow) event.getDamager();
 
 		EArrowHitEvent eEvent = new EArrowHitEvent(target, arrow, event.getDamage());
-		eEvent.setCancelled(event.isCancelled());
 		{
 			EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getDamager()), eEvent);
 		}

@@ -41,9 +41,10 @@ public class DamageListener extends CEAPIListenerUtils {
 	//                      DAMAGE EVENTS                         //
 	// ---------------------------------------------------------- //
 
+	public static boolean active = true;
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamage(EntityDamageByEntityEvent event) {
-		if(event.getEntity() == null || event.getDamager() == null)
+		if(!active || event.getEntity() == null || event.getDamager() == null)
 			return;
 		//LivingEntity owner, Entity entit
 
@@ -104,6 +105,7 @@ public class DamageListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPureDamage(EntityDamageEvent event) {
+		if(!active) return;
 		if(!(event.getEntity() instanceof LivingEntity)) return;
 		LivingEntity entity = (LivingEntity) event.getEntity();
 

@@ -70,17 +70,18 @@ public class ToolsListener extends CEAPIListenerUtils {
 		event.setBuild(eEvent.canBuild());
 	}
 
-	@EventHandler (priority = EventPriority.MONITOR)
+
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event) {
 		if(event.getPlayer() == null || event.getAction() == null || ItemUtil.isEmpty(event.getItem())) return;
 
 		HandType hT = CustomEnchantmentAPI.getInstance().getNSM().isHandMainHAnd(event) ? HandType.MAIN : HandType.OFF;
-		EInteractEvent e = new EInteractEvent(event.getItem(), event.getPlayer(), event.getAction(), event.getBlockFace(), event.getClickedBlock(), hT);
-		e.setCancelled(event.isCancelled());
-		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getItem()), e);
-		event.setCancelled(e.isCancelled());
 
-		// Updating the inventory if something changed
-		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
+		EInteractEvent e = new EInteractEvent(event.getItem(), event.getPlayer(), event.getAction(), event.getBlockFace(), event.getClickedBlock(), hT);
+
+		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getItem()), e);
+
+		event.setCancelled(e.isCancelled());
 	}
 }

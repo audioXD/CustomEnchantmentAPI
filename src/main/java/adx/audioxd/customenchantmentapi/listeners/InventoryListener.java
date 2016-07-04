@@ -114,4 +114,9 @@ public class InventoryListener implements Listener {
 			CEAPIListenerUtils.unenquipt(entity, item);
 		}
 	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void equip(PlayerInteractEvent event) {
+		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
+	}
 }

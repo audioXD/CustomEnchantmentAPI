@@ -4,7 +4,6 @@ package adx.audioxd.customenchantmentapi.commands.ceapi;
 import adx.audioxd.customenchantmentapi.CEAPIPermissions;
 import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.commands.CEAPICommand;
-import adx.audioxd.customenchantmentapi.commands.Visibility;
 import adx.audioxd.customenchantmentapi.commands.exceptions.CEAPICommandException;
 import adx.audioxd.customenchantmentapi.commands.requirement.RequirementHasPerm;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;

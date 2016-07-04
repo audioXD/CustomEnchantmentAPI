@@ -1,12 +1,9 @@
 package adx.audioxd.customenchantmentapi.listeners;
 
 
-import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
-import adx.audioxd.customenchantmentapi.events.inventory.EUnequipEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
 import adx.audioxd.customenchantmentapi.listeners.extra.EEquip;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
@@ -16,13 +13,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-
-import static adx.audioxd.customenchantmentapi.EnchantmentRegistry.getEnchantments;
 
 public class InventoryListener implements Listener {
 	private Plugin plugin;

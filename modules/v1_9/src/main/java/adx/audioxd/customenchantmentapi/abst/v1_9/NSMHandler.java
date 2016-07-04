@@ -3,7 +3,6 @@ package adx.audioxd.customenchantmentapi.abst.v1_9;
 
 import adx.audioxd.customenchantmentapi.abst.api.NSM;
 import adx.audioxd.customenchantmentapi.abst.api.VersionListener;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;

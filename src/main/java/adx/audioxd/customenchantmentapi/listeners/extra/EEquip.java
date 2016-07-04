@@ -3,7 +3,6 @@ package adx.audioxd.customenchantmentapi.listeners.extra;
 
 import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

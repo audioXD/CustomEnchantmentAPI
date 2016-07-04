@@ -6,7 +6,6 @@ import adx.audioxd.customenchantmentapi.commands.exceptions.CEAPICommandExceptio
 import adx.audioxd.customenchantmentapi.commands.exceptions.TypeException;
 import adx.audioxd.customenchantmentapi.commands.requirement.Requirement;
 import adx.audioxd.customenchantmentapi.commands.type.Type;
-import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

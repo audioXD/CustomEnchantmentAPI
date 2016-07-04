@@ -8,7 +8,6 @@ import adx.audioxd.customenchantmentapi.config.DefaultConfig;
 import adx.audioxd.customenchantmentapi.config.EnchantmentsConfig;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.listeners.*;
-import adx.audioxd.customenchantmentapi.listeners.InventoryListener;
 import adx.audioxd.customenchantmentapi.listeners.extra.EEquip;
 import adx.audioxd.customenchantmentapi.plugin.TLogger;
 import adx.audioxd.customenchantmentapi.utils.GameLogger;

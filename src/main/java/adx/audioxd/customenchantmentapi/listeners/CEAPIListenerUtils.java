@@ -13,7 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import static adx.audioxd.customenchantmentapi.EnchantmentRegistry.*;
+import static adx.audioxd.customenchantmentapi.EnchantmentRegistry.getEnchantments;
 
 public abstract class CEAPIListenerUtils implements Listener {
 	protected CustomEnchantmentAPI plugin;

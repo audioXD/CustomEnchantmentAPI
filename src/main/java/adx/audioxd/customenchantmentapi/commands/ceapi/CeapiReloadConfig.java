@@ -3,7 +3,6 @@ package adx.audioxd.customenchantmentapi.commands.ceapi;
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 import adx.audioxd.customenchantmentapi.commands.CEAPICommand;
-import adx.audioxd.customenchantmentapi.commands.Visibility;
 import adx.audioxd.customenchantmentapi.commands.exceptions.CEAPICommandException;
 import adx.audioxd.customenchantmentapi.commands.requirement.RequirementIsOP;
 

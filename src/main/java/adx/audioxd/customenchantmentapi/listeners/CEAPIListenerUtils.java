@@ -6,7 +6,10 @@ import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.events.inventory.EEquipEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.EUnequipEvent;
-import adx.audioxd.customenchantmentapi.events.inventory.hand.*;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInMainHandEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInOffHandEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemNotInMainHandEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemNotInOffHandEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 import org.bukkit.entity.LivingEntity;
@@ -17,7 +20,8 @@ import static adx.audioxd.customenchantmentapi.EnchantmentRegistry.getEnchantmen
 
 public abstract class CEAPIListenerUtils implements Listener {
 	protected CustomEnchantmentAPI plugin;
-	public CustomEnchantmentAPI getPlugin(){ return plugin; }
+
+	public CustomEnchantmentAPI getPlugin() { return plugin; }
 
 	// ---------------------------------------------------------- //
 	//                      CONSTRUCTOR                           //
@@ -31,14 +35,15 @@ public abstract class CEAPIListenerUtils implements Listener {
 	//               METHODS FOR EASE OF USE                      //
 	// ---------------------------------------------------------- //
 
-	public static void enquipt(LivingEntity owner, ItemStack item) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
+	public static boolean enquipt(LivingEntity owner, ItemStack item) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
 
 		EEquipEvent eEvent = new EEquipEvent(item, owner);
 		EnchantmentRegistry.fireEvents(getEnchantments(item), eEvent);
+		return !eEvent.isCancelled();
 	}
-	public static void unenquipt(LivingEntity owner, ItemStack item) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
+	public static boolean unenquipt(LivingEntity owner, ItemStack item) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
 
 		EUnequipEvent eEvent = new EUnequipEvent(item, owner);
 		EnchantmentRegistry.fireEvents(getEnchantments(item), eEvent);
@@ -49,65 +54,67 @@ public abstract class CEAPIListenerUtils implements Listener {
 
 			enquipt(owner, i);
 		}
+		return eEvent.isCancelled();
 	}
 
+	public static boolean itemInHand(LivingEntity owner, ItemStack item, HandType handType) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
 
-	public static void itemInHand(LivingEntity owner, ItemStack item, HandType handType) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
-
-		EItemHandEvent eItemHandEvent = new EItemInHandEvent(item, owner, handType);
 		EItemInMainHandEvent eItemInMainHandEvent = new EItemInMainHandEvent(item, owner);
 		EItemInOffHandEvent eItemInOffHandEvent = new EItemInOffHandEvent(item, owner);
 
-		for(Enchanted enchanted : getEnchantments(item)) {
-			enchanted.fireEvent(eItemHandEvent);
-			if(HandType.MAIN.equals(handType))
-				enchanted.fireEvent(eItemInMainHandEvent);
-			if(HandType.OFF.equals(handType))
-				enchanted.fireEvent(eItemInOffHandEvent);
-		}
-	}
-	public static void itemNotInHand(LivingEntity owner, ItemStack item, HandType handType) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
+		if(HandType.MAIN.equals(handType))
+			EnchantmentRegistry.fireEvents(getEnchantments(item), eItemInMainHandEvent);
+		else if(HandType.OFF.equals(handType))
+			EnchantmentRegistry.fireEvents(getEnchantments(item), eItemInOffHandEvent);
 
-		EItemNotInHandEvent eItemNotInHandEvent = new EItemNotInHandEvent(item, owner, handType);
+		return !eItemInMainHandEvent.isCancelled() && !eItemInOffHandEvent.isCancelled();
+	}
+	public static boolean itemNotInHand(LivingEntity owner, ItemStack item, HandType handType) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
+
 		EItemNotInMainHandEvent eItemNotInMainHandEvent = new EItemNotInMainHandEvent(item, owner);
 		EItemNotInOffHandEvent eItemNotInOffHandEvent = new EItemNotInOffHandEvent(item, owner);
 
-		for(Enchanted enchanted : getEnchantments(item)) {
-			enchanted.fireEvent(eItemNotInHandEvent);
-			if(HandType.MAIN.equals(handType))
-				enchanted.fireEvent(eItemNotInMainHandEvent);
-			if(HandType.OFF.equals(handType))
-				enchanted.fireEvent(eItemNotInOffHandEvent);
-		}
+		if(HandType.MAIN.equals(handType))
+			EnchantmentRegistry.fireEvents(getEnchantments(item), eItemNotInMainHandEvent);
+		else if(HandType.OFF.equals(handType))
+			EnchantmentRegistry.fireEvents(getEnchantments(item), eItemNotInOffHandEvent);
 
-		if(HandType.MAIN.equals(handType)) itemInOffHand(owner, ItemUtil.getOffHandItem(owner));
-		if(HandType.OFF.equals(handType)) itemInMainHand(owner, ItemUtil.getMainHandItem(owner));
+		if(eItemNotInMainHandEvent.isCancelled() || eItemNotInOffHandEvent.isCancelled()) return false;
+
+		if(HandType.MAIN.equals(handType)) return itemInOffHand(owner, ItemUtil.getOffHandItem(owner));
+		if(HandType.OFF.equals(handType)) return itemInMainHand(owner, ItemUtil.getMainHandItem(owner));
+		return true;
 	}
 
-	public static void itemInOffHand(LivingEntity owner, ItemStack item) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
+	public static boolean itemInOffHand(LivingEntity owner, ItemStack item) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
 
 		EItemInOffHandEvent eEvent = new EItemInOffHandEvent(item, owner);
 		EnchantmentRegistry.fireEvents(getEnchantments(item), eEvent);
+		return !eEvent.isCancelled();
 	}
-	public static void itemNotInOffHand(LivingEntity owner, ItemStack item) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
+	public static boolean itemNotInOffHand(LivingEntity owner, ItemStack item) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
+
 		EItemNotInOffHandEvent eEvent = new EItemNotInOffHandEvent(item, owner);
 		EnchantmentRegistry.fireEvents(getEnchantments(item), eEvent);
+		return !eEvent.isCancelled();
 	}
 
-	public static void itemInMainHand(LivingEntity owner, ItemStack item) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
+	public static boolean itemInMainHand(LivingEntity owner, ItemStack item) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
 
 		EItemInMainHandEvent eEvent = new EItemInMainHandEvent(item, owner);
 		EnchantmentRegistry.fireEvents(getEnchantments(item), eEvent);
+		return !eEvent.isCancelled();
 	}
-	public static void itemNotInMainHand(LivingEntity owner, ItemStack item) {
-		if(owner == null || ItemUtil.isEmpty(item)) return;
+	public static boolean itemNotInMainHand(LivingEntity owner, ItemStack item) {
+		if(owner == null || ItemUtil.isEmpty(item)) return true;
 
 		EItemNotInMainHandEvent eEvent = new EItemNotInMainHandEvent(item, owner);
 		EnchantmentRegistry.fireEvents(getEnchantments(item), eEvent);
+		return !eEvent.isCancelled();
 	}
 }

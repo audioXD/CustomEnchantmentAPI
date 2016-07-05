@@ -41,7 +41,7 @@ public class CeapiEnchant extends CEAPICommand {
 		if(lvl < 1) throw new CEAPICommandException(lc.LEVEL_LESS_THAN_ONE.format());
 
 		if(EnchantmentRegistry.enchant(ItemUtil.getMainHandItem(me), ench, lvl, true, true)){
-			CEAPIListenerUtils.itemInHand(me, ItemUtil.getMainHandItem(me), HandType.MAIN);
+			CEAPIListenerUtils.itemInMainHand(me, ItemUtil.getMainHandItem(me));
 			throw new CEAPICommandException(lc.ENCHANT_SUCCESS.format(ench.getDisplay(lvl)));
 		}
 		throw new CEAPICommandException(lc.ENCHANT_ERROR.format(ench.getDisplay(lvl)));

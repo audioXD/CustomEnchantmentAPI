@@ -6,7 +6,7 @@ import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventHandle
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventPriority;
 import adx.audioxd.customenchantmentapi.enums.ItemType;
 import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
-import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInHandEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.EGetItemInHandEvent;
 
 
 public class TestEnch extends Enchantment {
@@ -17,32 +17,32 @@ public class TestEnch extends Enchantment {
 	}
 
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.MONITOR)
-	public void event(EItemInHandEvent e) {
+	public void event(EGetItemInHandEvent e) {
 		System.out.println("Fired event with priority MONITOR");
 	}
 
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.LOWEST)
-	public void event1(EItemInHandEvent e) {
+	public void event1(EGetItemInHandEvent e) {
 		System.out.println("Fired event with priority LOWEST");
 	}
 
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.LOW)
-	public void event2(EItemInHandEvent e) {
+	public void event2(EGetItemInHandEvent e) {
 		System.out.println("Fired event with priority LOW");
 	}
 
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.NORMAL)
-	public void event3(EItemInHandEvent e) {
+	public void event3(EGetItemInHandEvent e) {
 		System.out.println("Fired event with priority NORMAL");
 	}
 
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.HIGH)
-	public void event4(EItemInHandEvent e) {
+	public void event4(EGetItemInHandEvent e) {
 		System.out.println("Fired event with priority HIGH");
 	}
 
 	@EnchantmentEventHandler(priority = EnchantmentEventPriority.HIGHEST)
-	public void event5(EItemInHandEvent e) {
+	public void event5(EGetItemInHandEvent e) {
 		System.out.println("Fired event with priority HIGHEST");
 	}
 

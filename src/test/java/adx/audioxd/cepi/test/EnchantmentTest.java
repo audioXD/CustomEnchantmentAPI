@@ -3,7 +3,7 @@ package adx.audioxd.cepi.test;
 
 import adx.audioxd.customenchantmentapi.enums.EnchantmentPriority;
 import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
-import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInHandEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.EGetItemInHandEvent;
 import org.bukkit.Material;
 import org.junit.Test;
 
@@ -87,7 +87,7 @@ public class EnchantmentTest {
 
 	@Test
 	public void fireEventsPriority() {
-		EItemInHandEvent e = new EItemInHandEvent(null, null, null);
+		EGetItemInHandEvent e = new EGetItemInHandEvent(null, null, null);
 		tEnch.fireEvent(e);
 	}
 

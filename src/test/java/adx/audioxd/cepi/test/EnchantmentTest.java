@@ -3,7 +3,9 @@ package adx.audioxd.cepi.test;
 
 import adx.audioxd.customenchantmentapi.enums.EnchantmentPriority;
 import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
-import adx.audioxd.customenchantmentapi.events.inventory.hand.EGetItemInHandEvent;
+import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantEntityEvent;
+import adx.audioxd.customenchantmentapi.events.enchant.unenchant.EUnenchantEntityEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInHandEvent;
 import org.bukkit.Material;
 import org.junit.Test;
 
@@ -14,7 +16,7 @@ public class EnchantmentTest {
 
 	@Test
 	public void getName() {
-		System.out.println("Name: " + tEnch.getName());
+		System.out.println("Name: " + tEnch.getDisplay(""));
 	}
 
 	@Test
@@ -87,7 +89,7 @@ public class EnchantmentTest {
 
 	@Test
 	public void fireEventsPriority() {
-		EGetItemInHandEvent e = new EGetItemInHandEvent(null, null, null);
+		EItemInHandEvent e = new EItemInHandEvent(null, null, null);
 		tEnch.fireEvent(e);
 	}
 
@@ -98,5 +100,11 @@ public class EnchantmentTest {
 
 		tEnch.fireEvent(e);
 		System.out.println("Cancelled: " + e.isCancelled());
+	}
+
+	@Test
+	public void testFireingInterfacesAndSuperClass(){
+		EEnchantEntityEvent e = new EEnchantEntityEvent(null);
+		tEnch.fireEvent(e);
 	}
 }

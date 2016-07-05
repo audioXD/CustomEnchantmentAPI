@@ -3,6 +3,7 @@ package adx.audioxd.customenchantmentapi.enchantment;
 
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventHandler;
+import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantEvent;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -29,13 +30,11 @@ public class EventBus {
 	}
 	private void fireEvent(EnchantmentEvent event, int lvl, boolean sync, Class<?> type) {
 		if(event == null) throw new NullPointerException("Event cannot be null");
-		if(!EnchantmentEvent.class.isAssignableFrom(type)) return;
+		if(type == null || !EnchantmentEvent.class.isAssignableFrom(type)) return;
 
-		// Fires the supper classes and interfaces the implement EnchantmentEvent
-		fireEvent(event, lvl, sync, event.getClass().getSuperclass());
-		for(Class<?> inter : event.getClass().getInterfaces()) fireEvent(event, lvl, sync, inter);
+		fireEvent(event, lvl, sync, type.getSuperclass());
+		for(Class<?> inter : type.getInterfaces()){ fireEvent(event, lvl, sync, inter); }
 
-		// Fires the normal event
 		HandlerList handler = handlers.get(type);
 		if(handler == null) return;
 

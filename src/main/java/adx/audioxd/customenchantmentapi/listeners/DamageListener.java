@@ -43,10 +43,9 @@ public class DamageListener extends CEAPIListenerUtils {
 
 	public static boolean active = true;
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onDamage(EntityDamageByEntityEvent event) {
+	public void onDamageByEntity(EntityDamageByEntityEvent event) {
 		if(!active || event.getEntity() == null || event.getDamager() == null)
 			return;
-		//LivingEntity owner, Entity entit
 
 		if(event.getDamager() instanceof LivingEntity) {
 			LivingEntity owner = (LivingEntity) event.getDamager();
@@ -60,6 +59,8 @@ public class DamageListener extends CEAPIListenerUtils {
 			event.setCancelled(offenseEvent.isCancelled());
 			event.setDamage(offenseEvent.getDamage());
 		}
+
+		// Defensive
 		if(!(event.getEntity() instanceof LivingEntity)) return;
 
 		LivingEntity entity = (LivingEntity) event.getEntity();
@@ -68,7 +69,6 @@ public class DamageListener extends CEAPIListenerUtils {
 		ItemStack mainHand = ItemUtil.getMainHandItem(entity);
 		ItemStack offHand = ItemUtil.getOffHandItem(entity);
 
-		// Defensive
 		Map<Type, List<ItemStack>> defenseItems = new HashMap<>();
 		List<ItemStack> armor = new ArrayList<>(), shield = new ArrayList<>(), bereHand = new ArrayList<>(), horseArmor = new ArrayList<>();
 
@@ -105,8 +105,8 @@ public class DamageListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPureDamage(EntityDamageEvent event) {
-		if(!active) return;
-		if(!(event.getEntity() instanceof LivingEntity)) return;
+		if(!active || event instanceof EntityDamageByEntityEvent || !(event.getEntity() instanceof LivingEntity))
+			return;
 		LivingEntity entity = (LivingEntity) event.getEntity();
 
 		ItemStack mainHand = ItemUtil.getMainHandItem(entity);

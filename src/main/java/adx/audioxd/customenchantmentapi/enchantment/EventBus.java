@@ -25,9 +25,18 @@ public class EventBus {
 	}
 
 	void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
+		fireEvent(event, lvl, sync, event.getClass());
+	}
+	private void fireEvent(EnchantmentEvent event, int lvl, boolean sync, Class<?> type) {
 		if(event == null) throw new NullPointerException("Event cannot be null");
+		if(!EnchantmentEvent.class.isAssignableFrom(type)) return;
 
-		HandlerList handler = handlers.get(event.getClass());
+		// Fires the supper classes and interfaces the implement EnchantmentEvent
+		fireEvent(event, lvl, sync, event.getClass().getSuperclass());
+		for(Class<?> inter : event.getClass().getInterfaces()) fireEvent(event, lvl, sync, inter);
+
+		// Fires the normal event
+		HandlerList handler = handlers.get(type);
 		if(handler == null) return;
 
 		if(sync) {
@@ -37,5 +46,7 @@ public class EventBus {
 		} else {
 			handler.fireEvent(event, lvl);
 		}
+
+
 	}
 }

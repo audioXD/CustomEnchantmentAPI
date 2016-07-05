@@ -4,10 +4,13 @@ package adx.audioxd.customenchantmentapi;
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
-import adx.audioxd.customenchantmentapi.events.enchant.EEnchantEvent;
-import adx.audioxd.customenchantmentapi.events.enchant.EUnenchantEvent;
+import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantEntityEvent;
+import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantItemEvent;
+import adx.audioxd.customenchantmentapi.events.enchant.unenchant.EUnenchantEntityEvent;
+import adx.audioxd.customenchantmentapi.events.enchant.unenchant.EUnenchantItemEvent;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
+import adx.audioxd.customenchantmentapi.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -20,7 +23,10 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 public class EnchantmentRegistry {
+	private static final EnchantingData DEFAULT_ENCHANT_DATA = new EnchantingData();
+
 	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<>();
+
 	/**
 	 * Gets all Enchantments registered in a HashMap.
 	 *
@@ -35,6 +41,7 @@ public class EnchantmentRegistry {
 
 
 	private static volatile Enchantment[] backedActiveEnchantments = null;
+
 	/**
 	 * returns a array of Enchantment[].
 	 *
@@ -44,6 +51,7 @@ public class EnchantmentRegistry {
 		if(backedActiveEnchantments != null) return backedActiveEnchantments;
 		return bake();
 	}
+
 	/**
 	 * This method in a bake method for synchronization
 	 *
@@ -81,6 +89,7 @@ public class EnchantmentRegistry {
 		}
 		return baked;
 	}
+
 	/**
 	 * Rebuild the Enchantments Array.
 	 */
@@ -92,6 +101,7 @@ public class EnchantmentRegistry {
 	// -------------------------------------------------- //
 	//                    CONSTRUCTOR                     //
 	// -------------------------------------------------- //
+
 	private EnchantmentRegistry() {}
 
 	// -------------------------------------------------- //
@@ -271,7 +281,6 @@ public class EnchantmentRegistry {
 		return plugin.getName() + ":" + getEnchantmentsMapID(enchantment);
 	}
 
-
 	// -------------------------------------------------- //
 	//                ITEM ENCHANTMENT                    //
 	// -------------------------------------------------- //
@@ -324,19 +333,85 @@ public class EnchantmentRegistry {
 
 		Iterator<String> iterator = lore.iterator();
 		boolean flag = false;
-		while(iterator.hasNext()){
-			if(enchantment.hasCustomEnchantment(iterator.next())){
+		while(iterator.hasNext()) {
+			if(enchantment.hasCustomEnchantment(iterator.next())) {
 				iterator.remove();
 				flag = true;
 			}
 		}
 		if(!flag) return false;
 
+		EUnenchantItemEvent e = new EUnenchantItemEvent(item);
+		enchantment.fireEvent(e);
+		if(e.isCancelled()) return false;
+
 		data.setLore(lore);
 		item.setItemMeta(data);
-		CustomEnchantmentAPI.getCEAPILogger().info("Unenchanted item with: " + enchantment.getDisplay(""));
-		enchantment.fireEvent(new EUnenchantEvent(item));
 		return true;
+	}
+
+	/**
+	 * Enchants a ItemStack with a Enchantment.
+	 *
+	 * @param item        The item you want to enchant.
+	 * @param enchantment The Enchantment you want to enchant on a item.
+	 * @param level       The level of the enchantment.
+	 * @return If the enchant method was successful.
+	 */
+	public static boolean enchant(ItemStack item, Enchantment enchantment, int level) {
+		return enchant(item, enchantment, level, DEFAULT_ENCHANT_DATA);
+	}
+
+	/**
+	 * Enchants a ItemStack with a Enchantment.
+	 *
+	 * @param item        The item you want to enchant.
+	 * @param enchantment The Enchantment you want to enchant on a item.
+	 * @param level       The level of the enchantment.
+	 * @param data        The data for enchanting.
+	 * @return If the enchant method was successful.
+	 */
+	public static boolean enchant(ItemStack item, Enchantment enchantment, int level, EnchantingData data) {
+		if(ItemUtil.isEmpty(item) || enchantment == null) return false;  // Checking if null
+		if(!item.hasItemMeta()) return false; // GetItem validation
+		if(level < 1) return false; // Invalid
+
+		// Quick applying the data
+		if(!data.isUnsafeItemType() && !enchantment.getType().matchType(item)) return false;
+		if(!data.isUnsafeLevel() && level > enchantment.getMaxLvl()) level = enchantment.getMaxLvl();
+
+		final ItemMeta itemMeta = item.getItemMeta();
+		List<String> lore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
+		if(lore.contains(enchantment.getDisplay(level))) return false;
+
+		boolean success = true; // If true then I'm happy.
+
+		// Checking if the Enchantment is already applied.
+		Iterator<String> loreIterator = lore.iterator();
+		while(loreIterator.hasNext()) {
+			String line = loreIterator.next();
+			if(Text.isEmpty(line)) continue;
+			if(!enchantment.hasCustomEnchantment(line)) continue;
+
+			int lvl = RomanNumeral.getIntFromRoman(line.substring(line.lastIndexOf(" ") + 1));
+			if(data.isOverrideCurrent() || (data.isOverrideIfLargerThatCurrent() && level > lvl) || (data.isOverrideIfSmallerThanCurrent() && level < lvl)) {
+				loreIterator.remove();
+				continue;
+			} else success = false;
+		}
+		if(!success) return false;
+
+		EEnchantItemEvent e = new EEnchantItemEvent(item);
+		enchantment.fireEvent(e, level);
+		if(e.isCancelled()) return false;
+
+		lore.add(0, enchantment.getDisplay(level));
+
+		// Applying the changes to the item
+		itemMeta.setLore(lore);
+		item.setItemMeta(itemMeta);
+
+		return true; // Returning if successful.
 	}
 
 	/**
@@ -349,53 +424,26 @@ public class EnchantmentRegistry {
 	 * @param override_if_larger_level If it overrides if there's a larger level.
 	 * @return If the enchant method was successful.
 	 */
-	public static boolean enchant(ItemStack item, Enchantment enchantment, int level, boolean override,
-	                              boolean override_if_larger_level) {
-		if(ItemUtil.isEmpty(item)) return false;
-		if(enchantment == null) return false;
-		if(!enchantment.getType().matchType(item)) return false;
-		if(enchantment.getMaxLvl() < level) level = enchantment.getMaxLvl();
-
-		boolean flag = false;
-
-		ItemMeta data = item.getItemMeta();
-		{
-			List<String> lore = data.hasLore() ? data.getLore() : new ArrayList<String>();
-			{
-				if(!lore.contains(enchantment.getDisplay(level))) {
-					int maxLvl = 0;
-					for(int i = lore.size() - 1; i >= 0; i--) {
-						String line = lore.get(i);
-						if(enchantment.hasCustomEnchantment(line)) {
-							int lvl = RomanNumeral.getIntFromRoman(line.substring(line.lastIndexOf(" ") + 1));
-							if(lvl < level || override) lore.remove(i);
-							if(lvl > maxLvl) maxLvl = lvl;
-						}
-					}
-					if((level > maxLvl && override_if_larger_level) || override) {
-						lore.add(0, enchantment.getDisplay(level));
-						CustomEnchantmentAPI.getCEAPILogger()
-								.info("Enchanted item with: " + enchantment.getDisplay(level));
-						flag = true;
-					}
-				}
-			}
-			data.setLore(lore);
-		}
-		item.setItemMeta(data);
-		if(flag) enchantment.fireEvent(new EEnchantEvent(item));
-		return flag;
+	public static boolean enchant(ItemStack item, Enchantment enchantment, int level, boolean override, boolean override_if_larger_level) {
+		return enchant(item, enchantment, level, new EnchantingData().setOverrideCurrent(override).setOverrideIfLargerThatCurrent(override_if_larger_level));
 	}
 
 	// -------------------------------------------------- //
 	//                ENTITY ENCHANTMENT                  //
 	// -------------------------------------------------- //
 
-	private static final String SALT = "adx_5367890987767_";
+	/**
+	 * The Tag-Prefix used by {@code getTagID}.
+	 */
+	public static final String TAG_PREFIX = ("adx_" + UUID.randomUUID().toString() + "_").trim().replace(' ', '_');
 
-	private synchronized static String getTagID(Enchantment enchantment) {
+	/**
+	 * @param enchantment The Enchantment.
+	 * @return Returns a String withe the {@code TAG_PREFIX} at the beginning and the {@code Enchantment.getDisplay}(with ' ' replaced to '_').
+	 */
+	public static String getTagID(Enchantment enchantment) {
 		if(enchantment == null) return null;
-		return SALT + enchantment.getDisplay("").trim().replace(' ', '_');
+		return TAG_PREFIX + enchantment.getDisplay("").trim().replace(' ', '_');
 
 	}
 
@@ -434,9 +482,13 @@ public class EnchantmentRegistry {
 		if(mValues == null || mValues.isEmpty()) return false;
 
 		Iterator<MetadataValue> iterator = mValues.iterator();
-		while(iterator.hasNext()){
+		while(iterator.hasNext()) {
 			MetadataValue mV = iterator.next();
 			if(mV.getOwningPlugin().equals(CustomEnchantmentAPI.getInstance())) {
+				EUnenchantEntityEvent e = new EUnenchantEntityEvent(entity);
+				enchantment.fireEvent(e);
+				if(e.isCancelled()) return false;
+
 				iterator.remove();
 				entity.removeMetadata(tagID, CustomEnchantmentAPI.getInstance());
 				return true;
@@ -463,25 +515,26 @@ public class EnchantmentRegistry {
 		String tagID = getTagID(enchantment);
 		List<MetadataValue> mValues = entity.getMetadata(tagID);
 
+		boolean flag = false;
 		if(mValues.isEmpty() || override) {
-			entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
-			return true;
+			flag = true;
 		} else if(override_if_larger_level) {
 			int largest_lvl = 0;
-
 			for(MetadataValue mV : mValues) {
 				int current = mV.asInt();
-
-				if(current > largest_lvl)
-					largest_lvl = current;
+				if(current > largest_lvl) largest_lvl = current;
 			}
 
-			if(largest_lvl < lvl) {
-				entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
-				return true;
-			}
+			if(largest_lvl < lvl) flag = true;
 		}
-		return false;
+		if(!flag) return false;
+
+		EEnchantEntityEvent e = new EEnchantEntityEvent(entity);
+		enchantment.fireEvent(e, lvl);
+		if(e.isCancelled()) return false;
+
+		entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
+		return true;
 	}
 
 	// -------------------------------------------------- //
@@ -492,13 +545,13 @@ public class EnchantmentRegistry {
 	 * Fires the Event/s for every Enchanted Enchantment.
 	 *
 	 * @param enchantedEnchantments The array of Enchanted Enchantments.
-	 * @param events                 The instance of the EnchantmentEvent/s.
+	 * @param events                The instance of the EnchantmentEvent/s.
 	 */
 	public static void fireEvents(Enchanted[] enchantedEnchantments, EnchantmentEvent... events) {
 		if(enchantedEnchantments == null || events == null || events.length < 1) return;
 
 		int count = 0;
-		for(int i = 0; i < events.length; i++){ if(events[i] == null) count++; }
+		for(int i = 0; i < events.length; i++) { if(events[i] == null) count++; }
 		if(count >= events.length) return;
 
 		for(Enchanted ench : enchantedEnchantments) {
@@ -513,13 +566,13 @@ public class EnchantmentRegistry {
 	 * Fires the Event/s for every Enchanted Enchantment.
 	 *
 	 * @param enchantments The array of Enchantments.
-	 * @param events        The instance of the EnchantmentEvent/s.
+	 * @param events       The instance of the EnchantmentEvent/s.
 	 */
 	public static void fireEvents(Enchantment[] enchantments, EnchantmentEvent... events) {
 		if(enchantments == null || events == null || events.length < 1) return;
 
 		int count = 0;
-		for(int i = 0; i < events.length; i++){ if(events[i] == null) count++; }
+		for(int i = 0; i < events.length; i++) { if(events[i] == null) count++; }
 		if(count >= events.length) return;
 
 		for(Enchantment ench : enchantments) {
@@ -527,6 +580,130 @@ public class EnchantmentRegistry {
 				if(event == null) continue;
 				ench.fireEvent(event);
 			}
+		}
+	}
+
+	// -------------------------------------------------- //
+	//         EXTRA CLASSES/ENUMS/INTERFACES             //
+	// -------------------------------------------------- //
+
+	public static final class EnchantingData {
+		private boolean overrideCurrent = false;
+
+		public boolean isOverrideCurrent() { return overrideCurrent; }
+
+		public EnchantingData setOverrideCurrent(boolean overrideCurrent) {
+			this.overrideCurrent = overrideCurrent;
+			return this;
+		}
+
+		private boolean overrideIfLargerThatCurrent = true;
+
+		public boolean isOverrideIfLargerThatCurrent() { return overrideIfLargerThatCurrent; }
+
+		public EnchantingData setOverrideIfLargerThatCurrent(boolean overrideIfLargerThatCurrent) {
+			this.overrideIfLargerThatCurrent = overrideIfLargerThatCurrent;
+			return this;
+		}
+
+		private boolean overrideIfSmallerThanCurrent = true;
+
+		public boolean isOverrideIfSmallerThanCurrent() { return overrideIfSmallerThanCurrent; }
+
+		public EnchantingData setOverrideIfLowerThatCurrent(boolean overrideIfLowerThanCurrent) {
+			this.overrideIfSmallerThanCurrent = overrideIfLowerThanCurrent;
+			return this;
+		}
+
+		private boolean unsafe = false;
+
+		public boolean isUnsafe() { return unsafe; }
+
+		public EnchantingData setUnsafe(boolean unsafe) {
+			this.unsafe = unsafe;
+			this.setUnsafeItemType(unsafe);
+			this.setUnsafeLevel(true);
+			return this;
+		}
+
+		private boolean unsafeLevel = false;
+
+		public boolean isUnsafeLevel() { return unsafeLevel; }
+
+		public EnchantingData setUnsafeLevel(boolean unsafeLevel) {
+			this.unsafeLevel = unsafeLevel;
+			this.unsafe = true;
+
+			return this;
+		}
+
+		private boolean unsafeItemType = false;
+
+		public boolean isUnsafeItemType() { return unsafeItemType; }
+
+		public EnchantingData setUnsafeItemType(boolean unsafeItemType) {
+			this.unsafeItemType = unsafeItemType;
+			this.unsafe = true;
+
+			return this;
+		}
+
+		public EnchantingData() {}
+
+		/**
+		 * Constructor for EnchantingData.
+		 *
+		 * @param overrideCurrent              If it overrides the current Enchantment.
+		 * @param overrideIfLargerThatCurrent  Overrides the current Enchantment if the Level is larger.
+		 * @param overrideIfSmallerThanCurrent Overrides the current Enchantment if the Level is lower.
+		 * @param unsafeLevel                  If the Level is unsafe(If it larger that the Max-Level)
+		 * @param unsafeItemType               If the ItemType is not what it supposed to be.
+		 */
+		public EnchantingData(boolean overrideCurrent, boolean overrideIfLargerThatCurrent, boolean overrideIfSmallerThanCurrent, boolean unsafeLevel, boolean unsafeItemType) {
+			this.setOverrideCurrent(overrideCurrent);
+			this.setOverrideIfLargerThatCurrent(overrideIfLargerThatCurrent);
+			this.setOverrideIfLowerThatCurrent(overrideIfSmallerThanCurrent);
+			this.setUnsafeLevel(unsafeLevel);
+			this.setUnsafeItemType(unsafeItemType);
+		}
+
+		/**
+		 * Constructor for EnchantingData.
+		 *
+		 * @param overrideCurrent             If it overrides the current Enchantment.
+		 * @param overrideIfLargerThatCurrent Overrides the current Enchantment if the Level is larger.
+		 * @param overrideISmallerThanCurrent Overrides the current Enchantment if the Level is lower.
+		 * @param unsafe                      If the Level is unsafe(If it larger that the Max-Level) and if the ItemType is not what it supposed to be.
+		 */
+		public EnchantingData(boolean overrideCurrent, boolean overrideIfLargerThatCurrent, boolean overrideISmallerThanCurrent, boolean unsafe) {
+			this.setOverrideCurrent(overrideCurrent);
+			this.setOverrideIfLargerThatCurrent(overrideIfLargerThatCurrent);
+			this.setOverrideIfLowerThatCurrent(overrideISmallerThanCurrent);
+			this.setUnsafe(unsafe);
+		}
+
+		/**
+		 * Constructor for EnchantingData.
+		 *
+		 * @param overrideCurrent              If it overrides the current Enchantment.
+		 * @param overrideIfLargerThatCurrent  Overrides the current Enchantment if the Level is larger.
+		 * @param overrideIfSmallerThanCurrent Overrides the current Enchantment if the Level is lower.
+		 */
+		public EnchantingData(boolean overrideCurrent, boolean overrideIfLargerThatCurrent, boolean overrideIfSmallerThanCurrent) {
+			this.setOverrideCurrent(overrideCurrent);
+			this.setOverrideIfLargerThatCurrent(overrideIfLargerThatCurrent);
+			this.setOverrideIfLowerThatCurrent(overrideIfSmallerThanCurrent);
+		}
+
+		/**
+		 * Constructor for EnchantingData.
+		 *
+		 * @param overrideCurrent             If it overrides the current Enchantment.
+		 * @param overrideIfLargerThatCurrent Overrides the current Enchantment if the Level is larger.
+		 */
+		public EnchantingData(boolean overrideCurrent, boolean overrideIfLargerThatCurrent) {
+			this.setOverrideCurrent(overrideCurrent);
+			this.setOverrideIfLargerThatCurrent(overrideIfLargerThatCurrent);
 		}
 	}
 }

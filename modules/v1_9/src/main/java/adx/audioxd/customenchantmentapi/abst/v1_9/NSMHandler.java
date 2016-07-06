@@ -3,6 +3,7 @@ package adx.audioxd.customenchantmentapi.abst.v1_9;
 
 import adx.audioxd.customenchantmentapi.abst.api.NSM;
 import adx.audioxd.customenchantmentapi.abst.api.VersionListener;
+import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,23 +25,15 @@ public class NSMHandler implements NSM {
 		return EquipmentSlot.HAND.equals(event.getHand());
 	}
 
-	public VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off) {
-		return new HSL(notMain, notOff, main, off);
-	}
-
+	public VersionListener getVersionListener() { return new HSL(); }
 	public static class HSL extends VersionListener {
-		// Constructor
-		HSL(Method notMain, Method notOff, Method main, Method off) {
-			super(notMain, notOff, main, off);
-		}
-
 		@EventHandler
 		public void hotbarSwap(PlayerSwapHandItemsEvent event) {
-			this.itemNotInMainHand(event.getPlayer(), event.getOffHandItem());
-			this.itemNotInOffHand(event.getPlayer(), event.getMainHandItem());
+			CEAPIListenerUtils.itemNotInMainHand(event.getPlayer(), event.getOffHandItem());
+			CEAPIListenerUtils.itemNotInOffHand(event.getPlayer(), event.getMainHandItem());
 
-			this.itemInMainHand(event.getPlayer(), event.getMainHandItem());
-			this.itemInOffHand(event.getPlayer(), event.getOffHandItem());
+			CEAPIListenerUtils.itemInMainHand(event.getPlayer(), event.getMainHandItem());
+			CEAPIListenerUtils.itemInOffHand(event.getPlayer(), event.getOffHandItem());
 		}
 	}
 }

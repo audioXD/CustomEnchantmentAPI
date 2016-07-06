@@ -8,8 +8,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Method;
-
 public class NSMHandler implements NSM {
 	public ItemStack getItemInMainHand(LivingEntity player) {
 		return player.getEquipment().getItemInHand();
@@ -24,7 +22,7 @@ public class NSMHandler implements NSM {
 		return true;
 	}
 
-	public VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off) {
-		return new VersionListener(notMain, notOff, main, off);
+	public VersionListener getVersionListener() {
+		return new VersionListener();
 	}
 }

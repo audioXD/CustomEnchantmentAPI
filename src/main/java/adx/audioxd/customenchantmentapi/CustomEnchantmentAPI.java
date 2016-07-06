@@ -7,19 +7,15 @@ import adx.audioxd.customenchantmentapi.commands.ceapi.Ceapi;
 import adx.audioxd.customenchantmentapi.config.DefaultConfig;
 import adx.audioxd.customenchantmentapi.config.EnchantmentsConfig;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
-import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
 import adx.audioxd.customenchantmentapi.listeners.DefaultEventsListener;
 import adx.audioxd.customenchantmentapi.listeners.extra.EEquip;
 import adx.audioxd.customenchantmentapi.plugin.TLogger;
 import adx.audioxd.customenchantmentapi.utils.GameLogger;
 import adx.audioxd.customenchantmentapi.utils.UpdateChecker;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -28,6 +24,7 @@ import java.util.zip.ZipInputStream;
 public class CustomEnchantmentAPI extends JavaPlugin {
 	// Global fields
 	private static final GameLogger ceapiLogger = new GameLogger();
+
 	/**
 	 * Returns the logger for all Custom Enchantment API Plugins
 	 *
@@ -36,6 +33,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	public static GameLogger getCEAPILogger() { return ceapiLogger; }
 
 	private static CustomEnchantmentAPI instance;
+
 	/**
 	 * This method returns the currently running instance of Plugin
 	 *
@@ -45,6 +43,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 
 	// End of Global Fields
 	private final TLogger logger;
+
 	/**
 	 * Returns the logger For the CustomEnchantmentAPI Plugin.
 	 *
@@ -53,6 +52,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	public TLogger getTLogger() { return logger; }
 
 	private final DefaultConfig dc;
+
 	/**
 	 * Returns the config.yml file and its options.
 	 *
@@ -61,6 +61,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	public DefaultConfig getDefaultConfig() { return dc; }
 
 	private final EnchantmentsConfig ec;
+
 	/**
 	 * Returns the Enchantments.yml file.
 	 *
@@ -69,6 +70,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 	public EnchantmentsConfig getEnchantmentsConfig() { return ec; }
 
 	private LanguageConfig lc;
+
 	/**
 	 * Returns the currently defined LanguageConfig in the DefaultConfig.
 	 *
@@ -78,27 +80,34 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 
 
 	private final String serverVersion;
+
 	/**
 	 * Gets the server NSMVersion like v1_8.. (IDK) i newer checked.
+	 *
 	 * @return The full server NSMVersion.
 	 */
-	public final String getServerVersion(){ return serverVersion; }
+	public final String getServerVersion() { return serverVersion; }
 
 	private final String[] supportedVersions;
+
 	/**
 	 * Gets the supported versions of bukkit/spigot.
+	 *
 	 * @return Return s a array with the versions like v1_8, v1_9 ,...
 	 */
 	public final String[] getSupportedVersions() { return supportedVersions; }
 
 	public final String NSMVersion;
+
 	/**
 	 * Gets the closest string resembling the {@code getServerVersion()} String.
+	 *
 	 * @return The NSMVersion used for the {@code NSM}
 	 */
-	public final String getNSMVersion(){ return NSMVersion; }
+	public final String getNSMVersion() { return NSMVersion; }
 
 	private NSM nsm;
+
 	/**
 	 * Returns the NSU used dynamic-ly assigned by the current Bukkit NSMVersion.
 	 *
@@ -126,7 +135,8 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 			reloadConfigs();
 		}
 	}
-	private String[] loadSupportedVersions(){
+
+	private String[] loadSupportedVersions() {
 		Set<String> supportedVersions = new HashSet<>();
 		try {
 			ZipInputStream zip = new ZipInputStream(new FileInputStream(this.getFile().getPath()));
@@ -153,9 +163,10 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		} catch(Exception e) {}
 		return supportedVersions.toArray(new String[supportedVersions.size()]);
 	}
-	private String loadVersion(){
+
+	private String loadVersion() {
 		String current = "";
-		for(String v: this.supportedVersions){
+		for(String v : this.supportedVersions) {
 			if(!serverVersion.toLowerCase().startsWith(v.toLowerCase())) continue;
 			if(v.length() < current.length()) continue;
 			current = v;
@@ -164,10 +175,11 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		return current;
 	}
 
-	private static final String[] languageConfigs = new String[]{
+	private static final String[] languageConfigs = new String[] {
 			"en-US",
 			"Template-en-US"
 	};
+
 	/**
 	 * This method creates(If they don't exist) and reloads the config Files.
 	 */
@@ -175,9 +187,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		dc.createFileIfDoesNotExist();
 		ec.createFileIfDoesNotExist();
 
-
-
-		for(String languageConfig: languageConfigs){
+		for(String languageConfig : languageConfigs) {
 			File newFile = new File(this.getDataFolder(), "/locale/" + languageConfig + ".yml");
 			if(newFile.exists()) continue;
 
@@ -192,14 +202,14 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 				out = new FileOutputStream(newFile);
 				int read;
 				byte[] bytes = new byte[1024];
-				while ((read = in.read(bytes)) != -1) {
+				while((read = in.read(bytes)) != -1) {
 					out.write(bytes, 0, read);
 				}
 				logger.info("Created File: 'locale/" + newFile.getName() + "'");
-			} catch(Exception e){
+			} catch(Exception e) {
 				logger.warning("Couldn't create File: 'locale/" + newFile.getName() + "'");
 			} finally {
-				try{
+				try {
 					if(in != null)
 						in.close();
 					if(out != null)
@@ -214,7 +224,8 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		EnchantmentRegistry.rebuildEnchantmentsArray();
 	}
 
-	@Override public void onEnable() {
+	@Override
+	public void onEnable() {
 		instance = this;
 		ceapiLogger.createDefaultLogFiles(this.getDataFolder());
 		logger.preEnabled(true);
@@ -237,18 +248,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 			EEquip.clear();
 			this.getServer().getOnlinePlayers().forEach(EEquip::loadPlayer);
 			Bukkit.getPluginManager().registerEvents(new DefaultEventsListener(this), this);
-
-			try {
-				Method notMain = CEAPIListenerUtils.class.getMethod("itemNotInMainHand", LivingEntity.class, ItemStack.class);
-				Method notOff = CEAPIListenerUtils.class.getMethod("itemNotInOffHand", LivingEntity.class, ItemStack.class);
-				Method main = CEAPIListenerUtils.class.getMethod("itemInMainHand", LivingEntity.class, ItemStack.class);
-				Method off = CEAPIListenerUtils.class.getMethod("itemInOffHand", LivingEntity.class, ItemStack.class);
-				if(notMain == null || notOff == null || main == null || off == null)
-					return;
-				Bukkit.getPluginManager().registerEvents(nsm.getVersionListener(notMain, notOff, main, off), this);
-			} catch(NoSuchMethodException e) {
-				e.printStackTrace();
-			}
+			Bukkit.getPluginManager().registerEvents(nsm.getVersionListener(), this);
 
 			CEAPICommand.registerCommand(this, new Ceapi());
 
@@ -263,7 +263,9 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 		}
 		logger.enabled(true);
 	}
-	@Override public void onDisable() {
+
+	@Override
+	public void onDisable() {
 		logger.preEnabled(false);
 		{
 			EnchantmentRegistry.reset();

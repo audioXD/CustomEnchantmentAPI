@@ -13,5 +13,5 @@ public interface NSM {
 
 	boolean isHandMainHAnd(PlayerInteractEvent event);
 
-	VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off);
+	VersionListener getVersionListener();
 }

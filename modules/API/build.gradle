@@ -1,4 +1,8 @@
 dependencies {
+    compile(project(':')) {
+        transitive = false
+    }
+
     compile(group: 'org.spigotmc', name: 'spigot-api', version: '1.8-R0.1-SNAPSHOT') {
         // Because the bungeecord-chat.jar isn't being found
         transitive = false

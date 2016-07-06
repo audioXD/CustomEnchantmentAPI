@@ -42,8 +42,14 @@ def create_doc = false
 // The dependencies
 dependencies {
     compile(project(':modules:API')) {
-        // transitive = false
+        transitive = false
     }
+
+    compile(group: 'org.spigotmc', name: 'spigot-api', version: '1.8-R0.1-SNAPSHOT') {
+        // Because the bungeecord-chat.jar isn't being found
+        transitive = false
+    }
+    compile group: 'org.bukkit', name: 'bukkit', version: '1.8-R0.1-SNAPSHOT'
 }
 
 /* ********************************************************************************* */

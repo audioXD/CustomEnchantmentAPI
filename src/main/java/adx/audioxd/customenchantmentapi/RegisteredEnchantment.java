@@ -59,7 +59,7 @@ public class RegisteredEnchantment {
 	 * @param enchantment The Enchantment.
 	 * @param plugin      The Plugin.
 	 */
-	public RegisteredEnchantment(Enchantment enchantment, Plugin plugin) {
+	RegisteredEnchantment(Enchantment enchantment, Plugin plugin) {
 		this(enchantment, plugin, false);
 	}
 	/**
@@ -69,7 +69,7 @@ public class RegisteredEnchantment {
 	 * @param plugin      The Plugin.
 	 * @param active      If it is active
 	 */
-	public RegisteredEnchantment(Enchantment enchantment, Plugin plugin, boolean active) {
+	RegisteredEnchantment(Enchantment enchantment, Plugin plugin, boolean active) {
 		if(enchantment == null || plugin == null) {
 			NullPointerException e = new NullPointerException("All parameters mustn't be null");
 			CustomEnchantmentAPI.getInstance().getTLogger().printException(e);

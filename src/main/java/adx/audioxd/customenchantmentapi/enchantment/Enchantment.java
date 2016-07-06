@@ -52,6 +52,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		return (T) this;
 	}
 
+
 	protected final ItemType type;
 	/**
 	 * Gets the items on which the Enchantment can be enchanted on.

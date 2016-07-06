@@ -6,7 +6,6 @@ import adx.audioxd.customenchantmentapi.RegisteredEnchantment;
 import adx.audioxd.customenchantmentapi.config.option.BooleanOption;
 import adx.audioxd.customenchantmentapi.config.option.ListStringOption;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
-import com.sun.org.apache.xerces.internal.xs.StringList;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -39,6 +38,7 @@ public class EnchantmentsConfig extends Config {
 			}
 		}
 	}
+
 	@Override
 	public void onSave(YamlConfiguration config) {
 		for(EnchantmentData option : options.values()) {
@@ -60,8 +60,9 @@ public class EnchantmentsConfig extends Config {
 		return ench.getIsActive().getValue();
 	}
 
-	public EnchantmentData getData(RegisteredEnchantment registeredEnchantment){
-		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getPlugin() == null) return null;
+	public EnchantmentData getData(RegisteredEnchantment registeredEnchantment) {
+		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getPlugin() == null)
+			return null;
 		String path = registeredEnchantment.getPlugin().getName() + "." + EnchantmentRegistry.getEnchantmentsMapID(registeredEnchantment.getEnchantment());
 
 		EnchantmentData data = options.containsKey(path) ? options.get(path) : new EnchantmentData(path, registeredEnchantment);
@@ -77,25 +78,28 @@ public class EnchantmentsConfig extends Config {
 
 	public static final class EnchantmentData {
 		private final BooleanOption isActive;
+
 		public BooleanOption getIsActive() { return isActive; }
 
 		private final ListStringOption lore;
+
 		public ListStringOption getLore() { return lore; }
 
-		public EnchantmentData(String pathPrefix, RegisteredEnchantment registeredEnchantment){
+		public EnchantmentData(String pathPrefix, RegisteredEnchantment registeredEnchantment) {
 			this.isActive = new BooleanOption(pathPrefix + ".active", true);
-			this.lore = new ListStringOption(pathPrefix + ".lore", new ArrayList<>());
+			this.lore = new ListStringOption(pathPrefix + ".lore", registeredEnchantment.getEnchantment().getDescription() == null ? new ArrayList<>() : registeredEnchantment.getEnchantment().getDescription());
 		}
-		public EnchantmentData(String pathPrefix){
+		public EnchantmentData(String pathPrefix) {
 			this.isActive = new BooleanOption(pathPrefix + ".active", true);
 			this.lore = new ListStringOption(pathPrefix + ".lore", new ArrayList<>());
 		}
 
-		public void loadIfExist(Config config){
+		public void loadIfExist(Config config) {
 			isActive.loadIfExist(config);
 			lore.loadIfExist(config);
 		}
-		public void save(Config config){
+
+		public void save(Config config) {
 			isActive.save(config);
 			lore.save(config);
 		}

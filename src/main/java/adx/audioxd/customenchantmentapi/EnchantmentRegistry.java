@@ -27,7 +27,6 @@ public class EnchantmentRegistry {
 	private static final EnchantingData DEFAULT_ENCHANT_DATA = new EnchantingData();
 
 	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<>();
-
 	/**
 	 * Gets all Enchantments registered in a HashMap.
 	 *
@@ -39,10 +38,9 @@ public class EnchantmentRegistry {
 
 
 	private static final Set<RegisteredEnchantment> enchantments = new HashSet<>();
-
+	public static Set<RegisteredEnchantment> getRegisteredEnchantments() { return new HashSet<>(enchantments); }
 
 	private static volatile Enchantment[] backedActiveEnchantments = null;
-
 	/**
 	 * returns a array of Enchantment[].
 	 *
@@ -68,7 +66,7 @@ public class EnchantmentRegistry {
 
 					for(RegisteredEnchantment en : enchantments) {
 						EnchantmentsConfig.EnchantmentData data = CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().getData(en);
-						en.setLore(data.getLore());
+						en.setLore(data.getLore().getValue());
 
 						if(data.getIsActive().getValue()) {
 							if(active.containsKey(en.getEnchantment().getDisplay(""))) {

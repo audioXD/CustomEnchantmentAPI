@@ -95,7 +95,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 				if(ItemType.SHIELD.matchType(mainHand) || ItemType.SHIELD.matchType(offHand))
 					shield.add(ItemType.SHIELD.matchType(mainHand) ? mainHand : offHand);
 				else
-					bereHand.add(ItemType.SHIELD.matchType(mainHand) ? mainHand : offHand);
+					bereHand.add(!ItemUtil.isEmpty(mainHand) ? mainHand : offHand);
 			}
 		} else if(entity instanceof Horse) {
 			horseArmor.add(((Horse) entity).getInventory().getArmor());
@@ -118,7 +118,6 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 			}
 		}
 	}
-
 	public void onDamageByEntity(EntityDamageByEntityEvent event) {
 		if(event.getEntity() == null || event.getDamager() == null)
 			return;
@@ -145,7 +144,6 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 		// Defensive
 		if(!(event.getEntity() instanceof LivingEntity)) return;
-
 		LivingEntity entity = (LivingEntity) event.getEntity();
 
 		ItemStack mainHand = ItemUtil.getMainHandItem(entity);
@@ -161,7 +159,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 				if(ItemType.SHIELD.matchType(mainHand) || ItemType.SHIELD.matchType(offHand))
 					shield.add(ItemType.SHIELD.matchType(mainHand) ? mainHand : offHand);
 				else
-					bereHand.add(ItemType.SHIELD.matchType(mainHand) ? mainHand : offHand);
+					bereHand.add(!ItemUtil.isEmpty(mainHand) ? mainHand : offHand);
 			}
 		} else if(entity instanceof Horse) {
 			horseArmor.add(((Horse) entity).getInventory().getArmor());

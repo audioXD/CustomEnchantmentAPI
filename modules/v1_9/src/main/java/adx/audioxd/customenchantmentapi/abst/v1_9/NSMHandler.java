@@ -3,7 +3,6 @@ package adx.audioxd.customenchantmentapi.abst.v1_9;
 
 import adx.audioxd.customenchantmentapi.abst.api.NSM;
 import adx.audioxd.customenchantmentapi.abst.api.VersionListener;
-import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -37,11 +36,11 @@ public class NSMHandler implements NSM {
 
 		@EventHandler
 		public void hotbarSwap(PlayerSwapHandItemsEvent event) {
-			CEAPIListenerUtils.itemNotInMainHand(event.getPlayer(), event.getOffHandItem());
-			CEAPIListenerUtils.itemNotInOffHand(event.getPlayer(), event.getMainHandItem());
+			this.itemNotInMainHand(event.getPlayer(), event.getOffHandItem());
+			this.itemNotInOffHand(event.getPlayer(), event.getMainHandItem());
 
-			CEAPIListenerUtils.itemInMainHand(event.getPlayer(), event.getMainHandItem());
-			CEAPIListenerUtils.itemInOffHand(event.getPlayer(), event.getOffHandItem());
+			this.itemInMainHand(event.getPlayer(), event.getMainHandItem());
+			this.itemInOffHand(event.getPlayer(), event.getOffHandItem());
 		}
 	}
 }

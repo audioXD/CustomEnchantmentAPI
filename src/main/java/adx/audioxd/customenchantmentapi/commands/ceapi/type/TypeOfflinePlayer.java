@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class TypeOfflinePlayer extends TypeAbstract<OfflinePlayer> {
+	private static final TypeOfflinePlayer i = new TypeOfflinePlayer();
+	public static TypeOfflinePlayer get(){ return i; }
+
 	@Override
 	public String getInvelidErrorMessage(String arg) {
 		return CustomEnchantmentAPI.getInstance().getLanguageConfig().OFFLINE_PLAYER_NOT_FOUND.format(arg);

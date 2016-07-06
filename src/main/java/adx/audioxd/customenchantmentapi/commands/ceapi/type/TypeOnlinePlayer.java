@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class TypeOnlinePlayer extends TypeAbstract<Player> {
+	private static final TypeOnlinePlayer i = new TypeOnlinePlayer();
+	public static TypeOnlinePlayer get(){ return i; }
+
 	@Override
 	public String getInvelidErrorMessage(String arg) {
 		return CustomEnchantmentAPI.getInstance().getLanguageConfig().ONLINE_PLAYER_NOT_FOUND.format(arg);

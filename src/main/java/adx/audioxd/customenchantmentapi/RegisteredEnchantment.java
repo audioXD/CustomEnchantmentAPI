@@ -47,10 +47,6 @@ public class RegisteredEnchantment {
 	 * @param active If the Enchantment can be use / is active.
 	 */
 	void setActive(boolean active) { this.active = active; }
-
-	private List<String> lore = new ArrayList<>();
-	public List<String> getLore() { return lore; }
-	void setLore(List<String> lore) { this.lore = lore; }
 	// Constructor
 
 	/**

@@ -32,27 +32,6 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		return displayName + " " + romanNumeral;
 	}
 
-
-	protected List<String> description = null;
-	/**
-	 * Gets the current description of the Enchantment.
-	 *
-	 * @return A List of Strings.
-	 */
-	public final List<String> getDescription() { return description; }
-	/**
-	 * Sets the current Description.
-	 *
-	 * @param description The value.
-	 * @param <T>
-	 * @return
-	 */
-	protected final <T extends Enchantment> T setDescription(List<String> description) {
-		this.description = description;
-		return (T) this;
-	}
-
-
 	protected final ItemType type;
 	/**
 	 * Gets the items on which the Enchantment can be enchanted on.

@@ -498,38 +498,60 @@ public class EnchantmentRegistry {
 	 *
 	 * @param entity                   The Entity that you want to enchant.
 	 * @param enchantment              Enchantment you want to enchant on a item.
-	 * @param lvl                      The level of the enchantment.
-	 * @param override                 If it overrides the current enchantment.
-	 * @param override_if_larger_level If it overrides if there's a larger level.
+	 * @param level                      The level of the enchantment.
 	 * @return If the enchant method was successful.
 	 */
-	public synchronized static boolean enchant(Entity entity, Enchantment enchantment, int lvl, boolean override, boolean override_if_larger_level) {
-		if(entity == null || enchantment == null || lvl < 1) return false;
-		if(lvl > enchantment.getMaxLvl()) return false;
+	public synchronized static boolean enchant(Entity entity, Enchantment enchantment, int level) {
+		return enchant(entity, enchantment, level, DEFAULT_ENCHANT_DATA);
+	}
+	/**
+	 * Enchants a Entity with a Enchantment.
+	 *
+	 * @param entity                   The Entity that you want to enchant.
+	 * @param enchantment              Enchantment you want to enchant on a item.
+	 * @param level                      The level of the enchantment.
+	 * @param data                     The data for enchanting.
+	 * @return If the enchant method was successful.
+	 */
+	public synchronized static boolean enchant(Entity entity, Enchantment enchantment, int level, EnchantingData data) {
+		if(entity == null || enchantment == null) return false;
+		if(level <  1) return false;
+
+		if(!data.isUnsafeLevel() && level > enchantment.getMaxLvl()) level = enchantment.getMaxLvl();
 
 		String tagID = getTagID(enchantment);
 		List<MetadataValue> mValues = entity.getMetadata(tagID);
 
-		boolean flag = false;
-		if(mValues.isEmpty() || override) {
-			flag = true;
-		} else if(override_if_larger_level) {
-			int largest_lvl = 0;
+		boolean flag = true;
+		if(mValues.isEmpty() || data.isOverrideCurrent());
+		else if(data.isOverrideIfLargerThatCurrent() || data.isOverrideIfSmallerThanCurrent()) {
 			for(MetadataValue mV : mValues) {
-				int current = mV.asInt();
-				if(current > largest_lvl) largest_lvl = current;
+				int lvl = mV.asInt();
+				if(data.isOverrideCurrent() || (data.isOverrideIfLargerThatCurrent() && level > lvl) || (data.isOverrideIfSmallerThanCurrent() && level < lvl));
+				else flag = false;
 			}
-
-			if(largest_lvl < lvl) flag = true;
 		}
 		if(!flag) return false;
 
 		EEnchantEntityEvent e = new EEnchantEntityEvent(entity);
-		enchantment.fireEvent(e, lvl);
+		enchantment.fireEvent(e, level);
 		if(e.isCancelled()) return false;
 
-		entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), lvl));
+		entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), level));
 		return true;
+	}
+	/**
+	 * Enchants a Entity with a Enchantment.
+	 *
+	 * @param entity                   The Entity that you want to enchant.
+	 * @param enchantment              Enchantment you want to enchant on a item.
+	 * @param level                      The level of the enchantment.
+	 * @param override                 If it overrides the current enchantment.
+	 * @param override_if_larger_level If it overrides if there's a larger level.
+	 * @return If the enchant method was successful.
+	 */
+	public synchronized static boolean enchant(Entity entity, Enchantment enchantment, int level, boolean override, boolean override_if_larger_level) {
+		return enchant(entity, enchantment, level, new EnchantingData(override, override_if_larger_level));
 	}
 
 	// -------------------------------------------------- //

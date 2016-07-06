@@ -8,9 +8,7 @@ import adx.audioxd.customenchantmentapi.config.DefaultConfig;
 import adx.audioxd.customenchantmentapi.config.EnchantmentsConfig;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
-import adx.audioxd.customenchantmentapi.listeners.DamageListener;
-import adx.audioxd.customenchantmentapi.listeners.InventoryListener;
-import adx.audioxd.customenchantmentapi.listeners.ToolsListener;
+import adx.audioxd.customenchantmentapi.listeners.DefaultEventsListener;
 import adx.audioxd.customenchantmentapi.listeners.extra.EEquip;
 import adx.audioxd.customenchantmentapi.plugin.TLogger;
 import adx.audioxd.customenchantmentapi.utils.GameLogger;
@@ -238,9 +236,7 @@ public class CustomEnchantmentAPI extends JavaPlugin {
 
 			EEquip.clear();
 			this.getServer().getOnlinePlayers().forEach(EEquip::loadPlayer);
-			Bukkit.getPluginManager().registerEvents(new InventoryListener(this), this);
-			Bukkit.getPluginManager().registerEvents(new ToolsListener(this), this);
-			Bukkit.getPluginManager().registerEvents(new DamageListener(this), this);
+			Bukkit.getPluginManager().registerEvents(new DefaultEventsListener(this), this);
 
 			try {
 				Method notMain = CEAPIListenerUtils.class.getMethod("itemNotInMainHand", LivingEntity.class, ItemStack.class);

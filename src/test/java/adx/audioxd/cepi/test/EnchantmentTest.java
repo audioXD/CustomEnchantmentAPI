@@ -4,7 +4,6 @@ package adx.audioxd.cepi.test;
 import adx.audioxd.customenchantmentapi.enums.EnchantmentPriority;
 import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
 import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantEntityEvent;
-import adx.audioxd.customenchantmentapi.events.enchant.unenchant.EUnenchantEntityEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInHandEvent;
 import org.bukkit.Material;
 import org.junit.Test;

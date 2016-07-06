@@ -8,8 +8,6 @@ import adx.audioxd.customenchantmentapi.enums.ItemType;
 import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
 import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantEntityEvent;
 import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantEvent;
-import adx.audioxd.customenchantmentapi.events.enchant.unenchant.EUnenchantEntityEvent;
-import adx.audioxd.customenchantmentapi.events.enchant.unenchant.EUnenchantEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInHandEvent;
 
 

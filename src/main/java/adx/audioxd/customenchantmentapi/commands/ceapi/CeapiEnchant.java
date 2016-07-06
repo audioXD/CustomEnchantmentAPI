@@ -13,7 +13,6 @@ import adx.audioxd.customenchantmentapi.commands.requirement.RequirementHasPerm;
 import adx.audioxd.customenchantmentapi.commands.requirement.RequirementIsPlayer;
 import adx.audioxd.customenchantmentapi.config.LanguageConfig;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
-import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
 import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 

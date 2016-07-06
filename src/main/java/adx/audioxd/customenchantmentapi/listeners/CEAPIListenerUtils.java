@@ -3,7 +3,6 @@ package adx.audioxd.customenchantmentapi.listeners;
 
 import adx.audioxd.customenchantmentapi.CustomEnchantmentAPI;
 import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
-import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.events.inventory.EEquipEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.EUnequipEvent;
 import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInMainHandEvent;

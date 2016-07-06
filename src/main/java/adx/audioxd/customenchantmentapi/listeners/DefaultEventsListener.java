@@ -11,14 +11,26 @@ import adx.audioxd.customenchantmentapi.events.bow.EBowShootEvent;
 import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedByEntityEvent;
 import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedEvent;
 import adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagesEntityEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.EUnequipEvent;
+import adx.audioxd.customenchantmentapi.events.inventory.hand.enums.HandType;
+import adx.audioxd.customenchantmentapi.events.world.EBlockBreakEvent;
+import adx.audioxd.customenchantmentapi.events.world.EBlockDamageEvent;
+import adx.audioxd.customenchantmentapi.events.world.EBlockPlaceEvent;
+import adx.audioxd.customenchantmentapi.events.world.EInteractEvent;
+import adx.audioxd.customenchantmentapi.listeners.extra.EEquip;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -26,16 +38,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static adx.audioxd.customenchantmentapi.EnchantmentRegistry.getEnchantments;
 import static adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedEvent.Type;
 
-public class DamageListener extends CEAPIListenerUtils {
+public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	// ---------------------------------------------------------- //
 	//                      CONSTRUCTOR                           //
 	// ---------------------------------------------------------- //
 
-	public DamageListener(CustomEnchantmentAPI plugin) {
+	public DefaultEventsListener(CustomEnchantmentAPI plugin) {
 		super(plugin);
+	}
+
+	// ---------------------------------------------------------- //
+	//                     JOIN/QUIT EVENTS                       //
+	// ---------------------------------------------------------- //
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onConnect(PlayerJoinEvent event) {
+		EEquip.loadPlayer(event.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDisconnect(PlayerQuitEvent event) {
+		EEquip.clearPlayer(event.getPlayer());
 	}
 
 	// ---------------------------------------------------------- //
@@ -91,6 +118,7 @@ public class DamageListener extends CEAPIListenerUtils {
 			}
 		}
 	}
+
 	public void onDamageByEntity(EntityDamageByEntityEvent event) {
 		if(event.getEntity() == null || event.getDamager() == null)
 			return;
@@ -197,5 +225,133 @@ public class DamageListener extends CEAPIListenerUtils {
 
 		EArrowLandEvent eEvent = new EArrowLandEvent(arrow);
 		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getEntity()), eEvent);
+	}
+
+	// ---------------------------------------------------------- //
+	//                     BLOCK EVENTS                           //
+	// ---------------------------------------------------------- //
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onDamageBlock(BlockDamageEvent event) {
+		if(event.getBlock() == null || event.getBlock().getType() == null || event.getPlayer() == null || ItemUtil.isEmpty(event.getItemInHand()))
+			return;
+
+		EBlockDamageEvent e = new EBlockDamageEvent(event.getPlayer(), event.getItemInHand(), event.getBlock());
+		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getItemInHand()), e);
+		event.setCancelled(e.isCancelled());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBlockBreak(BlockBreakEvent event) {
+		if(event.getBlock() == null || event.getBlock().getType() == null || event.getPlayer() == null) return;
+
+		ItemStack item = ItemUtil.getMainHandItem(event.getPlayer());
+		if(ItemUtil.isEmpty(item)) return;
+
+		EBlockBreakEvent eEvent = new EBlockBreakEvent(item, event.getPlayer(), event.getBlock(), event.getExpToDrop());
+		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(eEvent.getItem()), eEvent);
+		event.setCancelled(eEvent.isCancelled());
+		event.setExpToDrop(eEvent.getExpToDrop());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBlockPlace(BlockPlaceEvent event) {
+		if(event.getBlock() == null || event.getBlock().getType() == null || event.getPlayer() == null || ItemUtil.isEmpty(event.getItemInHand()))
+			return;
+
+		EBlockPlaceEvent eEvent = new EBlockPlaceEvent(event.getItemInHand(), event.getPlayer(), event.getBlock(), event.getBlockAgainst(), event.getBlockPlaced(), event.getBlockReplacedState());
+		eEvent.setBuild(event.canBuild());
+
+		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(eEvent.getItem()), eEvent);
+
+		event.setCancelled(eEvent.isCancelled());
+		event.setBuild(eEvent.canBuild());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onInteract(PlayerInteractEvent event) {
+		equip(event);
+		if(event.getPlayer() == null || event.getAction() == null || ItemUtil.isEmpty(event.getItem())) return;
+
+		HandType hT = CustomEnchantmentAPI.getInstance().getNSM().isHandMainHAnd(event) ? HandType.MAIN : HandType.OFF;
+		EInteractEvent e = new EInteractEvent(event.getItem(), event.getPlayer(), event.getAction(), event.getBlockFace(), event.getClickedBlock(), hT);
+		EnchantmentRegistry.fireEvents(EnchantmentRegistry.getEnchantments(event.getItem()), e);
+		event.setCancelled(e.isCancelled());
+	}
+
+	// ---------------------------------------------------------- //
+	//           INVENTORY CHANGE EVENTS(EQUIP,..)                //
+	// ---------------------------------------------------------- //
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void inventoryClick(InventoryClickEvent event) {
+		new EEquip(plugin.getServer().getPlayer(event.getWhoClicked().getName())).runTaskLater(plugin, 1);
+	}
+
+	public void equip(PlayerInteractEvent event) {
+		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBreak(PlayerItemBreakEvent event) {
+		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDispense(BlockDispenseEvent e) {
+		Location loc = e.getBlock().getLocation();
+		for(Player p : loc.getWorld().getPlayers()) {
+			if(loc.getBlockY() - p.getLocation().getBlockY() >= -1
+					&& loc.getBlockY() - p.getLocation().getBlockY() <= 1) {
+				org.bukkit.block.Dispenser dispenser = (org.bukkit.block.Dispenser) e.getBlock().getState();
+				org.bukkit.material.Dispenser dis = (org.bukkit.material.Dispenser) dispenser.getData();
+				BlockFace directionFacing = dis.getFacing();
+				// Someone told me not to do big if checks because it's
+				// hard to read, look at me doing it -_-
+				if(directionFacing == BlockFace.EAST && p.getLocation().getBlockX() != loc.getBlockX()
+						&& p.getLocation().getX() <= loc.getX() + 2.3 && p.getLocation().getX() >= loc.getX()
+						|| directionFacing == BlockFace.WEST && p.getLocation().getX() >= loc.getX() - 1.3
+						&& p.getLocation().getX() <= loc.getX()
+						|| directionFacing == BlockFace.SOUTH && p.getLocation().getBlockZ() != loc.getBlockZ()
+						&& p.getLocation().getZ() <= loc.getZ() + 2.3
+						&& p.getLocation().getZ() >= loc.getZ()
+						|| directionFacing == BlockFace.NORTH && p.getLocation().getZ() >= loc.getZ() - 1.3
+						&& p.getLocation().getZ() <= loc.getZ()) {
+					new EEquip(p).runTaskLater(plugin, 1);
+					return;
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onItemDrop(PlayerDropItemEvent event) {
+		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onItemPickUp(PlayerPickupItemEvent event) {
+		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onHotbarChange(PlayerItemHeldEvent event) {
+		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDeath(EntityDeathEvent event) {
+		LivingEntity entity = event.getEntity();
+		if(entity == null) return;
+
+		if(!ItemUtil.isEmpty(ItemUtil.getMainHandItem(entity)))
+			CEAPIListenerUtils.itemNotInHand(entity, ItemUtil.getMainHandItem(entity), HandType.MAIN);
+		if(!ItemUtil.isEmpty(ItemUtil.getOffHandItem(entity)))
+			CEAPIListenerUtils.itemNotInHand(entity, ItemUtil.getOffHandItem(entity), HandType.OFF);
+
+		for(ItemStack item : entity.getEquipment().getArmorContents()) {
+			EUnequipEvent eEvent = new EUnequipEvent(item, entity);
+			EnchantmentRegistry.fireEvents(getEnchantments(item), eEvent);
+		}
 	}
 }

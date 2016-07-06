@@ -3,7 +3,6 @@ package adx.audioxd.customenchantmentapi.enchantment;
 
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventHandler;
-import adx.audioxd.customenchantmentapi.events.enchant.enchant.EEnchantEvent;
 
 import java.lang.reflect.Method;
 import java.util.Map;

@@ -25,8 +25,16 @@ public class NSMHandler implements NSM {
 		return EquipmentSlot.HAND.equals(event.getHand());
 	}
 
-	public VersionListener getVersionListener() { return new HSL(); }
+	public VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off) {
+		return new HSL(notMain, notOff, main, off);
+	}
+
 	public static class HSL extends VersionListener {
+		// Constructor
+		HSL(Method notMain, Method notOff, Method main, Method off) {
+			super(notMain, notOff, main, off);
+		}
+
 		@EventHandler
 		public void hotbarSwap(PlayerSwapHandItemsEvent event) {
 			CEAPIListenerUtils.itemNotInMainHand(event.getPlayer(), event.getOffHandItem());

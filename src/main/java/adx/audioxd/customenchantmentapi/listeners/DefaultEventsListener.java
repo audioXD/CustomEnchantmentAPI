@@ -42,6 +42,7 @@ import static adx.audioxd.customenchantmentapi.EnchantmentRegistry.getEnchantmen
 import static adx.audioxd.customenchantmentapi.events.damage.EOwnerDamagedEvent.Type;
 
 public class DefaultEventsListener extends CEAPIListenerUtils {
+	public static boolean active = true;
 
 	// ---------------------------------------------------------- //
 	//                      CONSTRUCTOR                           //
@@ -57,19 +58,19 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onConnect(PlayerJoinEvent event) {
+		if(!active) return;
 		EEquip.loadPlayer(event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDisconnect(PlayerQuitEvent event) {
+		if(!active) return;
 		EEquip.clearPlayer(event.getPlayer());
 	}
 
 	// ---------------------------------------------------------- //
 	//                      DAMAGE EVENTS                         //
 	// ---------------------------------------------------------- //
-
-	public static boolean active = true;
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPureDamage(EntityDamageEvent event) {
@@ -189,6 +190,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void bowShoot(EntityShootBowEvent event) {
+		if(!active) return;
 		EBowShootEvent eEvent = new EBowShootEvent(event.getBow(), event.getEntity(),
 		                                           event.getProjectile()
 		);
@@ -200,7 +202,6 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 		}
 		event.setCancelled(eEvent.isCancelled());
 	}
-
 	public void hitByArrow(EntityDamageByEntityEvent event) {
 		if(!(event.getDamager() instanceof Arrow)) return;
 		if(!(event.getEntity() instanceof LivingEntity)) return;
@@ -218,6 +219,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void arrowLandEvent(ProjectileHitEvent event) {
+		if(!active) return;
 		if(!(event.getEntity() instanceof Arrow)) return;
 		Arrow arrow = (Arrow) event.getEntity();
 
@@ -231,6 +233,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamageBlock(BlockDamageEvent event) {
+		if(!active) return;
 		if(event.getBlock() == null || event.getBlock().getType() == null || event.getPlayer() == null || ItemUtil.isEmpty(event.getItemInHand()))
 			return;
 
@@ -241,6 +244,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
+		if(!active) return;
 		if(event.getBlock() == null || event.getBlock().getType() == null || event.getPlayer() == null) return;
 
 		ItemStack item = ItemUtil.getMainHandItem(event.getPlayer());
@@ -254,6 +258,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
+		if(!active) return;
 		if(event.getBlock() == null || event.getBlock().getType() == null || event.getPlayer() == null || ItemUtil.isEmpty(event.getItemInHand()))
 			return;
 
@@ -268,6 +273,7 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event) {
+		if(!active) return;
 		equip(event);
 		if(event.getPlayer() == null || event.getAction() == null || ItemUtil.isEmpty(event.getItem())) return;
 
@@ -283,20 +289,24 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void inventoryClick(InventoryClickEvent event) {
+		if(!active) return;
 		new EEquip(plugin.getServer().getPlayer(event.getWhoClicked().getName())).runTaskLater(plugin, 1);
 	}
 
 	public void equip(PlayerInteractEvent event) {
+		if(!active) return;
 		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBreak(PlayerItemBreakEvent event) {
+		if(!active) return;
 		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDispense(BlockDispenseEvent e) {
+		if(!active) return;
 		Location loc = e.getBlock().getLocation();
 		for(Player p : loc.getWorld().getPlayers()) {
 			if(loc.getBlockY() - p.getLocation().getBlockY() >= -1
@@ -324,21 +334,25 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemDrop(PlayerDropItemEvent event) {
+		if(!active) return;
 		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemPickUp(PlayerPickupItemEvent event) {
+		if(!active) return;
 		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onHotbarChange(PlayerItemHeldEvent event) {
+		if(!active) return;
 		new EEquip(event.getPlayer()).runTaskLater(plugin, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDeath(EntityDeathEvent event) {
+		if(!active) return;
 		LivingEntity entity = event.getEntity();
 		if(entity == null) return;
 

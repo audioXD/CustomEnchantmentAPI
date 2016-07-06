@@ -33,7 +33,7 @@ configure(allprojects - project(':modules')) {
 
 archivesBaseName = 'CustomEnchantmentAPI'
 group = 'adx.audioxd.customenchantmentapi'
-version = '2.7.5-RELEASE'
+version = '2.7.6-RELEASE'
 
 def MainClass = group + '.' + archivesBaseName
 def delete_on_upload = true

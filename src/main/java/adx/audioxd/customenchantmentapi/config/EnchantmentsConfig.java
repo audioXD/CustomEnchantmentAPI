@@ -2,16 +2,20 @@ package adx.audioxd.customenchantmentapi.config;
 
 
 import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
+import adx.audioxd.customenchantmentapi.RegisteredEnchantment;
 import adx.audioxd.customenchantmentapi.config.option.BooleanOption;
+import adx.audioxd.customenchantmentapi.config.option.ListStringOption;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
+import com.sun.org.apache.xerces.internal.xs.StringList;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class EnchantmentsConfig extends Config {
-	private Map<String, BooleanOption> options = new HashMap<>();
+	private Map<String, EnchantmentData> options = new HashMap<>();
 
 
 	// Constructor
@@ -26,7 +30,7 @@ public class EnchantmentsConfig extends Config {
 			for(String enchantment : config.getConfigurationSection(plugin).getValues(false).keySet()) {
 				String path = plugin + "." + enchantment;
 
-				BooleanOption ench = options.containsKey(path) ? options.get(path) : new BooleanOption(path, true);
+				EnchantmentData ench = options.containsKey(path) ? options.get(path) : new EnchantmentData(path);
 				ench.loadIfExist(this);
 
 				if(!options.containsKey(path)) {
@@ -35,10 +39,9 @@ public class EnchantmentsConfig extends Config {
 			}
 		}
 	}
-
 	@Override
 	public void onSave(YamlConfiguration config) {
-		for(BooleanOption option : options.values()) {
+		for(EnchantmentData option : options.values()) {
 			option.save(this);
 		}
 	}
@@ -47,13 +50,54 @@ public class EnchantmentsConfig extends Config {
 		if(plugin == null || enchantment == null) return false;
 		String path = plugin.getName() + "." + EnchantmentRegistry.getEnchantmentsMapID(enchantment);
 
-		BooleanOption ench = options.containsKey(path) ? options.get(path) : new BooleanOption(path, true);
+		EnchantmentData ench = options.containsKey(path) ? options.get(path) : new EnchantmentData(path);
 
 		if(!options.containsKey(path)) {
 			options.put(path, ench);
 			options.get(path).loadIfExist(this);
 		}
 
-		return ench.getValue();
+		return ench.getIsActive().getValue();
+	}
+
+	public EnchantmentData getData(RegisteredEnchantment registeredEnchantment){
+		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getPlugin() == null) return null;
+		String path = registeredEnchantment.getPlugin().getName() + "." + EnchantmentRegistry.getEnchantmentsMapID(registeredEnchantment.getEnchantment());
+
+		EnchantmentData data = options.containsKey(path) ? options.get(path) : new EnchantmentData(path, registeredEnchantment);
+
+		if(!options.containsKey(path)) {
+			options.put(path, data);
+			options.get(path).loadIfExist(this);
+		}
+		return data;
+
+	}
+
+
+	public static final class EnchantmentData {
+		private final BooleanOption isActive;
+		public BooleanOption getIsActive() { return isActive; }
+
+		private final ListStringOption lore;
+		public ListStringOption getLore() { return lore; }
+
+		public EnchantmentData(String pathPrefix, RegisteredEnchantment registeredEnchantment){
+			this.isActive = new BooleanOption(pathPrefix + ".active", true);
+			this.lore = new ListStringOption(pathPrefix + ".lore", new ArrayList<>());
+		}
+		public EnchantmentData(String pathPrefix){
+			this.isActive = new BooleanOption(pathPrefix + ".active", true);
+			this.lore = new ListStringOption(pathPrefix + ".lore", new ArrayList<>());
+		}
+
+		public void loadIfExist(Config config){
+			isActive.loadIfExist(config);
+			lore.loadIfExist(config);
+		}
+		public void save(Config config){
+			isActive.save(config);
+			lore.save(config);
+		}
 	}
 }

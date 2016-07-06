@@ -8,6 +8,8 @@ import adx.audioxd.customenchantmentapi.enums.ItemType;
 import adx.audioxd.customenchantmentapi.utils.RomanNumeral;
 import org.bukkit.ChatColor;
 
+import java.util.List;
+
 public abstract class Enchantment implements Comparable<Enchantment> {
 	protected final String displayName;
 	/**
@@ -28,6 +30,26 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 */
 	public String getDisplay(String romanNumeral) {
 		return displayName + " " + romanNumeral;
+	}
+
+
+	protected List<String> description = null;
+	/**
+	 * Gets the current description of the Enchantment.
+	 *
+	 * @return A List of Strings.
+	 */
+	public final List<String> getDescription() { return description; }
+	/**
+	 * Sets the current Description.
+	 *
+	 * @param description The value.
+	 * @param <T>
+	 * @return
+	 */
+	protected final <T extends Enchantment> T setDescription(List<String> description) {
+		this.description = description;
+		return (T) this;
 	}
 
 	protected final ItemType type;
@@ -63,6 +85,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	private final EventBus eb;
 
 // Constructor
+
 	/**
 	 * @param name   The name of the enchantment
 	 * @param type   The ItemType that the Enchantment can be enchanted on.
@@ -89,6 +112,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	}
 
 	// Fire event
+
 	/**
 	 * Fires the event.
 	 *
@@ -98,6 +122,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	public void fireEvent(EnchantmentEvent event, boolean sync) {
 		fireEvent(event, 1, sync);
 	}
+
 	/**
 	 * Fires the event.
 	 *
@@ -108,6 +133,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	public void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
 		eb.fireEvent(event, lvl, sync);
 	}
+
 	/**
 	 * Fires the event.
 	 *
@@ -116,6 +142,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	public void fireEvent(EnchantmentEvent event) {
 		fireEvent(event, 1);
 	}
+
 	/**
 	 * Fires the event.
 	 *

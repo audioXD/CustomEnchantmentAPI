@@ -1,6 +1,7 @@
 package adx.audioxd.customenchantmentapi;
 
 
+import adx.audioxd.customenchantmentapi.config.EnchantmentsConfig;
 import adx.audioxd.customenchantmentapi.enchantment.Enchanted;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
@@ -66,15 +67,14 @@ public class EnchantmentRegistry {
 					Map<String, Enchantment> active = new HashMap<>();
 
 					for(RegisteredEnchantment en : enchantments) {
-						if(CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().isActive(
-								en.getPlugin(),
-								en.getEnchantment()
-						)) {
+						EnchantmentsConfig.EnchantmentData data = CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().getData(en);
+						en.setLore(data.getLore());
+
+						if(data.getIsActive().getValue()) {
 							if(active.containsKey(en.getEnchantment().getDisplay(""))) {
 								en.setActive(false);
 								continue;
 							}
-
 							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());
 						}
 					}

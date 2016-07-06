@@ -4,6 +4,9 @@ package adx.audioxd.customenchantmentapi;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RegisteredEnchantment {
 	private final Enchantment enchantment;
 	/**
@@ -45,7 +48,10 @@ public class RegisteredEnchantment {
 	 */
 	void setActive(boolean active) { this.active = active; }
 
-// Constructor
+	private List<String> lore = new ArrayList<>();
+	public List<String> getLore() { return lore; }
+	void setLore(List<String> lore) { this.lore = lore; }
+	// Constructor
 
 	/**
 	 * The Constructor.

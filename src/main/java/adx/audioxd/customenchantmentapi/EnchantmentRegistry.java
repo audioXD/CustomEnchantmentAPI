@@ -369,7 +369,6 @@ public class EnchantmentRegistry {
 	 */
 	public static boolean enchant(ItemStack item, Enchantment enchantment, int level, EnchantingData data) {
 		if(ItemUtil.isEmpty(item) || enchantment == null) return false;  // Checking if null
-		if(!item.hasItemMeta()) return false; // GetItem validation
 		if(level < 1) return false; // Invalid
 
 		// Quick applying the data
@@ -377,7 +376,7 @@ public class EnchantmentRegistry {
 		if(!data.isUnsafeLevel() && level > enchantment.getMaxLvl()) level = enchantment.getMaxLvl();
 
 		final ItemMeta itemMeta = item.getItemMeta();
-		List<String> lore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
+		List<String> lore = itemMeta.hasLore() ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
 		if(lore.contains(enchantment.getDisplay(level))) return false;
 
 		boolean success = true; // If true then I'm happy.

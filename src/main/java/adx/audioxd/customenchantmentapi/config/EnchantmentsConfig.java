@@ -81,27 +81,19 @@ public class EnchantmentsConfig extends Config {
 
 		public BooleanOption getIsActive() { return isActive; }
 
-		private final ListStringOption lore;
-
-		public ListStringOption getLore() { return lore; }
-
 		public EnchantmentData(String pathPrefix, RegisteredEnchantment registeredEnchantment) {
 			this.isActive = new BooleanOption(pathPrefix + ".active", true);
-			this.lore = new ListStringOption(pathPrefix + ".lore", registeredEnchantment.getEnchantment().getDescription() == null ? new ArrayList<>() : registeredEnchantment.getEnchantment().getDescription());
 		}
 		public EnchantmentData(String pathPrefix) {
-			this.isActive = new BooleanOption(pathPrefix + ".active", true);
-			this.lore = new ListStringOption(pathPrefix + ".lore", new ArrayList<>());
+			this.isActive = new BooleanOption(pathPrefix, true);
 		}
 
 		public void loadIfExist(Config config) {
 			isActive.loadIfExist(config);
-			lore.loadIfExist(config);
 		}
 
 		public void save(Config config) {
 			isActive.save(config);
-			lore.save(config);
 		}
 	}
 }

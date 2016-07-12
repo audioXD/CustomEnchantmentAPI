@@ -16,5 +16,6 @@ public class Ceapi extends CEAPICommand {
 		this.addSubCommands(new CeapiEnchant());
 		this.addSubCommands(new CeapiUnenchnat());
 		this.addSubCommands(new CeapiReloadConfig());
+		this.addSubCommands(new CeapiEnchantment());
 	}
 }

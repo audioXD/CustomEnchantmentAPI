@@ -23,7 +23,7 @@ public class TypeCustomEnchantment extends TypeAbstract<Enchantment> {
 	@Override
 	public Enchantment read(String arg, CommandSender sender) throws TypeException {
 		if(!hasPermission(sender, arg)) throw new TypeException(RequirementHasPerm.get(CEAPIPermissions.ENCHANTMENT_PREFIX + arg).createErrorMessage(sender));
-		return EnchantmentRegistry.getFromID(arg);
+		return EnchantmentRegistry.getFromID(arg).getEnchantment();
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class TypeCustomEnchantment extends TypeAbstract<Enchantment> {
 		for(Plugin plugin : EnchantmentRegistry.getEnchantments().keySet()) {
 			if(EnchantmentRegistry.getEnchantments().get(plugin) == null) continue;
 			for(String enchName : EnchantmentRegistry.getEnchantments().get(plugin).keySet()) {
-				Enchantment ench = EnchantmentRegistry.getEnchantments().get(plugin).get(enchName);
+				Enchantment ench = EnchantmentRegistry.getEnchantments().get(plugin).get(enchName).getEnchantment();
 				String o = EnchantmentRegistry.getID(plugin, ench);
 				if(o == null) continue;
 				if(!hasPermission(sender, o)) continue;

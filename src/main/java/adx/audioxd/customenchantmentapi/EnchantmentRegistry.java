@@ -24,16 +24,16 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 public class EnchantmentRegistry {
-	private static final EnchantingData DEFAULT_ENCHANT_DATA = new EnchantingData();
+	public static final EnchantingData DEFAULT_ENCHANT_DATA = new EnchantingData();
 
-	private static final Map<Plugin, Map<String, Enchantment>> enchantmentsMap = new HashMap<>();
+	private static final Map<Plugin, Map<String, RegisteredEnchantment>> enchantmentsMap = new HashMap<>();
 	/**
 	 * Gets all Enchantments registered in a HashMap.
 	 *
 	 * @return Returns a Map.
 	 */
-	public static synchronized Map<Plugin, Map<String, Enchantment>> getEnchantments() {
-		return enchantmentsMap;
+	public static synchronized Map<Plugin, Map<String, RegisteredEnchantment>> getEnchantments() {
+		return new HashMap<>(enchantmentsMap);
 	}
 
 
@@ -50,7 +50,6 @@ public class EnchantmentRegistry {
 		if(backedActiveEnchantments != null) return backedActiveEnchantments;
 		return bake();
 	}
-
 	/**
 	 * This method in a bake method for synchronization
 	 *
@@ -85,7 +84,6 @@ public class EnchantmentRegistry {
 		}
 		return baked;
 	}
-
 	/**
 	 * Rebuild the Enchantments Array.
 	 */
@@ -116,7 +114,6 @@ public class EnchantmentRegistry {
 		if(plugin == null || enchantment == null) return false;
 		return register(new RegisteredEnchantment(enchantment, plugin));
 	}
-
 	/**
 	 * This method registers the Enchantment.
 	 *
@@ -131,26 +128,20 @@ public class EnchantmentRegistry {
 		Enchantment enchantment = registeredEnchantment.getEnchantment();
 		String enchMapID = getEnchantmentsMapID(enchantment);
 
-		Map<String, Enchantment> enchs = enchantmentsMap.containsKey(plugin) ?
+		Map<String, RegisteredEnchantment> enchs = enchantmentsMap.containsKey(plugin) ?
 				enchantmentsMap.get(plugin) :
 				new HashMap<>();
 
 		if(!enchs.containsKey(enchMapID)) {
 			if(enchantments.add(registeredEnchantment)) {
-				enchs.put(enchMapID, enchantment);
+				enchs.put(enchMapID, registeredEnchantment);
 				enchantmentsMap.put(plugin, enchs);
 				backedActiveEnchantments = null;
 
-				registeredEnchantment.setActive(
-						CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().isActive(
-								registeredEnchantment.getPlugin(),
-								registeredEnchantment.getEnchantment()
-						)
-				);
+				CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().getData(registeredEnchantment);
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -161,7 +152,7 @@ public class EnchantmentRegistry {
 	 * @return The ID.
 	 */
 	public static String getEnchantmentsMapID(Enchantment enchantment) {
-		return ChatColor.stripColor(enchantment.getDisplay("").trim().toUpperCase()).replace(" ", "_");
+		return ChatColor.stripColor(enchantment.getName().toUpperCase()).replace(" ", "_");
 	}
 
 	/**
@@ -175,7 +166,6 @@ public class EnchantmentRegistry {
 		if(plugin == null || enchantment == null) return false;
 		return unregister(new RegisteredEnchantment(enchantment, plugin));
 	}
-
 	/**
 	 * Unregisters a Enchantment.
 	 *
@@ -191,7 +181,7 @@ public class EnchantmentRegistry {
 
 		if(enchantments.remove(registeredEnchantment)) {
 			if(enchantmentsMap.containsKey(plugin)) {
-				Map<String, Enchantment> enchs = enchantmentsMap.get(plugin);
+				Map<String, RegisteredEnchantment> enchs = enchantmentsMap.get(plugin);
 
 				if(enchs.containsKey(enchMapID))
 					enchs.remove(enchMapID);
@@ -214,11 +204,9 @@ public class EnchantmentRegistry {
 		if(plugin == null) return;
 
 		if(enchantmentsMap.containsKey(plugin)) {
-			for(Enchantment en : enchantmentsMap.get(plugin).values()) {
-
-				if(enchantments.remove(new RegisteredEnchantment(en, plugin))) {
+			for(RegisteredEnchantment registeredEnchantment : enchantmentsMap.get(plugin).values()) {
+				if(enchantments.remove(registeredEnchantment))
 					backedActiveEnchantments = null;
-				}
 			}
 			enchantmentsMap.remove(plugin);
 		}
@@ -234,16 +222,16 @@ public class EnchantmentRegistry {
 	}
 
 	// -------------------------------------------------- //
-	//                 ENCHNATMNT IDs                     //
+	//                 ENCHANTMENT IDs                     //
 	// -------------------------------------------------- //
 
 	/**
-	 * Gets the Enchantment from the ID.
+	 * Gets the RegisteredEnchantment from the ID.
 	 *
 	 * @param id The id(case sensitive) given from getID().
 	 * @return Returns the Enchantment or null.
 	 */
-	public static synchronized Enchantment getFromID(String id) {
+	public static synchronized RegisteredEnchantment getFromID(String id) {
 		if(id == null) return null;
 		if(id.trim().length() == 0) return null;
 
@@ -255,7 +243,7 @@ public class EnchantmentRegistry {
 
 		if(!enchantmentsMap.containsKey(plu)) return null;
 
-		Map<String, Enchantment> data2 = enchantmentsMap.get(plu);
+		Map<String, RegisteredEnchantment> data2 = enchantmentsMap.get(plu);
 		if(data2 == null) return null;
 		if(data2.isEmpty()) return null;
 		if(data2.containsKey(ench.toUpperCase())) {
@@ -263,7 +251,6 @@ public class EnchantmentRegistry {
 		}
 		return null;
 	}
-
 	/**
 	 * Returns a ID. That can be used from getFromID().
 	 *

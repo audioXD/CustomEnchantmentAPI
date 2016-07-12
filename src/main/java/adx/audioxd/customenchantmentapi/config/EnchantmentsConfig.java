@@ -4,12 +4,10 @@ package adx.audioxd.customenchantmentapi.config;
 import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.RegisteredEnchantment;
 import adx.audioxd.customenchantmentapi.config.option.BooleanOption;
-import adx.audioxd.customenchantmentapi.config.option.ListStringOption;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

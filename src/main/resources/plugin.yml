@@ -30,6 +30,7 @@ permissions:
       adx.ceapi.use: true
       adx.ceapi.list: true
       adx.ceapi.enchant: true
+      adx.ceapi.enchantment: true
       adx.ceapi.unenchant: true
       adx.ceapi.enchantment.*: true
 #-----------------------------------------------------
@@ -41,6 +42,11 @@ permissions:
     default: false
     children:
       adx.ceapi.use: true
+  adx.ceapi.enchantment:
+      description: Allows the use of /ceapi enchantment
+      default: false
+      children:
+        adx.ceapi.use: true
   adx.ceapi.enchant:
     description: Allows the use of /ceapi enchant <ench_id> [lvl]
     default: false

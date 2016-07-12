@@ -4,9 +4,6 @@ package adx.audioxd.customenchantmentapi;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RegisteredEnchantment {
 	private final Enchantment enchantment;
 	/**

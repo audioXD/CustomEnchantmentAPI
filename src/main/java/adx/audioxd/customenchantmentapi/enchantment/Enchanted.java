@@ -29,7 +29,6 @@ public class Enchanted implements Lvl {
 	public void fireEvent(EnchantmentEvent event, boolean sync) {
 		enchantment.fireEvent(event, lvl, sync);
 	}
-
 	/**
 	 * Fires the event.
 	 *

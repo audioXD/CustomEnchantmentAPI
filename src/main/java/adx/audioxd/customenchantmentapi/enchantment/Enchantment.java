@@ -50,7 +50,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 * @param <T>
 	 * @return
 	 */
-	protected  <T extends Enchantment> T setDescription(String description) {
+	protected final <T extends Enchantment> T setDescription(String description) {
 		this.description = description;
 
 		return (T) this;
@@ -63,7 +63,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 *
 	 * @return A TemType object.
 	 */
-	public ItemType getType() {
+	public final ItemType getType() {
 		return type;
 	}
 
@@ -74,7 +74,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 	 *
 	 * @return The max level.
 	 */
-	public int getMaxLvl() {
+	public final int getMaxLvl() {
 		return maxLvl;
 	}
 

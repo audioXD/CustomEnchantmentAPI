@@ -206,6 +206,6 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 		return getDisplay("");
 	}
 	@Override public final int hashCode() {
-		return getDisplay("").hashCode();
+		return getName().hashCode();
 	}
 }

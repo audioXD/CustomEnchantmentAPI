@@ -27,6 +27,7 @@ public class EnchantmentRegistry {
 	public static final EnchantingData DEFAULT_ENCHANT_DATA = new EnchantingData();
 
 	private static final Map<Plugin, Map<String, RegisteredEnchantment>> enchantmentsMap = new HashMap<>();
+
 	/**
 	 * Gets all Enchantments registered in a HashMap.
 	 *
@@ -38,9 +39,11 @@ public class EnchantmentRegistry {
 
 
 	private static final Set<RegisteredEnchantment> enchantments = new HashSet<>();
+
 	public static Set<RegisteredEnchantment> getRegisteredEnchantments() { return new HashSet<>(enchantments); }
 
 	private static volatile Enchantment[] backedActiveEnchantments = null;
+
 	/**
 	 * returns a array of Enchantment[].
 	 *
@@ -50,6 +53,7 @@ public class EnchantmentRegistry {
 		if(backedActiveEnchantments != null) return backedActiveEnchantments;
 		return bake();
 	}
+
 	/**
 	 * This method in a bake method for synchronization
 	 *
@@ -65,29 +69,29 @@ public class EnchantmentRegistry {
 
 					for(RegisteredEnchantment en : enchantments) {
 						EnchantmentsConfig.EnchantmentData data = CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().getData(en);
+						if(!data.getIsActive().getValue()) continue;
 
-						if(data.getIsActive().getValue()) {
-							if(active.containsKey(en.getEnchantment().getDisplay(""))) {
-								en.setActive(false);
-								data.getIsActive().setValue(false);
-								data.save(CustomEnchantmentAPI.getInstance().getEnchantmentsConfig());
-								continue;
-							}
-							en.setActive(true);
-							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());
+						boolean newActive = !active.containsKey(en.getEnchantment().getDisplay(""));
+						en.setActive(newActive);
+						if(data.getIsActive().getValue() != newActive) {
+							data.getIsActive().setValue(newActive);
+							CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().update(en, data);
 						}
-					}
 
+						if(newActive)
+							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());
+					}
+					CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().save();
 					baked = active.values().toArray(new Enchantment[active.values().size()]);
 					Arrays.sort(baked);
 					backedActiveEnchantments = baked;
-
 				}
 			}
 
 		}
 		return baked;
 	}
+
 	/**
 	 * Rebuild the Enchantments Array.
 	 */
@@ -118,6 +122,7 @@ public class EnchantmentRegistry {
 		if(plugin == null || enchantment == null) return false;
 		return register(new RegisteredEnchantment(enchantment, plugin));
 	}
+
 	/**
 	 * This method registers the Enchantment.
 	 *
@@ -170,6 +175,7 @@ public class EnchantmentRegistry {
 		if(plugin == null || enchantment == null) return false;
 		return unregister(new RegisteredEnchantment(enchantment, plugin));
 	}
+
 	/**
 	 * Unregisters a Enchantment.
 	 *
@@ -255,6 +261,7 @@ public class EnchantmentRegistry {
 		}
 		return null;
 	}
+
 	/**
 	 * Returns a ID. That can be used from getFromID().
 	 *
@@ -487,26 +494,27 @@ public class EnchantmentRegistry {
 	/**
 	 * Enchants a Entity with a Enchantment.
 	 *
-	 * @param entity                   The Entity that you want to enchant.
-	 * @param enchantment              Enchantment you want to enchant on a item.
-	 * @param level                      The level of the enchantment.
+	 * @param entity      The Entity that you want to enchant.
+	 * @param enchantment Enchantment you want to enchant on a item.
+	 * @param level       The level of the enchantment.
 	 * @return If the enchant method was successful.
 	 */
 	public synchronized static boolean enchant(Entity entity, Enchantment enchantment, int level) {
 		return enchant(entity, enchantment, level, DEFAULT_ENCHANT_DATA);
 	}
+
 	/**
 	 * Enchants a Entity with a Enchantment.
 	 *
-	 * @param entity                   The Entity that you want to enchant.
-	 * @param enchantment              Enchantment you want to enchant on a item.
-	 * @param level                      The level of the enchantment.
-	 * @param data                     The data for enchanting.
+	 * @param entity      The Entity that you want to enchant.
+	 * @param enchantment Enchantment you want to enchant on a item.
+	 * @param level       The level of the enchantment.
+	 * @param data        The data for enchanting.
 	 * @return If the enchant method was successful.
 	 */
 	public synchronized static boolean enchant(Entity entity, Enchantment enchantment, int level, EnchantingData data) {
 		if(entity == null || enchantment == null) return false;
-		if(level <  1) return false;
+		if(level < 1) return false;
 
 		if(!data.isUnsafeLevel() && level > enchantment.getMaxLvl()) level = enchantment.getMaxLvl();
 
@@ -514,11 +522,12 @@ public class EnchantmentRegistry {
 		List<MetadataValue> mValues = entity.getMetadata(tagID);
 
 		boolean flag = true;
-		if(mValues.isEmpty() || data.isOverrideCurrent());
+		if(mValues.isEmpty() || data.isOverrideCurrent()) ;
 		else if(data.isOverrideIfLargerThatCurrent() || data.isOverrideIfSmallerThanCurrent()) {
 			for(MetadataValue mV : mValues) {
 				int lvl = mV.asInt();
-				if(data.isOverrideCurrent() || (data.isOverrideIfLargerThatCurrent() && level > lvl) || (data.isOverrideIfSmallerThanCurrent() && level < lvl));
+				if(data.isOverrideCurrent() || (data.isOverrideIfLargerThatCurrent() && level > lvl) || (data.isOverrideIfSmallerThanCurrent() && level < lvl))
+					;
 				else flag = false;
 			}
 		}
@@ -531,12 +540,13 @@ public class EnchantmentRegistry {
 		entity.setMetadata(tagID, new FixedMetadataValue(CustomEnchantmentAPI.getInstance(), level));
 		return true;
 	}
+
 	/**
 	 * Enchants a Entity with a Enchantment.
 	 *
 	 * @param entity                   The Entity that you want to enchant.
 	 * @param enchantment              Enchantment you want to enchant on a item.
-	 * @param level                      The level of the enchantment.
+	 * @param level                    The level of the enchantment.
 	 * @param override                 If it overrides the current enchantment.
 	 * @param override_if_larger_level If it overrides if there's a larger level.
 	 * @return If the enchant method was successful.

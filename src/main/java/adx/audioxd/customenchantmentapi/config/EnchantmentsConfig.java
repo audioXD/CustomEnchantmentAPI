@@ -8,11 +8,10 @@ import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class EnchantmentsConfig extends Config {
-	private Map<String, EnchantmentData> options = new HashMap<>();
+	private LinkedHashMap<String, EnchantmentData> options = new LinkedHashMap<>();
 
 
 	// Constructor
@@ -59,24 +58,27 @@ public class EnchantmentsConfig extends Config {
 	}
 
 	public EnchantmentData getData(RegisteredEnchantment registeredEnchantment) {
-		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getPlugin() == null)
+		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getEnchantment() == null)
 			return null;
 		String path = registeredEnchantment.getPlugin().getName() + "." + EnchantmentRegistry.getEnchantmentsMapID(registeredEnchantment.getEnchantment());
 
-		EnchantmentData data = options.containsKey(path) ? options.get(path) : new EnchantmentData(path, registeredEnchantment);
-
 		if(!options.containsKey(path)) {
-			options.put(path, data);
+			options.put(path, new EnchantmentData(path, registeredEnchantment));
 			options.get(path).loadIfExist(this);
 		}
-		return data;
+		return options.get(path);
+	}
 
+	public void update(RegisteredEnchantment registeredEnchantment, EnchantmentData data) {
+		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getEnchantment() == null)
+			return;
+		String path = registeredEnchantment.getPlugin().getName() + "." + EnchantmentRegistry.getEnchantmentsMapID(registeredEnchantment.getEnchantment());
+		options.put(path, data);
 	}
 
 
 	public static final class EnchantmentData {
 		private final BooleanOption isActive;
-
 		public BooleanOption getIsActive() { return isActive; }
 
 		public EnchantmentData(String pathPrefix, RegisteredEnchantment registeredEnchantment) {
@@ -89,7 +91,6 @@ public class EnchantmentsConfig extends Config {
 		public void loadIfExist(Config config) {
 			isActive.loadIfExist(config);
 		}
-
 		public void save(Config config) {
 			isActive.save(config);
 		}

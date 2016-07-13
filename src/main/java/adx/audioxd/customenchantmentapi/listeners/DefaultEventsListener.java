@@ -357,9 +357,9 @@ public class DefaultEventsListener extends CEAPIListenerUtils {
 		if(entity == null) return;
 
 		if(!ItemUtil.isEmpty(ItemUtil.getMainHandItem(entity)))
-			CEAPIListenerUtils.itemNotInHand(entity, ItemUtil.getMainHandItem(entity), HandType.MAIN);
+			CEAPIListenerUtils.itemNotInMainHand(entity, ItemUtil.getMainHandItem(entity));
 		if(!ItemUtil.isEmpty(ItemUtil.getOffHandItem(entity)))
-			CEAPIListenerUtils.itemNotInHand(entity, ItemUtil.getOffHandItem(entity), HandType.OFF);
+			CEAPIListenerUtils.itemNotInOffHand(entity, ItemUtil.getOffHandItem(entity));
 
 		for(ItemStack item : entity.getEquipment().getArmorContents()) {
 			EUnequipEvent eEvent = new EUnequipEvent(item, entity);

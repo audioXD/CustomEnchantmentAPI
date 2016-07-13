@@ -65,9 +65,10 @@ public class EnchantmentRegistry {
 
 					for(RegisteredEnchantment en : enchantments) {
 						EnchantmentsConfig.EnchantmentData data = CustomEnchantmentAPI.getInstance().getEnchantmentsConfig().getData(en);
+
 						if(data.getIsActive().getValue()) {
 							if(active.containsKey(en.getEnchantment().getDisplay(""))) {
-								en.setActive(false);
+								en.setActive(true);
 								continue;
 							}
 							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());

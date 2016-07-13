@@ -68,9 +68,12 @@ public class EnchantmentRegistry {
 
 						if(data.getIsActive().getValue()) {
 							if(active.containsKey(en.getEnchantment().getDisplay(""))) {
-								en.setActive(true);
+								en.setActive(false);
+								data.getIsActive().setValue(false);
+								data.save(CustomEnchantmentAPI.getInstance().getEnchantmentsConfig());
 								continue;
 							}
+							en.setActive(true);
 							active.put(en.getEnchantment().getDisplay(""), en.getEnchantment());
 						}
 					}

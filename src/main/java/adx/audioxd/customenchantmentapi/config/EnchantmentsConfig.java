@@ -4,7 +4,6 @@ package adx.audioxd.customenchantmentapi.config;
 import adx.audioxd.customenchantmentapi.EnchantmentRegistry;
 import adx.audioxd.customenchantmentapi.RegisteredEnchantment;
 import adx.audioxd.customenchantmentapi.config.option.BooleanOption;
-import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -29,9 +28,7 @@ public class EnchantmentsConfig extends Config {
 				EnchantmentData ench = options.containsKey(path) ? options.get(path) : new EnchantmentData(path);
 				ench.loadIfExist(this);
 
-				if(!options.containsKey(path)) {
-					options.put(path, ench);
-				}
+				options.put(path, ench);
 			}
 		}
 	}
@@ -43,32 +40,19 @@ public class EnchantmentsConfig extends Config {
 		}
 	}
 
-	public boolean isActive(Plugin plugin, Enchantment enchantment) {
-		if(plugin == null || enchantment == null) return false;
-		String path = plugin.getName() + "." + EnchantmentRegistry.getEnchantmentsMapID(enchantment);
-
-		EnchantmentData ench = options.containsKey(path) ? options.get(path) : new EnchantmentData(path);
-
-		if(!options.containsKey(path)) {
-			options.put(path, ench);
-			options.get(path).loadIfExist(this);
-		}
-
-		return ench.getIsActive().getValue();
-	}
-
 	public EnchantmentData getData(RegisteredEnchantment registeredEnchantment) {
 		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getEnchantment() == null)
 			return null;
 		String path = registeredEnchantment.getPlugin().getName() + "." + EnchantmentRegistry.getEnchantmentsMapID(registeredEnchantment.getEnchantment());
 
 		if(!options.containsKey(path)) {
-			options.put(path, new EnchantmentData(path, registeredEnchantment));
-			options.get(path).loadIfExist(this);
+			EnchantmentData data = new EnchantmentData(path, registeredEnchantment);
+			data.loadIfExist(this);
+
+			options.put(path, data);
 		}
 		return options.get(path);
 	}
-
 	public void update(RegisteredEnchantment registeredEnchantment, EnchantmentData data) {
 		if(registeredEnchantment == null || registeredEnchantment.getPlugin() == null || registeredEnchantment.getEnchantment() == null)
 			return;
@@ -85,7 +69,7 @@ public class EnchantmentsConfig extends Config {
 			this.isActive = new BooleanOption(pathPrefix + ".active", true);
 		}
 		public EnchantmentData(String pathPrefix) {
-			this.isActive = new BooleanOption(pathPrefix, true);
+			this.isActive = new BooleanOption(pathPrefix + ".active", true);
 		}
 
 		public void loadIfExist(Config config) {

@@ -8,21 +8,22 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class EnchantmentEventWithOwnerAndItem implements EnchantmentEvent, Owner, Item {
-	protected final LivingEntity owner;
-	private final ItemStack item;
 
-	// Constructor
-	public EnchantmentEventWithOwnerAndItem(LivingEntity owner, ItemStack item) {
-		this.owner = owner;
-		this.item = item;
-	}
+  protected final LivingEntity owner;
+  private final ItemStack item;
 
-	// Getters
-	final public LivingEntity getOwner() {
-		return owner;
-	}
+  // Constructor
+  public EnchantmentEventWithOwnerAndItem(LivingEntity owner, ItemStack item) {
+    this.owner = owner;
+    this.item = item;
+  }
 
-	final public ItemStack getItem() {
-		return item;
-	}
+  // Getters
+  final public LivingEntity getOwner() {
+    return owner;
+  }
+
+  final public ItemStack getItem() {
+    return item;
+  }
 }

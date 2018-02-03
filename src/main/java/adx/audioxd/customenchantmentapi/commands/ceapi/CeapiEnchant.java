@@ -17,32 +17,34 @@ import adx.audioxd.customenchantmentapi.listeners.CEAPIListenerUtils;
 import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 
 public class CeapiEnchant extends CEAPICommand {
-	public CeapiEnchant() {
-		this.addAlias("enchant");
 
-		this.addRequirements(RequirementHasPerm.get(CEAPIPermissions.ENCHANT_USE));
-		this.addRequirements(RequirementIsPlayer.get());
-		this.addRequirements(RequirementHasItemInHand.get());
+  public CeapiEnchant() {
+    this.addAlias("enchant");
 
-		this.addParameter(TypeCustomEnchantment.get());
-		this.addParameter(TypeInteger.get()).setDefaultDesc("Default 1");
-	}
+    this.addRequirements(RequirementHasPerm.get(CEAPIPermissions.ENCHANT_USE));
+    this.addRequirements(RequirementIsPlayer.get());
+    this.addRequirements(RequirementHasItemInHand.get());
 
-	@Override
-	public void perform() throws CEAPICommandException {
-		if(sender == null) throw new CEAPICommandException("Sender is null");
-		LanguageConfig lc = CustomEnchantmentAPI.getInstance().getLanguageConfig();
+    this.addParameter(TypeCustomEnchantment.get());
+    this.addParameter(TypeInteger.get()).setDefaultDesc("Default 1");
+  }
 
-		Enchantment ench = this.readArg(null);
-		if(ench == null) throw new CEAPICommandException(lc.UNKNOWN_ENCHANTMENT.format(this.readArgAt(0)));
+  @Override
+  public void perform() throws CEAPICommandException {
+    if (sender == null) throw new CEAPICommandException("Sender is null");
+    LanguageConfig lc = CustomEnchantmentAPI.getInstance().getLanguageConfig();
 
-		int lvl = this.readArg(1);
-		if(lvl < 1) throw new CEAPICommandException(lc.LEVEL_LESS_THAN_ONE.format());
+    Enchantment ench = this.readArg(null);
+    if (ench == null)
+      throw new CEAPICommandException(lc.UNKNOWN_ENCHANTMENT.format(this.readArgAt(0)));
 
-		if(EnchantmentRegistry.enchant(ItemUtil.getMainHandItem(me), ench, lvl, true, true)){
-			CEAPIListenerUtils.itemInMainHand(me, ItemUtil.getMainHandItem(me));
-			throw new CEAPICommandException(lc.ENCHANT_SUCCESS.format(ench.getDisplay(lvl)));
-		}
-		throw new CEAPICommandException(lc.ENCHANT_ERROR.format(ench.getDisplay(lvl)));
-	}
+    int lvl = this.readArg(1);
+    if (lvl < 1) throw new CEAPICommandException(lc.LEVEL_LESS_THAN_ONE.format());
+
+    if (EnchantmentRegistry.enchant(ItemUtil.getMainHandItem(me), ench, lvl, true, true)) {
+      CEAPIListenerUtils.itemInMainHand(me, ItemUtil.getMainHandItem(me));
+      throw new CEAPICommandException(lc.ENCHANT_SUCCESS.format(ench.getDisplay(lvl)));
+    }
+    throw new CEAPICommandException(lc.ENCHANT_ERROR.format(ench.getDisplay(lvl)));
+  }
 }

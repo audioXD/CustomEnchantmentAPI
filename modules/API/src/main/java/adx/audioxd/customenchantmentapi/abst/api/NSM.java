@@ -1,17 +1,17 @@
 package adx.audioxd.customenchantmentapi.abst.api;
 
 
+import java.lang.reflect.Method;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Method;
-
 public interface NSM {
-	ItemStack getItemInMainHand(LivingEntity player);
-	ItemStack getItemInOffHand(LivingEntity player);
 
-	boolean isHandMainHAnd(PlayerInteractEvent event);
+  ItemStack getItemInMainHand(LivingEntity player);
+  ItemStack getItemInOffHand(LivingEntity player);
 
-	VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off);
+  boolean isHandMainHAnd(PlayerInteractEvent event);
+
+  VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off);
 }

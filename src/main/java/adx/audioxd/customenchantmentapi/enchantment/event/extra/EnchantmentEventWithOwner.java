@@ -6,15 +6,16 @@ import adx.audioxd.customenchantmentapi.enchantment.event.forhelp.Owner;
 import org.bukkit.entity.LivingEntity;
 
 public abstract class EnchantmentEventWithOwner implements EnchantmentEvent, Owner {
-	protected final LivingEntity owner;
 
-	// Constructor
-	public EnchantmentEventWithOwner(LivingEntity owner) {
-		this.owner = owner;
-	}
+  protected final LivingEntity owner;
 
-	// Getters
-	final public LivingEntity getOwner() {
-		return owner;
-	}
+  // Constructor
+  public EnchantmentEventWithOwner(LivingEntity owner) {
+    this.owner = owner;
+  }
+
+  // Getters
+  final public LivingEntity getOwner() {
+    return owner;
+  }
 }

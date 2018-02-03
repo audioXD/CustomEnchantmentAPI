@@ -33,7 +33,7 @@ configure(allprojects - project(':modules')) {
 
 archivesBaseName = 'CustomEnchantmentAPI'
 group = 'adx.audioxd.customenchantmentapi'
-version = '2.8.3-RELEASE'
+version = '2.8.4-RELEASE'
 
 def MainClass = group + '.' + archivesBaseName
 def delete_on_upload = true
@@ -56,12 +56,12 @@ test {
 uploadArchives {
     repositories {
         flatDir {
-            dirs '/output/' + version
+            dirs 'output/' + version
         }
     }
     repositories {
         flatDir {
-            dirs '/output/latest'
+            dirs 'output/latest'
         }
     }
 }
@@ -70,8 +70,8 @@ uploadArchives {
 tasks.uploadArchives.dependsOn(clean)
 // Deletes every file except .gitignore
 clean.doFirst {
-    if (file("/output/latest").exists() && delete_on_upload) {
-        new File(rootDir, "/output/latest").eachFile() { file ->
+    if (file("output/latest").exists() && delete_on_upload) {
+        new File(rootDir, "output/latest").eachFile() { file ->
             if (!file.getName().equalsIgnoreCase(".gitignore")) {
                 delete file.getPath()
             }
@@ -143,5 +143,5 @@ uploadArchives {
 
 // This for generating the gradle wrapper
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
+    gradleVersion = '4.5'
 }

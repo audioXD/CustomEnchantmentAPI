@@ -10,16 +10,23 @@ import org.bukkit.inventory.ItemStack;
 
 @EnchantmentEventWithLevel
 public class EBowShootEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
-	private final Entity projectile;
-	public Entity getProjectile() { return projectile; }
 
-	private boolean cancelled = false;
-	public boolean isCancelled() { return cancelled; }
-	public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+  private final Entity projectile;
+  public Entity getProjectile() {
+    return projectile;
+  }
 
-	// Constructor
-	public EBowShootEvent(ItemStack item, LivingEntity owner, Entity projectile) {
-		super(owner, item);
-		this.projectile = projectile;
-	}
+  private boolean cancelled = false;
+  public boolean isCancelled() {
+    return cancelled;
+  }
+  public void setCancelled(boolean cancelled) {
+    this.cancelled = cancelled;
+  }
+
+  // Constructor
+  public EBowShootEvent(ItemStack item, LivingEntity owner, Entity projectile) {
+    super(owner, item);
+    this.projectile = projectile;
+  }
 }

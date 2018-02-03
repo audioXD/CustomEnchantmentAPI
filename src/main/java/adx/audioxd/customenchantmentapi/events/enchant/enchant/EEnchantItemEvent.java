@@ -6,10 +6,14 @@ import org.bukkit.inventory.ItemStack;
 
 
 public class EEnchantItemEvent extends EEnchantEvent implements Item {
-	private final ItemStack item;
-	@Override public ItemStack getItem() { return item; }
 
-	public EEnchantItemEvent(ItemStack item) {
-		this.item = item;
-	}
+  private final ItemStack item;
+  @Override
+  public ItemStack getItem() {
+    return item;
+  }
+
+  public EEnchantItemEvent(ItemStack item) {
+    this.item = item;
+  }
 }

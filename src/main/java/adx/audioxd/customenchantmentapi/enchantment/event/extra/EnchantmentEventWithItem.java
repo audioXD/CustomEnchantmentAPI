@@ -7,15 +7,15 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class EnchantmentEventWithItem implements EnchantmentEvent, Item {
 
-	private final ItemStack item;
+  private final ItemStack item;
 
-	// Constructor
-	public EnchantmentEventWithItem(ItemStack item) {
-		this.item = item;
-	}
+  // Constructor
+  public EnchantmentEventWithItem(ItemStack item) {
+    this.item = item;
+  }
 
-	// Getters
-	final public ItemStack getItem() {
-		return item;
-	}
+  // Getters
+  final public ItemStack getItem() {
+    return item;
+  }
 }

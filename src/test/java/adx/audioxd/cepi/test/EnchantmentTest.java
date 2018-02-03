@@ -9,101 +9,104 @@ import org.bukkit.Material;
 import org.junit.Test;
 
 public class EnchantmentTest {
-	// Global fields
-	public static TestEnch tEnch = new TestEnch();
-// End of Global Fields
 
-	@Test
-	public void getName() {
-		System.out.println("Name: " + tEnch.getDisplay(""));
-	}
+  // Global fields
+  public static TestEnch tEnch = new TestEnch();
+  // End of Global Fields
 
-	@Test
-	public void getType() {
-		System.out.println("Types: ");
-		for(Material m : tEnch.getType().getTypes()) {
-			System.out.println(" - " + m.toString());
-		}
-	}
+  @Test
+  public void getName() {
+    System.out.println("Name: " + tEnch.getDisplay(""));
+  }
 
-	@Test
-	public void getMaxLevel() {
-		System.out.println("Max Level: " + tEnch.getMaxLvl());
-	}
+  @Test
+  public void getType() {
+    System.out.println("Types: ");
+    for (Material m : tEnch.getType().getTypes()) {
+      System.out.println(" - " + m.toString());
+    }
+  }
 
-	@Test
-	public void getPriority() {
-		System.out.println("Priority: " + tEnch.getPriority().toString());
-	}
+  @Test
+  public void getMaxLevel() {
+    System.out.println("Max Level: " + tEnch.getMaxLvl());
+  }
 
-	@Test
-	public void getDisplay() {
-		System.out.println("Display: " + tEnch.getDisplay(""));
+  @Test
+  public void getPriority() {
+    System.out.println("Priority: " + tEnch.getPriority().toString());
+  }
 
-		for(int i = 0; i < (tEnch.getMaxLvl() > 3 ? 3 : tEnch.getMaxLvl()); i++) {
-			System.out.println(" - " + "Display for number '" + (i + 1) + "': " + tEnch.getDisplay(i + 1));
-		}
-	}
+  @Test
+  public void getDisplay() {
+    System.out.println("Display: " + tEnch.getDisplay(""));
 
-	@Test(expected = NumberFormatException.class)
-	public void getDisplayExceptionTest() {
-		tEnch.getDisplay(-1);
-	}
+    for (int i = 0; i < (tEnch.getMaxLvl() > 3 ? 3 : tEnch.getMaxLvl()); i++) {
+      System.out
+          .println(" - " + "Display for number '" + (i + 1) + "': " + tEnch.getDisplay(i + 1));
+    }
+  }
 
-	@Test
-	public void getToString() {
-		System.out.println("To String: " + tEnch.toString());
-	}
+  @Test(expected = NumberFormatException.class)
+  public void getDisplayExceptionTest() {
+    tEnch.getDisplay(-1);
+  }
+
+  @Test
+  public void getToString() {
+    System.out.println("To String: " + tEnch.toString());
+  }
 
 
-	private static final String[] toVerify = new String[] {
-			tEnch.getDisplay(tEnch.getMaxLvl()),
-			". Some text",
-			tEnch.getDisplay(""),
-			tEnch.getDisplay("bla"),
-			"Smite II"
-	};
+  private static final String[] toVerify = new String[] {
+      tEnch.getDisplay(tEnch.getMaxLvl()),
+      ". Some text",
+      tEnch.getDisplay(""),
+      tEnch.getDisplay("bla"),
+      "Smite II"
+  };
 
-	@Test
-	public void parseText() {
-		System.out.println("===========[START]===========");
-		for(int i = 0; i < toVerify.length; i++) {
-			String line = toVerify[i];
-			System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
-		}
-		System.out.println("============[END]============");
-	}
+  @Test
+  public void parseText() {
+    System.out.println("===========[START]===========");
+    for (int i = 0; i < toVerify.length; i++) {
+      String line = toVerify[i];
+      System.out.println(" - " + "Parse line '" + line + "': " + tEnch.hasCustomEnchantment(line));
+    }
+    System.out.println("============[END]============");
+  }
 
-	@Test
-	public void parseTextStressTest() {
-		for(int i = 0; i < 1000000; i++) {
-			tEnch.hasCustomEnchantment(toVerify[0]);
-		}
-	}
+  @Test
+  public void parseTextStressTest() {
+    for (int i = 0; i < 1000000; i++) {
+      tEnch.hasCustomEnchantment(toVerify[0]);
+    }
+  }
 
-	@Test
-	public void priority() {
-		System.out.println("HIGH compare to LOWEST: " + EnchantmentPriority.HIGH.compareTo(EnchantmentPriority.LOWEST));
-	}
+  @Test
+  public void priority() {
+    System.out.println("HIGH compare to LOWEST: " + EnchantmentPriority.HIGH
+        .compareTo(EnchantmentPriority.LOWEST));
+  }
 
-	@Test
-	public void fireEventsPriority() {
-		EItemInHandEvent e = new EItemInHandEvent(null, null, null);
-		tEnch.fireEvent(e);
-	}
+  @Test
+  public void fireEventsPriority() {
+    EItemInHandEvent e = new EItemInHandEvent(null, null, null);
+    tEnch.fireEvent(e);
+  }
 
-	@Test
-	public void testIgnoreCancelled() {
-		EBowShootEvent e = new EBowShootEvent(null, null, null);
-		e.setCancelled(false);
+  @Test
+  public void testIgnoreCancelled() {
+    EBowShootEvent e = new EBowShootEvent(null, null, null);
+    e.setCancelled(false);
 
-		tEnch.fireEvent(e);
-		System.out.println("Cancelled: " + e.isCancelled());
-	}
+    tEnch.fireEvent(e);
+    System.out.println("Cancelled: " + e.isCancelled());
+  }
 
-	@Test
-	public void testFireingInterfacesAndSuperClass(){
-		EEnchantEntityEvent e = new EEnchantEntityEvent(null);
-		tEnch.fireEvent(e);
-	}
+  @Test
+  public void testFireingInterfacesAndSuperClass() {
+    EEnchantEntityEvent e = new EEnchantEntityEvent(null);
+    tEnch.fireEvent(e);
+  }
 }

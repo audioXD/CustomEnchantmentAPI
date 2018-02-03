@@ -13,44 +13,45 @@ import org.bukkit.inventory.ItemStack;
 
 @EnchantmentEventWithLevel
 public class EInteractEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
-	private final HandType handType;
-	private boolean cancelled = false;
-	private Action action;
-	private BlockFace blockFace;
-	private Block clickedBlock;
 
-	// Constructor
-	public EInteractEvent(ItemStack item, LivingEntity owner, Action action, BlockFace blockFace,
-	                      Block clickedBlock, HandType handType) {
-		super(owner, item);
-		this.action = action;
-		this.blockFace = blockFace;
-		this.clickedBlock = clickedBlock;
-		this.handType = handType;
-	}
+  private final HandType handType;
+  private boolean cancelled = false;
+  private Action action;
+  private BlockFace blockFace;
+  private Block clickedBlock;
 
-	// Getters
-	public boolean isCancelled() {
-		return cancelled;
-	}
+  // Constructor
+  public EInteractEvent(ItemStack item, LivingEntity owner, Action action, BlockFace blockFace,
+      Block clickedBlock, HandType handType) {
+    super(owner, item);
+    this.action = action;
+    this.blockFace = blockFace;
+    this.clickedBlock = clickedBlock;
+    this.handType = handType;
+  }
 
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
+  // Getters
+  public boolean isCancelled() {
+    return cancelled;
+  }
 
-	public Action getAction() {
-		return action;
-	}
+  public void setCancelled(boolean cancelled) {
+    this.cancelled = cancelled;
+  }
 
-	public BlockFace getBlockFace() {
-		return blockFace;
-	}
+  public Action getAction() {
+    return action;
+  }
 
-	public Block getClickedBlock() {
-		return clickedBlock;
-	}
+  public BlockFace getBlockFace() {
+    return blockFace;
+  }
 
-	public HandType getHandType() {
-		return handType;
-	}
+  public Block getClickedBlock() {
+    return clickedBlock;
+  }
+
+  public HandType getHandType() {
+    return handType;
+  }
 }

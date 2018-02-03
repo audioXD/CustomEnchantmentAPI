@@ -10,23 +10,23 @@ import adx.audioxd.customenchantmentapi.events.inventory.hand.EItemInOffHandEven
 
 public class TestEventEnch extends Enchantment {
 
-	// Constructor
-	public TestEventEnch() {
-		super("Test Ench", ItemType.ALL_OFF_THE_ABOVE, 10);
-	}
+  // Constructor
+  public TestEventEnch() {
+    super("Test Ench", ItemType.ALL_OFF_THE_ABOVE, 10);
+  }
 
-	@EnchantmentEventHandler
-	public void test1(EItemInHandEvent e, int lvl) {
-		System.out.println("This should fire! Cancelled: " + e.isCancelled());
-	}
+  @EnchantmentEventHandler
+  public void test1(EItemInHandEvent e, int lvl) {
+    System.out.println("This should fire! Cancelled: " + e.isCancelled());
+  }
 
-	@EnchantmentEventHandler
-	public void test2(EItemInMainHandEvent e, int lvl) {
-		System.out.println("This should fire! Cancelled: " + e.isCancelled());
-	}
+  @EnchantmentEventHandler
+  public void test2(EItemInMainHandEvent e, int lvl) {
+    System.out.println("This should fire! Cancelled: " + e.isCancelled());
+  }
 
-	@EnchantmentEventHandler
-	public void test3(EItemInOffHandEvent e, int lvl) {
-		System.out.println("This should fire! Cancelled: " + e.isCancelled());
-	}
+  @EnchantmentEventHandler
+  public void test3(EItemInOffHandEvent e, int lvl) {
+    System.out.println("This should fire! Cancelled: " + e.isCancelled());
+  }
 }

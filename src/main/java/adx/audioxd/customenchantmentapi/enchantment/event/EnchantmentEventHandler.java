@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface EnchantmentEventHandler {
 
-	EnchantmentEventPriority priority() default EnchantmentEventPriority.NORMAL;
-	boolean ignoreCancelled() default false;
+  EnchantmentEventPriority priority() default EnchantmentEventPriority.NORMAL;
+  boolean ignoreCancelled() default false;
 
 }

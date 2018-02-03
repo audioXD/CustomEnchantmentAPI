@@ -3,48 +3,50 @@ package adx.audioxd.customenchantmentapi.enchantment;
 
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEvent;
 import adx.audioxd.customenchantmentapi.enchantment.event.EnchantmentEventHandler;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EventBus {
-	private final Map<Class<?>, HandlerList> handlers = new ConcurrentHashMap<>();
 
-	// Constructor
-	EventBus(Enchantment listener) {
-		if(listener == null) throw new NullPointerException("Listener cannot be null!");
+  private final Map<Class<?>, HandlerList> handlers = new ConcurrentHashMap<>();
 
-		for(Method method : listener.getClass().getMethods()) {
-			if(!method.isAnnotationPresent(EnchantmentEventHandler.class)) continue;
+  // Constructor
+  EventBus(Enchantment listener) {
+    if (listener == null) throw new NullPointerException("Listener cannot be null!");
 
-			RegisteredListener rListener = new RegisteredListener(listener, method);
-			handlers.computeIfAbsent(rListener.getEventClass(), (eventClass) -> new HandlerList())
-					.registerListener(rListener);
-		}
-	}
+    for (Method method : listener.getClass().getMethods()) {
+      if (!method.isAnnotationPresent(EnchantmentEventHandler.class)) continue;
 
-	void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
-		fireEvent(event, lvl, sync, event.getClass());
-	}
-	private void fireEvent(EnchantmentEvent event, int lvl, boolean sync, Class<?> type) {
-		if(event == null) throw new NullPointerException("Event cannot be null");
-		if(type == null || !EnchantmentEvent.class.isAssignableFrom(type)) return;
+      RegisteredListener rListener = new RegisteredListener(listener, method);
+      handlers.computeIfAbsent(rListener.getEventClass(), (eventClass) -> new HandlerList())
+          .registerListener(rListener);
+    }
+  }
 
-		fireEvent(event, lvl, sync, type.getSuperclass());
-		for(Class<?> inter : type.getInterfaces()){ fireEvent(event, lvl, sync, inter); }
+  void fireEvent(EnchantmentEvent event, int lvl, boolean sync) {
+    fireEvent(event, lvl, sync, event.getClass());
+  }
+  private void fireEvent(EnchantmentEvent event, int lvl, boolean sync, Class<?> type) {
+    if (event == null) throw new NullPointerException("Event cannot be null");
+    if (type == null || !EnchantmentEvent.class.isAssignableFrom(type)) return;
 
-		HandlerList handler = handlers.get(type);
-		if(handler == null) return;
+    fireEvent(event, lvl, sync, type.getSuperclass());
+    for (Class<?> inter : type.getInterfaces()) {
+      fireEvent(event, lvl, sync, inter);
+    }
 
-		if(sync) {
-			synchronized(EventBus.class) {
-				handler.fireEvent(event, lvl);
-			}
-		} else {
-			handler.fireEvent(event, lvl);
-		}
+    HandlerList handler = handlers.get(type);
+    if (handler == null) return;
+
+    if (sync) {
+      synchronized (EventBus.class) {
+        handler.fireEvent(event, lvl);
+      }
+    } else {
+      handler.fireEvent(event, lvl);
+    }
 
 
-	}
+  }
 }

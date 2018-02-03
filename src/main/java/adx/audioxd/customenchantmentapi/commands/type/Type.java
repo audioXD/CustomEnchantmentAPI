@@ -3,30 +3,30 @@ package adx.audioxd.customenchantmentapi.commands.type;
 
 import adx.audioxd.customenchantmentapi.commands.entities.Named;
 import adx.audioxd.customenchantmentapi.commands.exceptions.TypeException;
-import org.bukkit.command.CommandSender;
-
 import java.util.Collection;
 import java.util.List;
+import org.bukkit.command.CommandSender;
 
-public interface Type<T> extends Named{
-	String getInvelidErrorMessage(String arg);
+public interface Type<T> extends Named {
 
-	String getName();
+  String getInvelidErrorMessage(String arg);
 
-	T read(String arg, CommandSender sender) throws TypeException;
-	T read(CommandSender sender) throws TypeException;
-	T read(String arg) throws TypeException;
-	T read() throws TypeException;
+  String getName();
 
-	boolean isValid(String arg, CommandSender sender);
+  T read(String arg, CommandSender sender) throws TypeException;
+  T read(CommandSender sender) throws TypeException;
+  T read(String arg) throws TypeException;
+  T read() throws TypeException;
 
-	Collection<String> getTabList(CommandSender sender, String arg);
-	List<String> getTabListFiltered(CommandSender sender, String arg);
+  boolean isValid(String arg, CommandSender sender);
 
-	boolean allowSpaceAfterTab = false;
-	boolean allowSpaceAfterTab();
-	<T extends Type>T setAllowSpaceAfterTab(boolean allowSpaceAfterTab);
+  Collection<String> getTabList(CommandSender sender, String arg);
+  List<String> getTabListFiltered(CommandSender sender, String arg);
 
-	boolean equals(T type1, T type2);
-	boolean equalsInner(T type1, T type2);
+  boolean allowSpaceAfterTab = false;
+  boolean allowSpaceAfterTab();
+  <T extends Type> T setAllowSpaceAfterTab(boolean allowSpaceAfterTab);
+
+  boolean equals(T type1, T type2);
+  boolean equalsInner(T type1, T type2);
 }

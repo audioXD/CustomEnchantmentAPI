@@ -2,5 +2,7 @@ include ':modules:API'
 include ':modules:v1_8'
 include ':modules:v1_9'
 include ':modules:v1_10'
+include ':modules:v1_11'
+include ':modules:v1_12'
 
 rootProject.name = 'CustomEnchantmentAPI'

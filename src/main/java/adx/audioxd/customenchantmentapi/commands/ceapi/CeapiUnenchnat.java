@@ -18,29 +18,31 @@ import adx.audioxd.customenchantmentapi.utils.ItemUtil;
 import org.bukkit.inventory.ItemStack;
 
 public class CeapiUnenchnat extends CEAPICommand {
-	public CeapiUnenchnat() {
-		this.addAlias("unenchant");
 
-		this.addRequirements(RequirementHasPerm.get(CEAPIPermissions.UNENCHANT_USE));
-		this.addRequirements(RequirementIsPlayer.get());
-		this.addRequirements(RequirementHasItemInHand.get());
+  public CeapiUnenchnat() {
+    this.addAlias("unenchant");
 
-		this.addParameter(TypeCustomEnchantment.get());
-	}
+    this.addRequirements(RequirementHasPerm.get(CEAPIPermissions.UNENCHANT_USE));
+    this.addRequirements(RequirementIsPlayer.get());
+    this.addRequirements(RequirementHasItemInHand.get());
 
-	@Override
-	public void perform() throws CEAPICommandException {
-		if(sender == null) throw new CEAPICommandException("Sender is null");
-		LanguageConfig lc = CustomEnchantmentAPI.getInstance().getLanguageConfig();
+    this.addParameter(TypeCustomEnchantment.get());
+  }
 
-		Enchantment ench = this.readArg();
-		if(ench == null) throw new CEAPICommandException(lc.UNKNOWN_ENCHANTMENT.format(this.readArgAt(0)));
+  @Override
+  public void perform() throws CEAPICommandException {
+    if (sender == null) throw new CEAPICommandException("Sender is null");
+    LanguageConfig lc = CustomEnchantmentAPI.getInstance().getLanguageConfig();
 
-		ItemStack previous = new ItemStack(ItemUtil.getMainHandItem(me));
-		if(EnchantmentRegistry.unenchant(ItemUtil.getMainHandItem(me), ench) ){
-			CEAPIListenerUtils.itemNotInHand(me, previous, HandType.MAIN);
-			throw new CEAPICommandException(lc.UNENCHANT_SUCCESS.format(ench.getDisplay("")));
-		}
-		throw new CEAPICommandException(lc.UNENCHANT_ERROR.format(ench.getDisplay("")));
-	}
+    Enchantment ench = this.readArg();
+    if (ench == null)
+      throw new CEAPICommandException(lc.UNKNOWN_ENCHANTMENT.format(this.readArgAt(0)));
+
+    ItemStack previous = new ItemStack(ItemUtil.getMainHandItem(me));
+    if (EnchantmentRegistry.unenchant(ItemUtil.getMainHandItem(me), ench)) {
+      CEAPIListenerUtils.itemNotInHand(me, previous, HandType.MAIN);
+      throw new CEAPICommandException(lc.UNENCHANT_SUCCESS.format(ench.getDisplay("")));
+    }
+    throw new CEAPICommandException(lc.UNENCHANT_ERROR.format(ench.getDisplay("")));
+  }
 }

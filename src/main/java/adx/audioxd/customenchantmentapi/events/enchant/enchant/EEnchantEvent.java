@@ -7,7 +7,14 @@ import org.bukkit.event.Cancellable;
 
 @EnchantmentEventWithLevel
 public class EEnchantEvent implements EnchantmentEvent, Cancellable {
-	boolean cancelled = false;
-	@Override public boolean isCancelled() { return cancelled; }
-	@Override public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+
+  boolean cancelled = false;
+  @Override
+  public boolean isCancelled() {
+    return cancelled;
+  }
+  @Override
+  public void setCancelled(boolean cancelled) {
+    this.cancelled = cancelled;
+  }
 }

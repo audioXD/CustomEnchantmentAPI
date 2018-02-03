@@ -8,37 +8,39 @@ import adx.audioxd.customenchantmentapi.commands.CEAPICommand;
 import adx.audioxd.customenchantmentapi.commands.exceptions.CEAPICommandException;
 import adx.audioxd.customenchantmentapi.commands.requirement.RequirementHasPerm;
 import adx.audioxd.customenchantmentapi.enchantment.Enchantment;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.Plugin;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 
 public class CeapiList extends CEAPICommand {
-	public CeapiList() {
-		this.addAlias("list");
 
-		this.addRequirements(RequirementHasPerm.get(CEAPIPermissions.LIST));
-	}
+  public CeapiList() {
+    this.addAlias("list");
 
-	@Override
-	public void perform() throws CEAPICommandException {
-		sender.sendMessage(ChatColor.GREEN + "============[Enchantments]============");
-		for(Plugin plugin : EnchantmentRegistry.getEnchantments().keySet()) {
-			sender.sendMessage(ChatColor.BOLD + "[" + plugin.getName() + "]");
-			Map<String, RegisteredEnchantment> data = EnchantmentRegistry.getEnchantments().get(plugin);
-			if(data == null) continue;
+    this.addRequirements(RequirementHasPerm.get(CEAPIPermissions.LIST));
+  }
 
-			List<Enchantment> active = Arrays.asList(EnchantmentRegistry.getEnchantmentsArray());
+  @Override
+  public void perform() throws CEAPICommandException {
+    sender.sendMessage(ChatColor.GREEN + "============[Enchantments]============");
+    for (Plugin plugin : EnchantmentRegistry.getEnchantments().keySet()) {
+      sender.sendMessage(ChatColor.BOLD + "[" + plugin.getName() + "]");
+      Map<String, RegisteredEnchantment> data = EnchantmentRegistry.getEnchantments().get(plugin);
+      if (data == null) continue;
 
-			for(String id : data.keySet()) {
-				Enchantment ench = data.get(id).getEnchantment();
-				if(ench == null) continue;
+      List<Enchantment> active = Arrays.asList(EnchantmentRegistry.getEnchantmentsArray());
 
-				sender.sendMessage(ChatColor.GOLD + " - " + ench.getDisplay("") + " : " + (active.contains(ench) ? ChatColor.GREEN + "Active" : ChatColor.DARK_RED + "Disabled"));
-			}
-		}
-		sender.sendMessage(ChatColor.RED + "================[END]================");
-	}
+      for (String id : data.keySet()) {
+        Enchantment ench = data.get(id).getEnchantment();
+        if (ench == null) continue;
+
+        sender.sendMessage(
+            ChatColor.GOLD + " - " + ench.getDisplay("") + " : " + (active.contains(ench) ?
+                ChatColor.GREEN + "Active" : ChatColor.DARK_RED + "Disabled"));
+      }
+    }
+    sender.sendMessage(ChatColor.RED + "================[END]================");
+  }
 }

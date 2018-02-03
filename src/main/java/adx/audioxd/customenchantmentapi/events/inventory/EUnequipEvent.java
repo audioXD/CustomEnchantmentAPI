@@ -10,15 +10,22 @@ import org.bukkit.inventory.ItemStack;
 
 @EnchantmentEventWithLevel
 public class EUnequipEvent extends EnchantmentEventWithOwnerAndItem implements Cancellable {
-	private final ArmorType armorType;
-	public ArmorType getArmorType() { return armorType; }
 
-	private boolean cancelled = false;
-	public boolean isCancelled() { return cancelled; }
-	public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+  private final ArmorType armorType;
+  public ArmorType getArmorType() {
+    return armorType;
+  }
 
-	public EUnequipEvent(ItemStack item, LivingEntity owner) {
-		super(owner, item);
-		armorType = ArmorType.matchType(item);
-	}
+  private boolean cancelled = false;
+  public boolean isCancelled() {
+    return cancelled;
+  }
+  public void setCancelled(boolean cancelled) {
+    this.cancelled = cancelled;
+  }
+
+  public EUnequipEvent(ItemStack item, LivingEntity owner) {
+    super(owner, item);
+    armorType = ArmorType.matchType(item);
+  }
 }

@@ -3,28 +3,29 @@ package adx.audioxd.customenchantmentapi.abst.v1_8;
 
 import adx.audioxd.customenchantmentapi.abst.api.NSM;
 import adx.audioxd.customenchantmentapi.abst.api.VersionListener;
+import java.lang.reflect.Method;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Method;
-
 public class NSMHandler implements NSM {
-	public ItemStack getItemInMainHand(LivingEntity player) {
-		return player.getEquipment().getItemInHand();
-	}
 
-	private static ItemStack NULL = new ItemStack(Material.AIR);
-	public ItemStack getItemInOffHand(LivingEntity player) {
-		return NULL;
-	}
+  public ItemStack getItemInMainHand(LivingEntity player) {
+    return player.getEquipment().getItemInHand();
+  }
 
-	public boolean isHandMainHAnd(PlayerInteractEvent event) {
-		return true;
-	}
+  private static ItemStack NULL = new ItemStack(Material.AIR);
+  public ItemStack getItemInOffHand(LivingEntity player) {
+    return NULL;
+  }
 
-	public VersionListener getVersionListener(Method notMain, Method notOff, Method main, Method off) {
-		return new VersionListener(notMain, notOff, main, off);
-	}
+  public boolean isHandMainHAnd(PlayerInteractEvent event) {
+    return true;
+  }
+
+  public VersionListener getVersionListener(Method notMain, Method notOff, Method main,
+      Method off) {
+    return new VersionListener(notMain, notOff, main, off);
+  }
 }

@@ -2,5 +2,5 @@ package adx.audioxd.customenchantmentapi.enchantment.event;
 
 
 public enum EnchantmentEventPriority {
-	LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR
+  LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR
 }

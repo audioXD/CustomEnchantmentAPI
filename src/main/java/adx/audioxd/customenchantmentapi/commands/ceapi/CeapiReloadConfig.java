@@ -7,16 +7,18 @@ import adx.audioxd.customenchantmentapi.commands.exceptions.CEAPICommandExceptio
 import adx.audioxd.customenchantmentapi.commands.requirement.RequirementIsOP;
 
 public class CeapiReloadConfig extends CEAPICommand {
-	public CeapiReloadConfig() {
-		this.addAlias("reloadConfigs");
 
-		// this.addRequirements(RequirementHasPerm.get("adx.ceapi.use"));
-		this.addRequirements(RequirementIsOP.get());
-	}
+  public CeapiReloadConfig() {
+    this.addAlias("reloadConfigs");
 
-	@Override
-	public void perform() throws CEAPICommandException {
-		CustomEnchantmentAPI.getInstance().reloadConfigs();
-		sender.sendMessage(CustomEnchantmentAPI.getInstance().getLanguageConfig().RELOAD_CONFIG.format());
-	}
+    // this.addRequirements(RequirementHasPerm.get("adx.ceapi.use"));
+    this.addRequirements(RequirementIsOP.get());
+  }
+
+  @Override
+  public void perform() throws CEAPICommandException {
+    CustomEnchantmentAPI.getInstance().reloadConfigs();
+    sender
+        .sendMessage(CustomEnchantmentAPI.getInstance().getLanguageConfig().RELOAD_CONFIG.format());
+  }
 }
